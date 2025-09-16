@@ -133,7 +133,7 @@ export default function Home() {
       <PlanWaitlistModal
         isOpen={isPlanModalOpen}
         onClose={closePlanModal}
-        selectedPlan={selectedPlan}
+        selectedPlan={selectedPlan ?? ""}
       >
         {/* modal content here */}
       </PlanWaitlistModal>
