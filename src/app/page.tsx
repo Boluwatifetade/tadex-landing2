@@ -1,95 +1,142 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useState } from "react";
+import Hero from "@/components/Hero";
+import Features from "@/components/Features";
+import WhyAutomated from "@/components/WhyAutomated";
+import HowItWorks from "@/components/HowItWorks";
+import Pricing from "@/components/Pricing";
+import FAQ from "@/components/FAQ";
+import FinalCTA from "@/components/FinalCTA";
+import Footer from "@/components/Footer";
+import WaitlistModal from "@/components/WaitlistModal";
+import PlanWaitlistModal from "@/components/PlanWaitlistModal";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const openWaitlistModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handlePlanSelect = (planId: string) => {
+    setSelectedPlan(planId);
+    setIsPlanModalOpen(true);
+  };
+
+  const closePlanModal = () => {
+    setIsPlanModalOpen(false);
+    // Reset selectedPlan after modal animation completes
+    setTimeout(() => {
+      setSelectedPlan(null);
+    }, 300);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Navigation Bar */}
+      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <div
+                className="text-2xl font-bold text-[#004859] cursor-pointer"
+                onClick={() =>
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }
+              >
+                Tadex
+              </div>
+            </div>
+            <div className="hidden md:flex items-center space-x-8">
+              <button
+                onClick={() => scrollToSection("features")}
+                className="text-slate-700 hover:text-[#004859] transition-colors"
+              >
+                Features
+              </button>
+              <button
+                onClick={() => scrollToSection("how-it-works")}
+                className="text-slate-700 hover:text-[#004859] transition-colors"
+              >
+                How it Works
+              </button>
+              <button
+                onClick={() => scrollToSection("pricing")}
+                className="text-slate-700 hover:text-[#004859] transition-colors"
+              >
+                Pricing
+              </button>
+              <button
+                onClick={() => scrollToSection("faq")}
+                className="text-slate-700 hover:text-[#004859] transition-colors"
+              >
+                FAQ
+              </button>
+              <button
+                onClick={openWaitlistModal}
+                className="bg-[#004859] text-white px-6 py-2 rounded-lg hover:bg-[#00323B] transition-colors font-medium shadow-lg hover:shadow-xl transform hover:scale-105 duration-300"
+              >
+                Join Waitlist
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={openWaitlistModal}
+                className="bg-[#004859] text-white px-4 py-2 rounded-lg hover:bg-[#00323B] transition-colors font-medium text-sm"
+              >
+                Join Waitlist
+              </button>
+            </div>
+          </div>
         </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="relative">
+        <Hero />
+        <div id="features">
+          <Features />
+        </div>
+        <WhyAutomated />
+        <div id="how-it-works">
+          <HowItWorks />
+        </div>
+        <div id="pricing">
+          <Pricing onPlanSelect={handlePlanSelect} />
+        </div>
+        <div id="faq">
+          <FAQ />
+        </div>
+        <FinalCTA />
+        <Footer />
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      {/* General Waitlist Modal */}
+      <WaitlistModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+
+      {/* Plan-Specific Waitlist Modal */}
+      <PlanWaitlistModal
+        isOpen={isPlanModalOpen}
+        onClose={closePlanModal}
+        selectedPlan={selectedPlan}
+      >
+        {/* modal content here */}
+      </PlanWaitlistModal>
     </div>
   );
 }
