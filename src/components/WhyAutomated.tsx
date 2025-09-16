@@ -126,7 +126,7 @@ export default function WhyAutomated() {
 
         {/* Stats Section */}
         <div className="bg-gradient-to-r from-[#004859] to-[#006B7C] rounded-2xl p-8 lg:p-12 text-white text-center mb-12">
-          <h3 className="text-2xl md:text-3xl font-bold mb-8">The Numbers Don't Lie</h3>
+          <h3 className="text-2xl md:text-3xl font-bold mb-8">The Numbers Don&apos;t Lie</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <div className="text-4xl md:text-5xl font-bold text-[#00B894] mb-2">68%</div>

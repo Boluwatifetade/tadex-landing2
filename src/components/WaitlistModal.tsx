@@ -153,7 +153,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                 Welcome to Tadex!
               </h3>
               <p className="text-slate-600 mb-4">
-                You're now on our waitlist. We'll notify you as soon as we launch!
+                You&apos;re now on our waitlist. We&apos;ll notify you as soon as we launch!
               </p>
               <div className="bg-[#00B894]/10 border border-[#00B894]/20 rounded-lg p-3">
                 <p className="text-sm text-[#00B894] font-medium">

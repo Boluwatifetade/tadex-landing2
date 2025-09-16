@@ -17,9 +17,10 @@ export async function POST(req: Request) {
     }
 
     // No Resend – just return success
-    return NextResponse.json({ success: true });
-  } catch (err: any) {
-    console.error("API error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-  }
+} catch (err: unknown) {
+  console.error("API error:", err);
+  return NextResponse.json(
+    { error: "Internal server error" },
+    { status: 500 }
+  );
 }

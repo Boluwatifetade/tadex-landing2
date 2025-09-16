@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X, Star, CheckCircle, TrendingUp, Users, Shield, Zap, Crown, DollarSign } from 'lucide-react';
+import { X, Star, CheckCircle, Zap, Crown, DollarSign } from 'lucide-react';
 
 interface PlanWaitlistModalProps {
   isOpen: boolean;
