@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X, Star, CheckCircle, Zap, Crown, DollarSign } from 'lucide-react';
+import { X, Star, CheckCircle, Zap, Crown, DollarSign, Shield} from 'lucide-react';
 
 interface PlanWaitlistModalProps {
   isOpen: boolean;
@@ -47,7 +47,16 @@ export default function PlanWaitlistModal({ isOpen, onClose, selectedPlan }: Pla
     }
   };
 
-  const plan = planDetails[selectedPlan as keyof typeof planDetails];
+  const plan = planDetails[selectedPlan as keyof typeof planDetails] as {
+  name: string;
+  icon: typeof Star;
+  price: string;
+  originalPrice?: string; // optional now
+  color: string;
+  benefits: string[];
+  discount: string | null;
+  };
+
   const IconComponent = plan?.icon || Star;
 
   const handleSubmit = async (e: React.FormEvent) => {
