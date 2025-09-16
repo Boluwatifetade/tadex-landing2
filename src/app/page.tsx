@@ -11,6 +11,7 @@ import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import WaitlistModal from "@/components/WaitlistModal";
 import PlanWaitlistModal from "@/components/PlanWaitlistModal";
+import { Analytics } from "@vercel/analytics/next"
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
