@@ -16,11 +16,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    // No Resend – just return success
-} catch (err: unknown) {
-  console.error("API error:", err);
-  return NextResponse.json(
-    { error: "Internal server error" },
-    { status: 500 }
-  );
+    // Success response
+    return NextResponse.json({ success: true });
+    
+  } catch (err: unknown) {
+    console.error("API error:", err);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
