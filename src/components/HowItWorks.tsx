@@ -114,7 +114,7 @@ export default function HowItWorks() {
             Ready to Start Automated Trading?
           </h3>
           <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
-            Join thousands of traders who've already automated their success with Tadex
+            Join thousands of traders who&apos;ve already automated their success with Tadex
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <div className="inline-flex items-center bg-[#004859] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#00323B] transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl">

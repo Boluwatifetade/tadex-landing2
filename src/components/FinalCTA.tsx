@@ -112,7 +112,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <div className="flex items-center justify-center gap-3 bg-[#00B894]/20 backdrop-blur-sm border border-[#00B894]/30 rounded-xl py-4 px-6">
                 <CheckCircle className="w-6 h-6 text-[#00B894]" />
                 <span className="text-[#00B894] font-semibold text-lg">
-                  You're on the waitlist! Check your email.
+                  You&apos;re on the waitlist! Check your email.
                 </span>
               </div>
             )}
