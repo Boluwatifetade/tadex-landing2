@@ -55,7 +55,7 @@ export default function Footer() {
       { name: 'Privacy Policy', href: '#' },
       { name: 'Terms of Service', href: '#' },
       { name: 'Cookie Policy', href: '#' },
-      { name: 'Security', href: '#' }
+      { name: 'Security', href: '/security' }
     ]
   }
 
