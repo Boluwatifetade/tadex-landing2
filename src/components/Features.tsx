@@ -1,54 +1,80 @@
 'use client';
-import { Zap, Brain, TrendingUp, Radio, BarChart3, Shield } from 'lucide-react';
+import { Zap, Smartphone, TrendingUp, Radio, BarChart3, Shield, Brain } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Features() {
   const features = [
     {
       icon: Zap,
-      title: 'Automated Execution',
-      desc: 'Connect your exchange and let Tadex handle entries, exits, stop-losses and take-profits automatically.',
+      title: 'Instant Execution',
+      desc: 'Tadex reads your signal and places the order on Bybit in milliseconds. Faster than humanly possible.',
       color: 'text-[#00B894]',
-      bgColor: 'bg-[#00B894]/10'
+      bgColor: 'bg-[#00B894]/10',
+      highlight: true
+    },
+    {
+      icon: Smartphone,
+      title: '100% Telegram Native',
+      desc: 'No heavy apps or complex dashboards. Manage your entire trading portfolio directly from your chat app.',
+      color: 'text-[#004859]',
+      bgColor: 'bg-[#004859]/10'
+    },
+    {
+      icon: Shield,
+      title: 'Smart Risk Guard',
+      desc: 'Set your risk per trade once (e.g., 2%). Tadex automatically calculates position size for every trade.',
+      color: 'text-[#00B894]',
+      bgColor: 'bg-[#00B894]/10',
+      highlight: true
     },
     {
       icon: Brain,
       title: 'Remove Emotional Bias',
-      desc: 'Eliminate FOMO, fear and emotional trading decisions that lead to losses.',
+      desc: 'Eliminate FOMO, fear and emotional trading decisions that lead to losses with automated execution.',
+      color: 'text-[#004859]',
+      bgColor: 'bg-[#004859]/10'
+    },
+    {
+      icon: Radio,
+      title: 'Smart Signal Parsing',
+      desc: 'Copy-paste signals from any VIP group. Our NLP engine understands entry, SL, and TP formats automatically.',
+      color: 'text-[#00B894]',
+      bgColor: 'bg-[#00B894]/10',
+      highlight: true
+    },
+    {
+      icon: BarChart3,
+      title: 'Real-Time PnL Tracking',
+      desc: 'Get notified the moment a trade hits profit. Receive daily summary reports of your trading performance.',
       color: 'text-[#004859]',
       bgColor: 'bg-[#004859]/10'
     },
     {
       icon: TrendingUp,
-      title: 'Lightning Fast Performance',
-      desc: 'Execute trades 3.2x faster than manual trading with zero missed opportunities.',
+      title: 'Auto-Breakeven & Scaling',
+      desc: 'Protect your gains. Tadex automatically moves Stop Loss to entry and scales positions at profit targets.',
       color: 'text-[#00B894]',
-      bgColor: 'bg-[#00B894]/10'
-    },
-    {
-      icon: Radio,
-      title: 'Signal Integration',
-      desc: 'Subscribe to proven signal providers and automate their strategies instantly.',
-      color: 'text-[#004859]',
-      bgColor: 'bg-[#004859]/10'
-    },
-    {
-      icon: BarChart3,
-      title: 'Provider Dashboard',
-      desc: 'Signal providers can easily input trades and monetize their expertise.',
-      color: 'text-[#00B894]',
-      bgColor: 'bg-[#00B894]/10'
+      bgColor: 'bg-[#00B894]/10',
+      highlight: true
     },
     {
       icon: Shield,
       title: 'Advanced Analytics',
-      desc: 'Track performance, win rates and optimize your automated trading strategies.',
+      desc: 'Track performance, win rates and optimize your automated trading strategies with detailed insights.',
       color: 'text-[#004859]',
       bgColor: 'bg-[#004859]/10'
+    },
+    {
+      icon: Radio,
+      title: 'Signal Provider Integration',
+      desc: 'Subscribe to proven signal providers and automate their strategies instantly with one click.',
+      color: 'text-[#00B894]',
+      bgColor: 'bg-[#00B894]/10'
     },
   ];
 
   return (
-    <section className="py-20 lg:py-32 bg-white relative" id="features">
+    <section className="py-20 lg:py-32 bg-gradient-to-br from-slate-50 to-white relative" id="features">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -56,10 +82,10 @@ export default function Features() {
             Built for Success
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#004859]">
-            Built for Smarter Trading
+            Powerful Features, <span className="text-[#00B894]">Simplified</span>
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Everything you need to automate your trading strategy and maximize profits
+            We stripped away the complexity of pro tools and kept the power. Everything you need to automate your trading strategy and maximize profits.
           </p>
         </div>
 
@@ -70,10 +96,17 @@ export default function Features() {
             return (
               <div 
                 key={feature.title}
-                className="group relative bg-white p-8 rounded-2xl border border-slate-200 hover:border-[#004859]/20 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+                className="group relative bg-white p-8 rounded-2xl border border-slate-200 hover:border-[#004859]/30 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
               >
+                {/* Highlight Badge */}
+                {feature.highlight && (
+                  <div className="absolute -top-2 -right-2 bg-[#00B894] text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                    POPULAR
+                  </div>
+                )}
+
                 {/* Icon */}
-                <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl ${feature.bgColor} mb-6`}>
+                <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl ${feature.bgColor} mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <IconComponent className={`w-7 h-7 ${feature.color}`} />
                 </div>
 
@@ -94,9 +127,26 @@ export default function Features() {
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">
-          <div className="inline-flex items-center gap-4 bg-gradient-to-r from-[#004859] to-[#006B7C] text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 cursor-pointer">
-            <TrendingUp className="w-5 h-5" />
-            Start Your Free Trial Today
+          <div className="bg-gradient-to-r from-[#004859] to-[#006B7C] rounded-2xl p-8 lg:p-12 text-white shadow-xl">
+            <h3 className="text-2xl md:text-3xl font-bold mb-4">
+              Ready to Experience Automated Trading?
+            </h3>
+            <p className="text-blue-100 mb-8 max-w-2xl mx-auto text-lg">
+              Join thousands of traders who've transformed their trading with Tadex
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link 
+                href="https://t.me/TradeSwiftNowBot" 
+                target="_blank"
+                className="bg-[#00B894] hover:bg-[#00A085] text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2"
+              >
+                <Zap className="w-5 h-5" />
+                Launch Telegram Bot
+              </Link>
+              <div className="text-blue-100 text-sm">
+                No signup required • Instant access
+              </div>
+            </div>
           </div>
         </div>
       </div>
