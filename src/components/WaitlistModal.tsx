@@ -157,7 +157,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
               </p>
               <div className="bg-[#00B894]/10 border border-[#00B894]/20 rounded-lg p-3">
                 <p className="text-sm text-[#00B894] font-medium">
-                  Check your email for confirmation
+                  Success
                 </p>
               </div>
             </div>
