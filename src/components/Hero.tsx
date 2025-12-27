@@ -7,7 +7,7 @@ export default function Hero() {
   // Link to the actual bot
   const TELEGRAM_BOT_URL = "https://t.me/TradeSwiftNowBot";
   // Placeholder for YouTube video
-  const YOUTUBE_DEMO_URL = "https://youtube.com"; 
+  const YOUTUBE_DEMO_URL = "https://youtu.be/7cLw92poCss"; 
 
   return (
     <section className="relative bg-gradient-to-br from-[#004859] via-[#006B7C] to-[#004859] text-white overflow-hidden">
