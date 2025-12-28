@@ -104,7 +104,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   <div className="inline-flex items-center justify-center w-10 h-10 bg-[#00B894]/10 rounded-lg mb-2">
                     <Shield className="w-5 h-5 text-[#00B894]" />
                   </div>
-                  <p className="text-xs text-slate-600">Bank Security</p>
+                  <p className="text-xs text-slate-600">Strong Security</p>
                 </div>
               </div>
 

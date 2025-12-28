@@ -28,8 +28,8 @@ export default function SecurityTransparency() {
     },
     {
       icon: Lock,
-      title: "Bank-Level Encryption",
-      description: "All your data is encrypted both in transit (SSL/TLS) and at rest (AES-256). Your API keys are stored with military-grade encryption.",
+      title: "AES-256 Encryption",
+      description: "Your data is encrypted in transit and at rest using modern industry standards. API keys are stored securely and never exposed.",
       color: "from-purple-500 to-purple-600",
       details: [
         "256-bit AES encryption at rest",
@@ -90,7 +90,7 @@ export default function SecurityTransparency() {
     {
       category: "Data Protection",
       items: [
-        "GDPR and data privacy compliance",
+        "NDPR and data privacy compliance",
         "No selling or sharing of user data",
         "Encrypted database with access logs",
         "Regular data security assessments"
@@ -99,7 +99,6 @@ export default function SecurityTransparency() {
     {
       category: "Access Control",
       items: [
-        "Two-factor authentication (2FA) required",
         "IP whitelisting options available",
         "Role-based access control",
         "Session management and timeout"
@@ -109,7 +108,6 @@ export default function SecurityTransparency() {
       category: "Monitoring & Response",
       items: [
         "24/7 system monitoring and alerts",
-        "Anomaly detection for unusual activity",
         "Instant notification of security events",
         "Dedicated security incident response team"
       ]
@@ -395,7 +393,7 @@ export default function SecurityTransparency() {
                 <span className="text-2xl group-open:rotate-45 transition-transform">+</span>
               </summary>
               <p className="mt-4 text-slate-600 leading-relaxed">
-                Never. Your trading data, email, and personal information are never sold, shared, or used for any purpose other than providing our service to you. We're GDPR compliant and take data privacy seriously.
+                Never. Your trading data, email, and personal information are never sold, shared, or used for any purpose other than providing our service to you. We're NDPR compliant and take data privacy seriously.
               </p>
             </details>
           </div>

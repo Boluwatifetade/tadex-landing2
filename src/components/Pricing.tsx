@@ -207,7 +207,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-slate-600">
             <div className="flex items-center justify-center gap-3">
               <Shield className="w-5 h-5 text-[#00B894]" />
-              <span>Bank-level security</span>
+              <span>AES-256 Encryption</span>
             </div>
             <div className="flex items-center justify-center gap-3">
               <Zap className="w-5 h-5 text-[#00B894]" />

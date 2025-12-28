@@ -16,7 +16,7 @@ export default function HowItWorks() {
       icon: LinkIcon,
       title: 'Connect Exchange',
       desc: 'Create API keys on Bybit (Testnet or Mainnet) and paste them into the bot securely.',
-      features: ['Bank-level security', 'Read-only permissions', '2-minute setup']
+      features: ['AES-256 encryption', 'Read-only permissions', '2-minute setup']
     },
     {
       number: '3',

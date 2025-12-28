@@ -24,13 +24,13 @@ export default function Hero() {
 
           {/* Main Headline - Original Large Typography */}
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            Automate Your Trades With Signals You Trust and Execute Your Crypto Signals Automatically With Full Control.
+            Automate Your Trades
             <span className="block text-[#00B894]">Visualize Profits.</span>
           </h1>
 
           {/* Subheadline - Original Style */}
           <p className="text-xl md:text-2xl mb-10 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Connect your exchange, follow expert signals, and track your PnL in real-time. The simplest trading bot for the African crypto space.
+            Connect your exchange, follow expert signals, and track your PnL in real time. Tadex automates crypto signal execution with full control, built for the African crypto market.
           </p>
 
           {/* CTA Buttons - New Actions with Original Styling */}
