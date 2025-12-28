@@ -30,7 +30,7 @@ export default function WhyAutomated() {
   const solutions = [
     {
       icon: Zap,
-      title: "Lightning Execution",
+      title: "Automate your crypto trades safely using real signals Connect your exchange, execute signals automatically",
       description: "Trades execute in milliseconds, not minutes",
       metric: "3.2x faster"
     },
@@ -146,7 +146,7 @@ export default function WhyAutomated() {
         {/* CTA */}
         <div className="text-center">
           <p className="text-lg text-slate-600 mb-6">
-            Ready to eliminate emotions and maximize profits?
+            Leverage advanced analytics to inform your strategy.
           </p>
           <Button className="bg-[#00B894] hover:bg-[#00A085] text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
             <TrendingUp className="w-5 h-5 mr-2" />

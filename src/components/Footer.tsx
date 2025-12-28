@@ -79,7 +79,7 @@ export default function Footer() {
             <div className="mb-8">
               <div className="text-3xl font-bold text-[#004859] mb-4">Tadex</div>
               <p className="text-lg text-slate-600 max-w-md">
-                Automate your crypto trading, eliminate emotions, and maximize profits with our advanced trading platform.
+                Automate your crypto trading, eliminate emotions with our advanced trading platform.
               </p>
             </div>
 

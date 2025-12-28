@@ -85,7 +85,7 @@ export default function Features() {
             Powerful Features, <span className="text-[#00B894]">Simplified</span>
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            We stripped away the complexity of pro tools and kept the power. Everything you need to automate your trading strategy and maximize profits.
+            We stripped away the complexity of pro tools and kept the power. Everything you need to automate your trading strategy Tadex executes signals exactly as defined.
           </p>
         </div>
 

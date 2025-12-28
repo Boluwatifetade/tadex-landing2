@@ -211,7 +211,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
             </div>
             <div className="flex items-center justify-center gap-3">
               <Zap className="w-5 h-5 text-[#00B894]" />
-              <span>Lightning-fast execution</span>
+              <span>Automate your crypto trades safely using real signals</span>
             </div>
             <div className="flex items-center justify-center gap-3">
               <Star className="w-5 h-5 text-[#00B894]" />

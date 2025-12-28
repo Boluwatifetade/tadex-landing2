@@ -24,7 +24,7 @@ export default function Hero() {
 
           {/* Main Headline - Original Large Typography */}
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            Automate Trades.
+            Automate Your Trades With Signals You Trust and Execute Your Crypto Signals Automatically With Full Control.
             <span className="block text-[#00B894]">Visualize Profits.</span>
           </h1>
 
@@ -41,7 +41,7 @@ export default function Hero() {
                 className="bg-[#00B894] hover:bg-[#00A085] text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 <Send className="w-5 h-5 mr-2" />
-                Start Automating
+                Request Private Beta Access
               </Button>
             </Link>
             <Link href={YOUTUBE_DEMO_URL} target="_blank">

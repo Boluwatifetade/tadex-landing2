@@ -147,7 +147,7 @@ export default function FinalCTA() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-blue-100 mb-8">
             <div className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-[#00B894]" />
-              <span className="text-sm">Bank-level security</span>
+              <span className="text-sm">Strong API security</span>
             </div>
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-[#00B894]" />
@@ -161,10 +161,10 @@ export default function FinalCTA() {
 
           {/* Social Proof */}
           <div className="pt-8 border-t border-white/20">
-            <p className="text-blue-100 mb-4">Trusted by traders worldwide</p>
+            <p className="text-blue-100 mb-4">Trusted by traders testing right now. Join the private beta to shape the product.</p>
             <div className="flex justify-center items-center gap-8 opacity-80">
               <div className="text-center">
-                <div className="text-2xl font-bold text-[#00B894]">2,000+</div>
+                <div className="text-2xl font-bold text-[#00B894]">100+</div>
                 <div className="text-xs text-blue-100">Traders</div>
               </div>
               <div className="text-center">
