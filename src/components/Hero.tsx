@@ -24,13 +24,13 @@ export default function Hero() {
 
           {/* Main Headline - Original Large Typography */}
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            Automate Your Trades
-            <span className="block text-[#00B894]">Visualize Profits.</span>
+            Automate Your Workflows
+            <span className="block text-[#00B894]">Route Data Instantly.</span>
           </h1>
 
           {/* Subheadline - Original Style */}
           <p className="text-xl md:text-2xl mb-10 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Connect your exchange, follow expert signals, and track your PnL in real time. Tadex automates crypto signal execution with full control, built for the African crypto market.
+            Connect your systems, automate event routing, and track execution logs in real time. Tadex simplifies payload dispatch and rule-based workflow automation.
           </p>
 
           {/* CTA Buttons - New Actions with Original Styling */}
@@ -62,42 +62,42 @@ export default function Hero() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
-                  <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">3.2x</div>
-                  <p className="text-blue-100 font-medium">Faster Execution</p>
+                  <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">Instant</div>
+                  <p className="text-blue-100 font-medium">Event Routing</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
                   <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">24/7</div>
                   <p className="text-blue-100 font-medium">Uptime</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
-                  <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">68%</div>
-                  <p className="text-blue-100 font-medium">Profit Improvement</p>
+                  <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">99.9%</div>
+                  <p className="text-blue-100 font-medium">Delivery Accuracy</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
-                  <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">0%</div>
-                  <p className="text-blue-100 font-medium">Beta Fees</p>
+                  <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">0</div>
+                  <p className="text-blue-100 font-medium">Setup Fees</p>
                 </div>
               </div>
 
               {/* Additional Benefits */}
               <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                <h3 className="text-lg font-semibold text-white mb-4">Why Traders Love Tadex</h3>
+                <h3 className="text-lg font-semibold text-white mb-4">Why Developers Choose Tadex</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-blue-100">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-[#00B894] rounded-full"></div>
-                    <span>Real-time PnL Tracking</span>
+                    <span>Real-time Event Logging</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-[#00B894] rounded-full"></div>
-                    <span>Multi-Exchange Support</span>
+                    <span>Multi-Platform Connectors</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-[#00B894] rounded-full"></div>
-                    <span>Expert Trading Signals</span>
+                    <span>Custom Event Rules</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-[#00B894] rounded-full"></div>
-                    <span>Risk Management Tools</span>
+                    <span>Fail-safe Routing Logic</span>
                   </div>
                 </div>
               </div>
@@ -125,21 +125,21 @@ export default function Hero() {
                     {/* User Msg */}
                     <div className="flex justify-end">
                       <div className="bg-[#00B894] text-white p-3 rounded-2xl rounded-tr-sm text-xs max-w-[80%] shadow-sm">
-                        BTCUSDT BUY ENTRY: 67000 SL: 66500 TP: 68000
+                        TRIGGER: webhook_event SRC: main_app PAYLOAD: status=active
                       </div>
                     </div>
 
                     {/* Bot Msg */}
                     <div className="flex justify-start">
                       <div className="bg-white border border-slate-200 text-slate-800 p-3 rounded-2xl rounded-tl-sm text-xs max-w-[90%] shadow-sm">
-                        <p className="font-bold text-[#004859] mb-1">✅ Signal Received</p>
+                        <p className="font-bold text-[#004859] mb-1">✅ Event Dispatched</p>
                         <div className="space-y-1 text-slate-600">
-                          <p>Token: BTC/USDT</p>
-                          <p>Risk: 2.0% ($124.50)</p>
-                          <p>Entry: Market</p>
+                          <p>Event: Webhook Trigger</p>
+                          <p>Destination: Slack/Bybit API</p>
+                          <p>Status: Dispatched</p>
                         </div>
                         <div className="mt-2 pt-2 border-t border-slate-100 text-[10px] text-slate-400 flex justify-between">
-                          <span>Executing on Bybit...</span>
+                          <span>Routing payload...</span>
                           <span className="text-[#00B894]">Just now</span>
                         </div>
                       </div>
@@ -152,8 +152,8 @@ export default function Hero() {
                           <Zap className="w-4 h-4 text-green-600" />
                         </div>
                         <div>
-                          <p className="text-xs font-bold text-slate-800">Order Filled</p>
-                          <p className="text-[10px] text-slate-500">BTCUSDT Long @ $67,042</p>
+                          <p className="text-xs font-bold text-slate-800">Delivery Confirmed</p>
+                          <p className="text-[10px] text-slate-500">Webhook event delivered successfully</p>
                         </div>
                       </div>
                     </div>
@@ -168,8 +168,8 @@ export default function Hero() {
 
           {/* Bottom CTA */}
           <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-white mb-4">Ready to Transform Your Trading?</h3>
-            <p className="text-blue-100 mb-6">Join hundreds of traders already automating their strategies</p>
+            <h3 className="text-2xl font-bold text-white mb-4">Ready to Automate Your Workflows?</h3>
+            <p className="text-blue-100 mb-6">Join hundreds of users already optimizing their event-driven logic</p>
             <Link href={TELEGRAM_BOT_URL} target="_blank">
               <Button 
                 size="lg" 

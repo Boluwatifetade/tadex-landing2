@@ -39,10 +39,10 @@ export default function FinalCTA() {
   };
 
   const benefits = [
-    { icon: TrendingUp, text: "68% better execution" },
-    { icon: Zap, text: "3.2x faster trades" },
+    { icon: TrendingUp, text: "99.9% routing accuracy" },
+    { icon: Zap, text: "Instant routing" },
     { icon: Shield, text: "99.9% uptime" },
-    { icon: Users, text: "2,000+ traders" }
+    { icon: Users, text: "2,000+ users" }
   ];
 
   return (
@@ -60,7 +60,7 @@ export default function FinalCTA() {
           {/* Badge */}
           <div className="inline-flex items-center bg-[#00B894]/20 text-[#00B894] px-4 py-2 rounded-full text-sm font-medium mb-6 border border-[#00B894]/30">
             <TrendingUp className="w-4 h-4 mr-2" />
-            Join the trading revolution
+            Join the workflow revolution
           </div>
 
           {/* Main Headline */}
@@ -70,7 +70,7 @@ export default function FinalCTA() {
 
           {/* Subheadline */}
           <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Join the beta today. No credit card required. No complex setup. Just pure trading efficiency.
+            Join the beta today. No credit card required. No complex setup. Just pure workflow efficiency.
           </p>
 
           {/* Benefits Grid */}
@@ -100,7 +100,7 @@ export default function FinalCTA() {
                 </Button>
               </Link>
               <p className="text-blue-100 text-sm">
-                Instant access • No signup required • Start trading immediately
+                Instant access • No signup required • Start automating immediately
               </p>
             </div>
 
@@ -161,19 +161,19 @@ export default function FinalCTA() {
 
           {/* Social Proof */}
           <div className="pt-8 border-t border-white/20">
-            <p className="text-blue-100 mb-4">Trusted by traders testing right now. Join the private beta to shape the product.</p>
+            <p className="text-blue-100 mb-4">Trusted by users testing right now. Join the private beta to shape the product.</p>
             <div className="flex justify-center items-center gap-8 opacity-80">
               <div className="text-center">
                 <div className="text-2xl font-bold text-[#00B894]">100+</div>
-                <div className="text-xs text-blue-100">Traders</div>
+                <div className="text-xs text-blue-100">Users</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-[#00B894]">68%</div>
-                <div className="text-xs text-blue-100">Better Execution</div>
+                <div className="text-2xl font-bold text-[#00B894]">99.9%</div>
+                <div className="text-xs text-blue-100">Routing Accuracy</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-[#00B894]">3.2x</div>
-                <div className="text-xs text-blue-100">Faster Trades</div>
+                <div className="text-2xl font-bold text-[#00B894]">Instant</div>
+                <div className="text-xs text-blue-100">Event Dispatch</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-[#00B894]">99.9%</div>

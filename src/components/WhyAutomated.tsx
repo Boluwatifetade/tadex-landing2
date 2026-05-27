@@ -6,22 +6,22 @@ export default function WhyAutomated() {
   const problems = [
     {
       icon: AlertTriangle,
-      title: "Emotional Trading",
-      description: "FOMO and fear lead to poor decisions",
+      title: "Manual Errors",
+      description: "Manual oversight leads to typos or missed steps",
       color: "text-red-500",
       bgColor: "bg-red-50"
     },
     {
       icon: Clock,
       title: "Missed Opportunities",
-      description: "Markets move while you sleep or work",
+      description: "Feeds updates while you sleep or work",
       color: "text-orange-500",
       bgColor: "bg-orange-50"
     },
     {
       icon: Brain,
       title: "Analysis Paralysis",
-      description: "Overthinking delays profitable trades",
+      description: "Manual parsing and routing causes delays",
       color: "text-yellow-500",
       bgColor: "bg-yellow-50"
     }
@@ -30,21 +30,21 @@ export default function WhyAutomated() {
   const solutions = [
     {
       icon: Zap,
-      title: "Automate your crypto trades safely using real signals Connect your exchange, execute signals automatically",
-      description: "Trades execute in milliseconds, not minutes",
-      metric: "3.2x faster"
+      title: "Automate Webhook Dispatch Connect your feed, route payloads automatically",
+      description: "Workflows execute instantly, not minutes",
+      metric: "Instant"
     },
     {
       icon: Brain,
-      title: "Zero Emotions",
-      description: "Stick to your strategy without second-guessing",
-      metric: "100% disciplined"
+      title: "Zero Manual Overhead",
+      description: "Run automated workflows exactly as configured",
+      metric: "100% Consistent"
     },
     {
       icon: DollarSign,
-      title: "Maximize Profits",
-      description: "Never miss a signal or opportunity again",
-      metric: "24/7 trading"
+      title: "Optimize Efficiency",
+      description: "Never miss an incoming webhook or feed payload",
+      metric: "24/7 Monitoring"
     }
   ];
 
@@ -58,13 +58,13 @@ export default function WhyAutomated() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center bg-[#004859]/10 text-[#004859] px-4 py-2 rounded-full text-sm font-medium mb-4">
-            The Trading Revolution
+            Workflow Automation
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#004859]">
-            Why Automated Trading?
+            Why Automated Event Routing?
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Transform your trading from emotional guesswork to systematic profit generation
+            Transform your workflow from manual checking to systematic event routing
           </p>
         </div>
 
@@ -73,7 +73,7 @@ export default function WhyAutomated() {
           {/* Problems Side */}
           <div>
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-slate-800 mb-4">Manual Trading Problems</h3>
+              <h3 className="text-2xl font-bold text-slate-800 mb-4">Manual Routing Problems</h3>
               <div className="w-16 h-1 bg-red-400 mx-auto rounded"></div>
             </div>
             <div className="space-y-6">
@@ -97,7 +97,7 @@ export default function WhyAutomated() {
           {/* Solutions Side */}
           <div>
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-[#004859] mb-4">Tadex Automated Solutions</h3>
+              <h3 className="text-2xl font-bold text-[#004859] mb-4">Tadex Automation Solutions</h3>
               <div className="w-16 h-1 bg-[#00B894] mx-auto rounded"></div>
             </div>
             <div className="space-y-6">
@@ -129,16 +129,16 @@ export default function WhyAutomated() {
           <h3 className="text-2xl md:text-3xl font-bold mb-8">The Numbers Don&apos;t Lie</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#00B894] mb-2">68%</div>
-              <p className="text-blue-100">Better execution accuracy</p>
+              <div className="text-4xl md:text-5xl font-bold text-[#00B894] mb-2">99.9%</div>
+              <p className="text-blue-100">Routing accuracy</p>
             </div>
             <div>
-              <div className="text-4xl md:text-5xl font-bold text-[#00B894] mb-2">3.2x</div>
-              <p className="text-blue-100">Faster trade execution</p>
+              <div className="text-4xl md:text-5xl font-bold text-[#00B894] mb-2">Instant</div>
+              <p className="text-blue-100">Event dispatching</p>
             </div>
             <div>
               <div className="text-4xl md:text-5xl font-bold text-[#00B894] mb-2">24/7</div>
-              <p className="text-blue-100">Never miss an opportunity</p>
+              <p className="text-blue-100">Continuous monitoring</p>
             </div>
           </div>
         </div>
