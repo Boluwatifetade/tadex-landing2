@@ -60,9 +60,9 @@ export default function Footer() {
 
   const socialLinks = [
     { icon: Twitter, href: 'https://twitter.com/TadexTeam', label: 'Twitter' },
-  { icon: Linkedin, href: 'https://www.linkedin.com/in/boluwatife-tade/', label: 'LinkedIn' },
-  { icon: Github, href: 'https://github.com/Boluwatifetade', label: 'GitHub' },
-  { icon: Mail, href: 'mailto:tadex.team@gmail.com', label: 'Email' }
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/boluwatife-tade/', label: 'LinkedIn' },
+    { icon: Github, href: 'https://github.com/Boluwatifetade', label: 'GitHub' },
+    { icon: Mail, href: 'mailto:support@tadexapp.com', label: 'Email' }
 
 
   ]
@@ -78,8 +78,8 @@ export default function Footer() {
             <div className="mb-8">
               <div className="text-3xl font-bold text-[#004859] mb-4">Tadex</div>
               <p className="text-lg text-slate-600 max-w-md">
-              Automate routing and webhook delivery, eliminating manual steps with our advanced workflow automation system.
-            </p>
+                Automate routing and webhook delivery, eliminating manual steps with our advanced workflow automation system.
+              </p>
             </div>
 
             <div className="mb-8">
@@ -192,7 +192,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-slate-200">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="text-slate-600 text-sm">© 2025 Tadex. All rights reserved.</div>
+            <div className="text-slate-600 text-sm">© 2026 Voreza Technologies. All rights reserved.</div>
             <div className="flex items-center gap-6 text-sm text-slate-600">
               <span className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-[#00B894] rounded-full animate-pulse"></div>

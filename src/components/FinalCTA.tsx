@@ -88,32 +88,9 @@ export default function FinalCTA() {
 
           {/* Dual CTA Section */}
           <div className="max-w-2xl mx-auto mb-12">
-            {/* Primary CTA - Telegram Bot */}
-            <div className="mb-8">
-              <Link href="https://t.me/TradeSwiftNowBot" target="_blank">
-                <Button 
-                  size="lg"
-                  className="bg-[#00B894] hover:bg-[#00A085] text-white px-10 py-6 text-lg rounded-full font-semibold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 w-full sm:w-auto mb-4"
-                >
-                  <Send className="w-5 h-5 mr-2" />
-                  Launch Tadex Bot Now
-                </Button>
-              </Link>
-              <p className="text-blue-100 text-sm">
-                Instant access • No signup required • Start automating immediately
-              </p>
-            </div>
-
-            {/* Divider */}
-            <div className="flex items-center my-8">
-              <div className="flex-1 h-px bg-white/20"></div>
-              <span className="px-4 text-blue-100 text-sm">OR</span>
-              <div className="flex-1 h-px bg-white/20"></div>
-            </div>
-
-            {/* Secondary CTA - Waitlist */}
+            {/* CTA - Waitlist */}
             <div>
-              <p className="text-blue-100 mb-4 font-medium">Join waitlist for early access to new features</p>
+              <p className="text-blue-100 mb-4 font-medium">Join the waitlist for early platform access</p>
               {!isSubmitted ? (
                 <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                   <Input

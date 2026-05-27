@@ -13,7 +13,6 @@ import Footer from "@/components/Footer";
 import WaitlistModal from "@/components/WaitlistModal";
 import PlanWaitlistModal from "@/components/PlanWaitlistModal";
 import ComparisonTable from "@/components/ComparisonTable";
-import Roadmap from "@/components/Roadmap";
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,16 +85,9 @@ export default function Home() {
 
               {/* Dual CTAs */}
               <div className="flex items-center gap-3">
-                <a
-                  href=""
-                  target="_blank"
-                  className="bg-[#00B894] text-white px-5 py-2 rounded-full hover:bg-[#00A085] transition-colors font-medium text-sm shadow-md hover:shadow-lg transform hover:scale-105 duration-300"
-                >
-                  Launch Bot
-                </a>
                 <button
                   onClick={openWaitlistModal}
-                  className="border border-[#004859] text-[#004859] px-5 py-2 rounded-full hover:bg-[#004859] hover:text-white transition-all font-medium text-sm"
+                  className="bg-[#00B894] hover:bg-[#00A085] text-white px-5 py-2 rounded-full transition-colors font-medium text-sm shadow-md hover:shadow-lg transform hover:scale-105 duration-300"
                 >
                   Join Waitlist
                 </button>
@@ -104,16 +96,9 @@ export default function Home() {
 
             {/* Mobile Navigation */}
             <div className="md:hidden flex items-center gap-3">
-              <a
-                href=""
-                target="_blank"
-                className="bg-[#00B894] text-white px-4 py-2 rounded-full hover:bg-[#00A085] transition-colors font-medium text-sm shadow-md"
-              >
-                Launch
-              </a>
               <button
                 onClick={openWaitlistModal}
-                className="border border-[#004859] text-[#004859] px-3 py-2 rounded-full hover:bg-[#004859] hover:text-white transition-all font-medium text-sm"
+                className="bg-[#00B894] text-white px-4 py-2 rounded-full hover:bg-[#00A085] transition-colors font-medium text-sm shadow-md"
               >
                 Waitlist
               </button>
@@ -133,7 +118,7 @@ export default function Home() {
         </div>
         <WhyAutomated />
         <ComparisonTable />
-        <Roadmap />
+
 
         <div id="pricing">
           <Pricing onPlanSelect={handlePlanSelect} />

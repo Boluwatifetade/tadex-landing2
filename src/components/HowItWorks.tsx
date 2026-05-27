@@ -7,8 +7,8 @@ export default function HowItWorks() {
     {
       number: '1',
       icon: Send,
-      title: 'Open Telegram Bot',
-      desc: 'Click the link to open Tadex in Telegram. No app download or complex sign-up required.',
+      title: 'Access the Platform',
+      desc: 'Open Tadex on any web browser. No complex installations or system down times.',
       features: ['Instant access', 'No installation', 'Mobile-friendly']
     },
     {
@@ -16,13 +16,13 @@ export default function HowItWorks() {
       icon: LinkIcon,
       title: 'Connect Destination API',
       desc: 'Configure API keys for your preferred target destination and link them securely.',
-      features: ['AES-256 encryption', 'Read-only permissions', '2-minute setup']
+      features: ['Secure integration', 'Scoped permissions', '2-minute setup']
     },
     {
       number: '3',
       icon: Settings,
       title: 'Send a Payload',
-      desc: 'Send an event payload or webhook stream to the chat. Tadex parses the structured data instantly.',
+      desc: 'Send an event payload or webhook stream to the platform. Tadex parses the structured data instantly.',
       features: ['Smart parsing', 'Multiple formats', 'Payload parsing']
     },
     {
@@ -43,10 +43,10 @@ export default function HowItWorks() {
             Get Started in Minutes
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#004859]">
-            From Chat to Routed Event Instantly
+            From Feed to Routed Event Instantly
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Tadex lives where you already are—on Telegram. Here's how to route your first automated payload in 4 simple steps.
+            Tadex runs as a cloud automation utility. Here's how to route your first automated payload in 4 simple steps.
           </p>
         </div>
 
@@ -112,8 +112,7 @@ export default function HowItWorks() {
         {/* Quick Start CTA */}
         <div className="mt-16 text-center">
           <Link 
-            href="https://t.me/TradeSwiftNowBot" 
-            target="_blank" 
+            href="#pricing" 
             className="inline-flex items-center gap-3 bg-[#00B894] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#00A085] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
           >
             <Send className="w-5 h-5" />
@@ -121,7 +120,7 @@ export default function HowItWorks() {
             <ArrowRight className="w-5 h-5" />
           </Link>
           <p className="text-slate-500 text-sm mt-4">
-            No signup required • Instant access via Telegram
+            No complex setup required • Instant web access
           </p>
         </div>
 
@@ -135,12 +134,11 @@ export default function HowItWorks() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link 
-              href="https://t.me/TradeSwiftNowBot" 
-              target="_blank"
+              href="#pricing" 
               className="inline-flex items-center bg-[#004859] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#00323B] transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               <Play className="w-5 h-5 mr-2" />
-              Start Free on Telegram
+              Start Free Trial
             </Link>
             <div className="text-slate-500 text-sm">
               No credit card required • Instant setup

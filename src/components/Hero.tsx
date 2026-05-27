@@ -4,8 +4,8 @@ import { Play, TrendingUp, Zap, Send } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Hero() {
-  // Link to the actual bot
-  const TELEGRAM_BOT_URL = "https://t.me/TradeSwiftNowBot";
+  // Link to pricing section
+  const PRICING_URL = "#pricing";
   // Placeholder for YouTube video
   const YOUTUBE_DEMO_URL = "https://youtu.be/7cLw92poCss"; 
 
@@ -19,7 +19,7 @@ export default function Hero() {
           {/* Badge - Original Style */}
           <div className="inline-flex items-center bg-[#00B894]/20 text-[#00B894] px-4 py-2 rounded-full text-sm font-medium mb-8 border border-[#00B894]/30">
             <Zap className="w-4 h-4 mr-2" />
-            Live on Telegram Beta
+            Public Beta Live
           </div>
 
           {/* Main Headline - Original Large Typography */}
@@ -35,13 +35,13 @@ export default function Hero() {
 
           {/* CTA Buttons - New Actions with Original Styling */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Link href={TELEGRAM_BOT_URL} target="_blank">
+            <Link href={PRICING_URL}>
               <Button 
                 size="lg" 
                 className="bg-[#00B894] hover:bg-[#00A085] text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 <Send className="w-5 h-5 mr-2" />
-                Request Private Beta Access
+                Get Started for Free
               </Button>
             </Link>
             <Link href={YOUTUBE_DEMO_URL} target="_blank">
@@ -113,9 +113,9 @@ export default function Hero() {
                 <div className="bg-slate-50 rounded-[1.5rem] overflow-hidden h-[500px] flex flex-col relative">
                   {/* Mock Header */}
                   <div className="bg-[#004859] p-4 pt-8 text-white flex items-center gap-3">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-xs">🤖</div>
+                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-xs">T</div>
                     <div>
-                      <div className="font-bold text-sm">Tadex Bot</div>
+                      <div className="font-bold text-sm">Tadex Platform</div>
                       <div className="text-[10px] text-[#00B894]">● Online</div>
                     </div>
                   </div>
@@ -170,13 +170,13 @@ export default function Hero() {
           <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20 max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold text-white mb-4">Ready to Automate Your Workflows?</h3>
             <p className="text-blue-100 mb-6">Join hundreds of users already optimizing their event-driven logic</p>
-            <Link href={TELEGRAM_BOT_URL} target="_blank">
+            <Link href={PRICING_URL}>
               <Button 
                 size="lg" 
                 className="bg-[#00B894] hover:bg-[#00A085] text-white px-8 py-4 text-lg font-semibold rounded-xl"
               >
                 <Send className="w-5 h-5 mr-2" />
-                Start Free on Telegram
+                Get Started Now
               </Button>
             </Link>
           </div>

@@ -14,8 +14,8 @@ export default function Features() {
     },
     {
       icon: Smartphone,
-      title: '100% Chat Managed',
-      desc: 'No heavy apps or complex dashboards. Manage your entire automation configuration directly from your chat app.',
+      title: '100% Web Managed',
+      desc: 'No heavy apps or complex local client setup. Manage your entire automation configuration directly from the browser.',
       color: 'text-[#004859]',
       bgColor: 'bg-[#004859]/10'
     },
@@ -136,15 +136,14 @@ export default function Features() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link 
-                href="https://t.me/TradeSwiftNowBot" 
-                target="_blank"
+                href="#pricing" 
                 className="bg-[#00B894] hover:bg-[#00A085] text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2"
               >
                 <Zap className="w-5 h-5" />
-                Launch Telegram Bot
+                Get Started for Free
               </Link>
               <div className="text-blue-100 text-sm">
-                No signup required • Instant access
+                No credit card required • Instant access
               </div>
             </div>
           </div>

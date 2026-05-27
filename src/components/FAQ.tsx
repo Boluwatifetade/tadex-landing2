@@ -20,7 +20,7 @@ export default function FAQ() {
     {
       icon: Smartphone,
       q: 'Do I need to download an app?',
-      a: 'No! Tadex works entirely inside Telegram. If you have Telegram installed, you already have Tadex. Just search for @TradeSwiftNowBot to start.',
+      a: 'No! Tadex is a web-based SaaS workflow automation platform. You can access it directly from your web browser, configure your event feeds, and start routing payloads in minutes.',
       category: 'General'
     },
     {
@@ -32,7 +32,7 @@ export default function FAQ() {
     {
       icon: Shield,
       q: 'How secure are my API keys?',
-      a: 'Extremely secure. We encrypt your keys using AES-256 (military-grade encryption) before storing them in an isolated database. We never ask for root or transfer permissions—only necessary dispatch permissions.',
+      a: 'Extremely secure. We secure credentials using standard encryption protocols and store them in isolated databases. We only request permissions necessary to route data payloads.',
       category: 'Security'
     },
     {
@@ -44,7 +44,7 @@ export default function FAQ() {
     {
       icon: Clock,
       q: 'What happens if I lose internet connection?',
-      a: 'Tadex runs on the cloud, not your phone. Once you send a payload or activate automation, the bot manages the dispatch 24/7, even if your phone is off.',
+      a: 'Tadex runs on the cloud. Once you establish a workflow and configure your payload routing rules, the platform routes events 24/7 automatically.',
       category: 'Technical'
     },
     {

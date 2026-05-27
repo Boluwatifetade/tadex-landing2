@@ -3,9 +3,9 @@ import { Check, X, Minus } from 'lucide-react';
 
 export default function ComparisonTable() {
   const features = [
-    { name: 'Mobile-First Experience', tadex: true, c3: false, ch: false },
+    { name: 'Cloud-Native Platform', tadex: true, c3: false, ch: false },
     { name: 'Free Beta Access', tadex: true, c3: false, ch: false },
-    { name: 'Simple Chat Interface', tadex: true, c3: false, ch: false },
+    { name: 'Simple Web Interface', tadex: true, c3: false, ch: false },
     { name: 'Real-time Outcome Logs', tadex: true, c3: true, ch: true },
     { name: 'Auto-Recovery Workflows', tadex: true, c3: 'Paid', ch: 'Paid' },
     { name: 'Localized Support (Africa)', tadex: true, c3: false, ch: false },
@@ -19,7 +19,7 @@ export default function ComparisonTable() {
             Why Users Switch to Tadex
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto">
-            Stop paying for complex dashboards you don't use. Get the features you need, right in Telegram.
+            Stop paying for complex dashboards you don't use. Get the features you need, simplified and cloud-hosted.
           </p>
         </div>
 
