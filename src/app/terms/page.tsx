@@ -77,6 +77,10 @@ export default function TermsPage() {
                       <div className="w-2 h-2 bg-[#00B894] rounded-full mt-2 flex-shrink-0"></div>
                       <p className="text-slate-700">We do not hold, manage, or have custody of user funds or assets. We cannot access or withdraw user assets.</p>
                     </li>
+                    <li className="flex items-start gap-3">
+                      <div className="w-2 h-2 bg-[#00B894] rounded-full mt-2 flex-shrink-0"></div>
+                      <p className="text-slate-700"><strong>Non-Decision Authority Constraint:</strong> Tadex is strictly a passive data transport and routing layer. The platform does not evaluate, rank, optimize, or interpret data inputs, nor does it transform data inputs into decisions or trigger outcomes based on external input quality.</p>
+                    </li>
                   </ul>
                 </div>
               </div>

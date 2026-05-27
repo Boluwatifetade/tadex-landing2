@@ -60,6 +60,12 @@ export default function FAQ() {
       category: 'Technical'
     },
     {
+      icon: Shield,
+      q: 'Does Tadex make automated decisions or evaluations?',
+      a: 'No. Tadex operates strictly as a passive data routing layer. The platform does not evaluate, rank, optimize, or interpret the quality of incoming data streams. All routing actions are executed purely based on user-configured rules, without any decision-making authority or optimization by Tadex.',
+      category: 'General'
+    },
+    {
       icon: DollarSign,
       q: 'Can I cancel anytime?',
       a: 'Yes, you can cancel your subscription at any time directly from your dashboard. There are no cancellation fees, and you\'ll retain access to your account until the end of your billing period.',
