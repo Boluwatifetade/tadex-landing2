@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       .insert({
         email: email.toLowerCase().trim(),
         selected_plan: selectedPlan,
-        trading_volume: eventVolume || null,
+        event_volume: eventVolume || null,
         current_tool: currentTool || null,
         created_at: new Date().toISOString(),
       })
