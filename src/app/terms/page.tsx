@@ -54,7 +54,7 @@ export default function TermsPage() {
 
           <h2 className="text-xl font-bold text-[#004859] mt-6">6. Contact Us</h2>
           <p>
-            If you have any questions about these Terms, please contact us at support@voreza.com.
+            If you have any questions about these Terms, please contact us at support@tadexapp.com.
           </p>
         </div>
       </div>

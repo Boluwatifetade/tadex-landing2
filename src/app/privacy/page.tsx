@@ -26,7 +26,7 @@ export default function PrivacyPage() {
           <p>
             Voreza Technologies ("we", "us", or "our") operates the Tadex platform (the "Platform"). This Privacy Policy describes how we collect, use, and share information in connection with your use of our Platform.
           </p>
-          
+
           <h2 className="text-xl font-bold text-[#004859] mt-6">1. Information We Collect</h2>
           <p>
             We only collect the personal data that you voluntarily provide to us when registering for our waitlist or subscribing to our Platform features, which may include your email address. We do not collect or store any personal financial information, identity cards, or credentials.
@@ -44,7 +44,7 @@ export default function PrivacyPage() {
 
           <h2 className="text-xl font-bold text-[#004859] mt-6">4. Contact Us</h2>
           <p>
-            If you have any questions about this Privacy Policy or our data practices, please contact us at support@voreza.com.
+            If you have any questions about this Privacy Policy or our data practices, please contact us at support@tadexapp.com.
           </p>
         </div>
       </div>
