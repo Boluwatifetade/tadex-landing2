@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tadex - Automated Trading",
-  description: "Simplify Trading. Amplify Results",
+  title: "Tadex - Workflow Automation for Event-Driven Systems",
+  description: "Simplify Workflows. Automate Event Routing.",
 };
 
 export default function RootLayout({

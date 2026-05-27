@@ -6,21 +6,21 @@ export default function Roadmap() {
     {
       phase: "Phase 1 (Live)",
       title: "MVP Launch",
-      items: ["Telegram Bot Interface", "Bybit Integration", "Auto-Risk Calculation", "Real-time PnL"],
+      items: ["Telegram Bot Interface", "Bybit Integration", "Auto-Risk Calculations", "Real-time Outcome Logging"],
       status: "completed",
       color: "bg-[#00B894]"
     },
     {
       phase: "Phase 2 (Q2 2026)",
       title: "Multi-Exchange",
-      items: ["Binance Support", "OKX Integration", "Copy Trading Marketplace", "Advanced Analytics"],
+      items: ["Binance Support", "OKX Integration", "Feed Integration Marketplace", "Advanced Activity Logging"],
       status: "in-progress",
       color: "bg-[#004859]"
     },
     {
       phase: "Phase 3 (Q3 2026)",
       title: "Platform Expansion",
-      items: ["Web Dashboard", "Mobile App (iOS/Android)", "Build-Your-Own-Bot", "AI-Powered Insights"],
+      items: ["Web Dashboard", "Mobile App (iOS/Android)", "Build-Your-Own-Trigger", "AI-Powered Insights"],
       status: "planned",
       color: "bg-slate-300"
     }

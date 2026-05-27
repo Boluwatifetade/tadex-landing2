@@ -78,7 +78,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
               <Mail className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-2xl font-bold mb-2">Join the Waitlist</h2>
-            <p className="text-blue-100">Be first to access automated trading</p>
+            <p className="text-blue-100">Be first to access event-driven automation</p>
           </div>
         </div>
 
@@ -92,7 +92,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   <div className="inline-flex items-center justify-center w-10 h-10 bg-[#00B894]/10 rounded-lg mb-2">
                     <TrendingUp className="w-5 h-5 text-[#00B894]" />
                   </div>
-                  <p className="text-xs text-slate-600">3.2x Faster</p>
+                  <p className="text-xs text-slate-600">Optimized</p>
                 </div>
                 <div className="text-center">
                   <div className="inline-flex items-center justify-center w-10 h-10 bg-[#004859]/10 rounded-lg mb-2">

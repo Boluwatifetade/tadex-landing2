@@ -175,7 +175,7 @@ export default function PlanWaitlistModal({ isOpen, onClose, selectedPlan }: Pla
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Monthly Trading Volume
+                    Monthly Event Volume
                   </label>
                   <select 
                     value={tradingVolume}
@@ -183,17 +183,17 @@ export default function PlanWaitlistModal({ isOpen, onClose, selectedPlan }: Pla
                     className="w-full border border-slate-300 focus:border-[#004859] rounded-lg py-2 px-3 bg-white"
                   >
                     <option value="">Select volume...</option>
-                    <option value="under-1k">Under $1,000</option>
-                    <option value="1k-10k">$1,000 - $10,000</option>
-                    <option value="10k-50k">$10,000 - $50,000</option>
-                    <option value="50k-100k">$50,000 - $100,000</option>
-                    <option value="over-100k">Over $100,000</option>
+                    <option value="under-1k">Under 1,000 events</option>
+                    <option value="1k-10k">1,000 - 10,000 events</option>
+                    <option value="10k-50k">10,000 - 50,000 events</option>
+                    <option value="50k-100k">50,000 - 100,000 events</option>
+                    <option value="over-100k">Over 100,000 events</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Current Trading Method
+                    Current Automation Method
                   </label>
                   <select 
                     value={currentTool}
@@ -201,10 +201,10 @@ export default function PlanWaitlistModal({ isOpen, onClose, selectedPlan }: Pla
                     className="w-full border border-slate-300 focus:border-[#004859] rounded-lg py-2 px-3 bg-white"
                   >
                     <option value="">Select method...</option>
-                    <option value="manual">Manual Trading</option>
-                    <option value="3commas">3Commas</option>
-                    <option value="cryptohopper">Cryptohopper</option>
-                    <option value="other-bot">Other Trading Bot</option>
+                    <option value="manual">Manual / Custom Webhooks</option>
+                    <option value="3commas">Zapier / Make</option>
+                    <option value="cryptohopper">n8n / Node-RED</option>
+                    <option value="other-bot">Other Automation Tool</option>
                     <option value="none">Just Getting Started</option>
                   </select>
                 </div>

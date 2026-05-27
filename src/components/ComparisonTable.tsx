@@ -6,8 +6,8 @@ export default function ComparisonTable() {
     { name: 'Mobile-First Experience', tadex: true, c3: false, ch: false },
     { name: 'Free Beta Access', tadex: true, c3: false, ch: false },
     { name: 'Simple Chat Interface', tadex: true, c3: false, ch: false },
-    { name: 'Real-time PnL Alerts', tadex: true, c3: true, ch: true },
-    { name: 'Auto-Breakeven Logic', tadex: true, c3: 'Paid', ch: 'Paid' },
+    { name: 'Real-time Outcome Logs', tadex: true, c3: true, ch: true },
+    { name: 'Auto-Recovery Workflows', tadex: true, c3: 'Paid', ch: 'Paid' },
     { name: 'Localized Support (Africa)', tadex: true, c3: false, ch: false },
   ];
 
@@ -16,7 +16,7 @@ export default function ComparisonTable() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-[#004859] mb-4">
-            Why Traders Switch to Tadex
+            Why Users Switch to Tadex
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto">
             Stop paying for complex dashboards you don't use. Get the features you need, right in Telegram.

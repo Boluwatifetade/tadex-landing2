@@ -19,10 +19,10 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
       features: [
         'All core features enabled',
         'Connect one exchange account',
-        'Up to 10 automated trades',
+        'Up to 10 automated event routings',
         'Basic support',
-        'Real-time execution',
-        'Performance tracking'
+        'Real-time routing',
+        'Activity logging'
       ],
       cta: 'Start Free Trial',
       description: 'Perfect for testing our platform',
@@ -38,15 +38,15 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
       popular: true,
       features: [
         'Everything in Free Trial',
-        'Unlimited trade automation',
+        'Unlimited event automation',
         'Connect up to 3 exchange accounts',
-        'Advanced risk management',
+        'Advanced routing rules',
         'Email support',
-        'Custom position sizing',
-        'Multiple signal providers'
+        'Custom payload mapping',
+        'Multiple feed connectors'
       ],
       cta: 'Reserve Basic Plan',
-      description: 'Most popular for individual traders',
+      description: 'Most popular for individual users',
       color: 'border-[#00B894] bg-gradient-to-br from-white to-[#00B894]/5 relative',
       planId: 'basic'
     },
@@ -60,12 +60,12 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
       features: [
         'Everything in Basic',
         'Unlimited exchange accounts',
-        'Priority execution & alerts',
-        'Advanced analytics dashboard',
-        'Custom strategy builder',
+        'Priority routing & alerts',
+        'Advanced activity analytics',
+        'Custom rule builder',
         'Priority support (24/7)',
         'API access',
-        'Portfolio management tools'
+        'Multi-account routing'
       ],
       cta: 'Reserve Premium',
       description: 'For professional traders and teams',
@@ -211,7 +211,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
             </div>
             <div className="flex items-center justify-center gap-3">
               <Zap className="w-5 h-5 text-[#00B894]" />
-              <span>Automate your crypto trades safely using real signals</span>
+              <span>Automate event routing safely using real-time feeds</span>
             </div>
             <div className="flex items-center justify-center gap-3">
               <Star className="w-5 h-5 text-[#00B894]" />
