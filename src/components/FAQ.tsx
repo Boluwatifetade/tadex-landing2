@@ -26,37 +26,37 @@ export default function FAQ() {
     {
       icon: DollarSign,
       q: 'Is it free to use?',
-      a: 'Yes, Tadex is completely free during our Public Beta period. You can automate trades on Bybit Mainnet or Testnet without any subscription fees.',
+      a: 'Yes, Tadex is completely free during our Public Beta period. You can automate workflow routing to destination endpoints without any subscription fees.',
       category: 'Billing'
     },
     {
       icon: Shield,
       q: 'How secure are my API keys?',
-      a: 'Extremely secure. We encrypt your keys using AES-256 (military-grade encryption) before storing them in an isolated database. We never ask for withdrawal permissions—only trade permissions.',
+      a: 'Extremely secure. We encrypt your keys using AES-256 (military-grade encryption) before storing them in an isolated database. We never ask for root or transfer permissions—only necessary dispatch permissions.',
       category: 'Security'
     },
     {
       icon: Settings,
       q: 'Does it work with Binance or OKX?',
-      a: 'Currently, we support Bybit (Unified Trading Accounts) for the best speed and reliability. Binance, OKX, and others are on our roadmap for Q2 2026.',
+      a: 'Currently, we support Bybit accounts for the best speed and reliability. Binance, OKX, and others are on our roadmap for Q2 2026.',
       category: 'Technical'
     },
     {
       icon: Clock,
       q: 'What happens if I lose internet connection?',
-      a: 'Tadex runs on the cloud, not your phone. Once you send a signal or activate automation, the bot manages the trade 24/7, even if your phone is off.',
+      a: 'Tadex runs on the cloud, not your phone. Once you send a payload or activate automation, the bot manages the dispatch 24/7, even if your phone is off.',
       category: 'Technical'
     },
     {
       icon: HelpCircle,
       q: 'What is Tadex?',
-      a: 'Tadex is an automated crypto trading platform that connects directly to your exchange and executes trades instantly based on signals from verified providers. It eliminates emotional trading and ensures you never miss profitable opportunities.',
+      a: 'Tadex is an automated event-driven workflow routing platform that connects directly to your target endpoints and routes payloads instantly based on rules from your data feeds. It eliminates manual overhead and ensures you never miss a payload.',
       category: 'General'
     },
     {
       icon: Settings,
-      q: 'How fast are trade executions?',
-      a: 'Tadex executes trades in milliseconds - 3.2x faster than manual trading. Our infrastructure is optimized for high-frequency trading with 99.9% uptime and direct API connections to exchanges.',
+      q: 'How fast are event dispatches?',
+      a: 'Tadex dispatches payloads in milliseconds. Our infrastructure is optimized for high-throughput routing with 99.9% uptime and direct API connections.',
       category: 'Technical'
     },
     {
@@ -83,7 +83,7 @@ export default function FAQ() {
             Frequently Asked Questions
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Everything you need to know about Tadex automated trading
+            Everything you need to know about Tadex workflow automation
           </p>
         </div>
 
@@ -167,7 +167,7 @@ export default function FAQ() {
             Still Have Questions?
           </h3>
           <p className="text-blue-100 mb-8 max-w-2xl mx-auto text-lg">
-            Our support team is here to help you get started with automated trading
+            Our support team is here to help you get started with workflow automation
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button className="bg-[#00B894] hover:bg-[#00A085] text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2">

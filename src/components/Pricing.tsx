@@ -18,7 +18,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
       popular: false,
       features: [
         'All core features enabled',
-        'Connect one exchange account',
+        'Connect one target API/destination',
         'Up to 10 automated event routings',
         'Basic support',
         'Real-time routing',
@@ -39,7 +39,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
       features: [
         'Everything in Free Trial',
         'Unlimited event automation',
-        'Connect up to 3 exchange accounts',
+        'Connect up to 3 target APIs/destinations',
         'Advanced routing rules',
         'Email support',
         'Custom payload mapping',
@@ -59,7 +59,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
       popular: false,
       features: [
         'Everything in Basic',
-        'Unlimited exchange accounts',
+        'Unlimited target APIs/destinations',
         'Priority routing & alerts',
         'Advanced activity analytics',
         'Custom rule builder',
@@ -68,7 +68,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
         'Multi-account routing'
       ],
       cta: 'Reserve Premium',
-      description: 'For professional traders and teams',
+      description: 'For automated systems and teams',
       color: 'border-[#004859] bg-gradient-to-br from-white to-[#004859]/5',
       planId: 'premium'
     },

@@ -14,23 +14,23 @@ export default function HowItWorks() {
     {
       number: '2',
       icon: LinkIcon,
-      title: 'Connect Exchange',
-      desc: 'Create API keys on Bybit (Testnet or Mainnet) and paste them into the bot securely.',
+      title: 'Connect Destination API',
+      desc: 'Configure API keys for your preferred target destination and link them securely.',
       features: ['AES-256 encryption', 'Read-only permissions', '2-minute setup']
     },
     {
       number: '3',
       icon: Settings,
-      title: 'Paste a Signal',
-      desc: 'Copy a trade signal from your favorite group and paste it into the chat. Tadex parses it instantly.',
-      features: ['Smart parsing', 'Multiple formats', 'Instant processing']
+      title: 'Send a Payload',
+      desc: 'Send an event payload or webhook stream to the chat. Tadex parses the structured data instantly.',
+      features: ['Smart parsing', 'Multiple formats', 'Payload parsing']
     },
     {
       number: '4',
       icon: BarChart3,
-      title: 'See Live Results',
-      desc: 'Tadex calculates risk, places the trade, and sends you a PnL report when it closes.',
-      features: ['Real-time execution', 'Live PnL tracking', 'Performance analytics']
+      title: 'See Live Routing Logs',
+      desc: 'Tadex validates the payload, routes the request, and logs the execution status in real time.',
+      features: ['Real-time routing', 'Live delivery logs', 'System metrics']
     },
   ];
 
@@ -43,10 +43,10 @@ export default function HowItWorks() {
             Get Started in Minutes
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#004859]">
-            From Chat to Trade Instantly
+            From Chat to Routed Event Instantly
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Tadex lives where you already are—on Telegram. Here's how to execute your first automated trade in 4 simple steps.
+            Tadex lives where you already are—on Telegram. Here's how to route your first automated payload in 4 simple steps.
           </p>
         </div>
 
@@ -128,10 +128,10 @@ export default function HowItWorks() {
         {/* Bottom CTA Section */}
         <div className="mt-20 text-center bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-8 lg:p-12 border border-slate-200 shadow-sm">
           <h3 className="text-2xl md:text-3xl font-bold text-[#004859] mb-4">
-            Ready to Start Automated Trading?
+            Ready to Start Automated Event Routing?
           </h3>
           <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
-            Join thousands of traders who've already automated their success with Tadex
+            Join thousands of users who've already automated their workflows with Tadex
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link 

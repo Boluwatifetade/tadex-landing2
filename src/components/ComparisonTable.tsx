@@ -31,8 +31,8 @@ export default function ComparisonTable() {
                 <th className="p-6 text-center bg-[#004859]/5 border-x border-[#004859]/10">
                   <span className="text-[#004859] font-bold text-lg">Tadex</span>
                 </th>
-                <th className="p-6 text-center text-slate-500 font-medium">3Commas</th>
-                <th className="p-6 text-center text-slate-500 font-medium">Cryptohopper</th>
+                <th className="p-6 text-center text-slate-500 font-medium">Zapier</th>
+                <th className="p-6 text-center text-slate-500 font-medium">Make</th>
               </tr>
             </thead>
             <tbody>

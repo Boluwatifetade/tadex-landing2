@@ -6,22 +6,22 @@ export default function SecurityTransparency() {
   const securityFeatures = [
     {
       icon: Shield,
-      title: "We Never Hold Your Funds",
-      description: "Your cryptocurrency stays in your exchange account at all times. We only execute trades - we never have access to withdraw or transfer your assets.",
+      title: "We Never Hold Your Assets",
+      description: "Your data and assets stay in your external accounts at all times. We only route payloads - we never have access to withdraw or transfer any assets.",
       color: "from-green-500 to-green-600",
       details: [
         "Your funds remain in your control",
         "No custody or withdrawal permissions",
-        "Only trade execution capabilities"
+        "Only dispatch/routing capabilities"
       ]
     },
     {
       icon: Key,
-      title: "Trade-Only API Keys",
-      description: "We use exchange API keys with restricted permissions - trading only, no withdrawals. Even if compromised, your funds cannot be moved off the exchange.",
+      title: "Restricted-Scope API Keys",
+      description: "We use target destination API keys with restricted permissions - routing/posting only, no administrative access. Even if compromised, your assets cannot be moved.",
       color: "from-blue-500 to-blue-600",
       details: [
-        "Read and trade permissions only",
+        "Read and dispatch permissions only",
         "Withdrawal permissions disabled",
         "You control API key restrictions"
       ]
@@ -40,12 +40,12 @@ export default function SecurityTransparency() {
     {
       icon: Eye,
       title: "Full Transparency",
-      description: "You have complete visibility into every trade, decision, and action. Real-time notifications and detailed logs keep you informed 24/7.",
+      description: "You have complete visibility into every event, routing rule, and action. Real-time notifications and detailed logs keep you informed 24/7.",
       color: "from-amber-500 to-amber-600",
       details: [
-        "Real-time trade notifications",
+        "Real-time routing notifications",
         "Complete audit logs",
-        "Performance tracking dashboard"
+        "Uptime and delivery logs dashboard"
       ]
     }
   ];
@@ -53,8 +53,8 @@ export default function SecurityTransparency() {
   const howItWorks = [
     {
       step: 1,
-      title: "You Create Trade-Only API Keys",
-      description: "On your exchange (Binance, Coinbase, etc.), create API keys with only 'read' and 'trade' permissions. Never enable withdrawal permissions.",
+      title: "You Create Restricted-Scope API Keys",
+      description: "On your target platform, create API keys with only 'read' and 'write' permissions. Never enable administrative/transfer permissions.",
       icon: Key
     },
     {
@@ -65,14 +65,14 @@ export default function SecurityTransparency() {
     },
     {
       step: 3,
-      title: "Automated Trading Begins",
-      description: "Our system monitors signals and executes trades on your behalf - but only trades. Your funds stay safely in your exchange account.",
+      title: "Automated Routing Begins",
+      description: "Our system monitors event feeds and routes payloads on your behalf - but only routes. Your assets stay safely in your target account.",
       icon: Zap
     },
     {
       step: 4,
       title: "You Stay In Control",
-      description: "Pause trading anytime, revoke API keys instantly, or adjust risk settings. You're always in the driver's seat.",
+      description: "Pause routing anytime, revoke API keys instantly, or adjust validation settings. You're always in control.",
       icon: Shield
     }
   ];
@@ -127,13 +127,13 @@ export default function SecurityTransparency() {
     },
     {
       icon: AlertCircle,
-      title: "Honest About Risks",
-      description: "Trading carries risk. We're upfront about potential losses and never guarantee returns. Your decision should be informed."
+      title: "Honest About Limits",
+      description: "Data delivery depends on external uptime. We are upfront about third-party API limits and enforce strict timeout rules."
     },
     {
       icon: Server,
       title: "Battle-Tested Technology",
-      description: "Our infrastructure is built on proven, enterprise-grade technologies used by leading financial institutions."
+      description: "Our infrastructure is built on proven, enterprise-grade technologies used by leading institutions."
     }
   ];
 
@@ -161,10 +161,10 @@ export default function SecurityTransparency() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-[#004859] mb-4">
-              How We Keep Your Assets Safe
+              How We Keep Your Data Safe
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Four fundamental principles that protect your trading account
+              Four fundamental principles that protect your automation account
             </p>
           </div>
 
@@ -349,21 +349,21 @@ export default function SecurityTransparency() {
           <div className="space-y-6">
             <details className="bg-slate-50 rounded-xl p-6 border border-slate-200 group">
               <summary className="font-semibold text-[#004859] cursor-pointer flex items-center justify-between">
-                What happens if Tadex gets hacked?
+                What happens if Tadex gets compromised?
                 <span className="text-2xl group-open:rotate-45 transition-transform">+</span>
               </summary>
               <p className="mt-4 text-slate-600 leading-relaxed">
-                Even in the worst-case scenario, your funds are safe. We only have trade-only API keys with no withdrawal permissions. Hackers couldn't move your cryptocurrency off the exchange - they could only potentially place trades, which would be immediately detected and blocked.
+                Even in the worst-case scenario, your assets are safe. We only store restricted API keys with no transfer or withdrawal permissions. Attackers cannot move your assets off your account.
               </p>
             </details>
 
             <details className="bg-slate-50 rounded-xl p-6 border border-slate-200 group">
               <summary className="font-semibold text-[#004859] cursor-pointer flex items-center justify-between">
-                Can you access my exchange account directly?
+                Can you access my destination account directly?
                 <span className="text-2xl group-open:rotate-45 transition-transform">+</span>
               </summary>
               <p className="mt-4 text-slate-600 leading-relaxed">
-                No. We never have your exchange login credentials. We only use API keys you create with restricted permissions. You maintain full control and can revoke our access at any time by deleting the API key in your exchange settings.
+                No. We never have your destination login credentials. We only use API keys you create with restricted permissions. You maintain full control and can revoke our access at any time by deleting the API key in your account settings.
               </p>
             </details>
 
@@ -383,7 +383,7 @@ export default function SecurityTransparency() {
                 <span className="text-2xl group-open:rotate-45 transition-transform">+</span>
               </summary>
               <p className="mt-4 text-slate-600 leading-relaxed">
-                You can stop at any time with no penalties. Simply pause trading in your dashboard or revoke the API key from your exchange. Your data can be deleted upon request, and there are no cancellation fees.
+                You can stop at any time with no penalties. Simply pause routing in your dashboard or revoke the API key. Your data can be deleted upon request, and there are no cancellation fees.
               </p>
             </details>
 
@@ -393,7 +393,7 @@ export default function SecurityTransparency() {
                 <span className="text-2xl group-open:rotate-45 transition-transform">+</span>
               </summary>
               <p className="mt-4 text-slate-600 leading-relaxed">
-                Never. Your trading data, email, and personal information are never sold, shared, or used for any purpose other than providing our service to you. We're NDPR compliant and take data privacy seriously.
+                Never. Your routing data, email, and personal information are never sold, shared, or used for any purpose other than providing our service to you. We're NDPR compliant and take data privacy seriously.
               </p>
             </details>
           </div>
@@ -405,10 +405,10 @@ export default function SecurityTransparency() {
         <div className="max-w-4xl mx-auto text-center">
           <Shield className="w-16 h-16 mx-auto mb-6 opacity-80" />
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Trade with Confidence
+            Automate with Confidence
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Your security and trust are the foundation of everything we build. Start trading with peace of mind.
+            Your security and trust are the foundation of everything we build. Start automating with peace of mind.
           </p>
           <button className="bg-white text-[#004859] px-8 py-4 rounded-xl font-semibold text-lg hover:bg-blue-50 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105">
             Get Started Securely

@@ -13,7 +13,7 @@ interface PlanWaitlistModalProps {
 
 export default function PlanWaitlistModal({ isOpen, onClose, selectedPlan }: PlanWaitlistModalProps) {
   const [email, setEmail] = useState('');
-  const [tradingVolume, setTradingVolume] = useState('');
+  const [eventVolume, setEventVolume] = useState('');
   const [currentTool, setCurrentTool] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +70,7 @@ export default function PlanWaitlistModal({ isOpen, onClose, selectedPlan }: Pla
         body: JSON.stringify({ 
           email, 
           selectedPlan,
-          tradingVolume,
+          eventVolume,
           currentTool
         }),
       });
@@ -84,7 +84,7 @@ export default function PlanWaitlistModal({ isOpen, onClose, selectedPlan }: Pla
       console.log('Plan interest submitted:', { email, selectedPlan });
       setIsSubmitted(true);
       setEmail('');
-      setTradingVolume('');
+      setEventVolume('');
       setCurrentTool('');
       
       // Auto-close modal after success
@@ -178,8 +178,8 @@ export default function PlanWaitlistModal({ isOpen, onClose, selectedPlan }: Pla
                     Monthly Event Volume
                   </label>
                   <select 
-                    value={tradingVolume}
-                    onChange={(e) => setTradingVolume(e.target.value)}
+                    value={eventVolume}
+                    onChange={(e) => setEventVolume(e.target.value)}
                     className="w-full border border-slate-300 focus:border-[#004859] rounded-lg py-2 px-3 bg-white"
                   >
                     <option value="">Select volume...</option>
@@ -202,9 +202,9 @@ export default function PlanWaitlistModal({ isOpen, onClose, selectedPlan }: Pla
                   >
                     <option value="">Select method...</option>
                     <option value="manual">Manual / Custom Webhooks</option>
-                    <option value="3commas">Zapier / Make</option>
-                    <option value="cryptohopper">n8n / Node-RED</option>
-                    <option value="other-bot">Other Automation Tool</option>
+                    <option value="zapier">Zapier / Make</option>
+                    <option value="n8n">n8n / Node-RED</option>
+                    <option value="other-tool">Other Automation Tool</option>
                     <option value="none">Just Getting Started</option>
                   </select>
                 </div>

@@ -67,15 +67,15 @@ export default function TermsPage() {
                   <ul className="space-y-3">
                     <li className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-[#00B894] rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-slate-700">We provide a software interface to automate the transmission of data to your cryptocurrency exchange account.</p>
+                      <p className="text-slate-700">We provide a software interface to automate the routing and transmission of data payloads and webhooks to user-configured API endpoints.</p>
                     </li>
                     <li className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-[#00B894] rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-slate-700"><strong>We are NOT a Financial Advisor, Broker-Dealer, or Hedge Fund.</strong></p>
+                      <p className="text-slate-700"><strong>We are NOT a Financial Advisor, Broker-Dealer, or Hedge Fund.</strong> Tadex is a SaaS workflow automation platform and does not provide financial services, trading services, execution services, or investment advice.</p>
                     </li>
                     <li className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-[#00B894] rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-slate-700">We do not have custody of your funds. We cannot withdraw your funds.</p>
+                      <p className="text-slate-700">We do not hold, manage, or have custody of user funds or assets. We cannot access or withdraw user assets.</p>
                     </li>
                   </ul>
                 </div>
@@ -90,27 +90,26 @@ export default function TermsPage() {
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-[#004859] mb-4">Risk Disclosure</h2>
                   <p className="text-slate-700 mb-6 text-lg font-semibold">
-                    Cryptocurrency trading involves extreme risk. By using Tadex, you acknowledge:
+                    Using API integrations and automated event routing carries operational risks. By using Tadex, you acknowledge and agree that:
                   </p>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="bg-red-50 border border-red-200 rounded-xl p-6">
-                      <h3 className="font-bold text-red-800 mb-3">Software Risk</h3>
+                      <h3 className="font-bold text-red-800 mb-3">API and Connection Risk</h3>
                       <p className="text-red-700 text-sm">
-                        Bugs, latency, or API outages at Bybit may cause trades to fail or exit late. 
+                        Bugs, network latency, or API outages at destination platforms may cause event dispatches to fail, delay, or be lost. 
                         Tadex is provided "AS IS" without warranty.
                       </p>
                     </div>
                     <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
-                      <h3 className="font-bold text-yellow-800 mb-3">Signal Risk</h3>
+                      <h3 className="font-bold text-yellow-800 mb-3">Feed Content and Payload Risk</h3>
                       <p className="text-yellow-700 text-sm">
-                        Signal Providers are independent third parties. Tadex does not vet their financial qualifications. 
-                        Past performance is not indicative of future results.
+                        Data feeds and payload sources are configured and managed entirely by the User. Tadex does not verify, vet, or validate the content, accuracy, or suitability of incoming data streams. The User is solely responsible for verifying the conditions defined in their workflow triggers.
                       </p>
                     </div>
                     <div className="bg-orange-50 border border-orange-200 rounded-xl p-6 md:col-span-2">
-                      <h3 className="font-bold text-orange-800 mb-3">Total Loss Warning</h3>
+                      <h3 className="font-bold text-orange-800 mb-3">Integration and Outcome Disclaimer</h3>
                       <p className="text-orange-700 text-sm font-semibold">
-                        You understand that you may lose 100% of the funds allocated to trading.
+                        You understand that Tadex is purely a routing tool and is not responsible for any actions, executions, or outcomes that occur on external systems or target APIs as a result of payload delivery.
                       </p>
                     </div>
                   </div>
@@ -128,8 +127,8 @@ export default function TermsPage() {
                   <p className="text-slate-700 mb-6 text-lg">To the maximum extent permitted by law, Tadex Technologies Ltd. shall NOT be liable for:</p>
                   <ul className="space-y-3 mb-8">
                     {[
-                      "Any direct, indirect, or consequential loss of profits or data.",
-                      "Losses resulting from 'Fat Finger' errors by Signal Providers.",
+                      "Any direct, indirect, or consequential loss of revenues, profits, or data.",
+                      "Losses or incorrect actions resulting from errors, typos, or malformed payloads from data feeds.",
                       "Losses resulting from unauthorized access to your account due to your failure to secure your password or API keys."
                     ].map((item, index) => (
                       <li key={index} className="flex items-start gap-3">
@@ -185,8 +184,7 @@ export default function TermsPage() {
                 <div>
                   <h3 className="text-xl font-bold text-[#004859] mb-3">Acknowledgment</h3>
                   <p className="text-[#004859] text-lg leading-relaxed">
-                    By using the Tadex platform, I confirm that I have read and understand the risks involved in automated trading, 
-                    including the potential for complete loss of funds, and agree to be bound by these Terms of Service.
+                    By using the Tadex platform, I confirm that I have read and understand the risks involved in automated workflow routing and API integration, including the potential for payload delivery failures, and agree to be bound by these Terms of Service.
                   </p>
                 </div>
               </div>

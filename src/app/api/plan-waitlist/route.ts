@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 
 export async function POST(req: Request) {
   try {
-    const { email, selectedPlan, tradingVolume, currentTool } = await req.json();
+    const { email, selectedPlan, eventVolume, currentTool } = await req.json();
 
     if (!email || !email.includes('@')) {
       return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       .insert({
         email: email.toLowerCase().trim(),
         selected_plan: selectedPlan,
-        trading_volume: tradingVolume || null,
+        trading_volume: eventVolume || null,
         current_tool: currentTool || null,
         created_at: new Date().toISOString(),
       })

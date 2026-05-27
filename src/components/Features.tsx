@@ -6,53 +6,53 @@ export default function Features() {
   const features = [
     {
       icon: Zap,
-      title: 'Instant Execution',
-      desc: 'Tadex reads your signal and places the order on Bybit in milliseconds. Faster than humanly possible.',
+      title: 'Instant Event Dispatch',
+      desc: 'Tadex parses event payloads and routes requests to destination APIs in milliseconds. Automated delivery at scale.',
       color: 'text-[#00B894]',
       bgColor: 'bg-[#00B894]/10',
       highlight: true
     },
     {
       icon: Smartphone,
-      title: '100% Telegram Native',
-      desc: 'No heavy apps or complex dashboards. Manage your entire trading portfolio directly from your chat app.',
+      title: '100% Chat Managed',
+      desc: 'No heavy apps or complex dashboards. Manage your entire automation configuration directly from your chat app.',
       color: 'text-[#004859]',
       bgColor: 'bg-[#004859]/10'
     },
     {
       icon: Shield,
-      title: 'Smart Risk Guard',
-      desc: 'Set your risk per trade once (e.g., 2%). Tadex automatically calculates position size for every trade.',
+      title: 'Rule-Based Validation',
+      desc: 'Define validation and threshold rules once. Tadex automatically enforces parameters on outgoing payloads.',
       color: 'text-[#00B894]',
       bgColor: 'bg-[#00B894]/10',
       highlight: true
     },
     {
       icon: Brain,
-      title: 'Remove Emotional Bias',
-      desc: 'Eliminate FOMO, fear and emotional trading decisions that lead to losses with automated execution.',
+      title: 'Continuous Processing',
+      desc: 'Eliminate manual latency and processing delays with fully automated payload routing.',
       color: 'text-[#004859]',
       bgColor: 'bg-[#004859]/10'
     },
     {
       icon: Radio,
-      title: 'Smart Signal Parsing',
-      desc: 'Copy-paste signals from any VIP group. Our NLP engine understands entry, SL, and TP formats automatically.',
+      title: 'Structured Payload Parsing',
+      desc: 'Parse unstructured data from message feeds. Our parsing engine understands custom formats automatically.',
       color: 'text-[#00B894]',
       bgColor: 'bg-[#00B894]/10',
       highlight: true
     },
     {
       icon: BarChart3,
-      title: 'Real-Time PnL Tracking',
-      desc: 'Get notified the moment a trade hits profit. Receive daily summary reports of your trading performance.',
+      title: 'Real-Time Activity Logs',
+      desc: 'Get notified the moment an event routes. Receive daily summary reports of your system metrics.',
       color: 'text-[#004859]',
       bgColor: 'bg-[#004859]/10'
     },
     {
       icon: TrendingUp,
-      title: 'Auto-Breakeven & Scaling',
-      desc: 'Protect your gains. Tadex automatically moves Stop Loss to entry and scales positions at profit targets.',
+      title: 'Auto-Retry & Scaling',
+      desc: 'Protect your data pipelines. Tadex automatically retries failed dispatches and routes payloads based on targets.',
       color: 'text-[#00B894]',
       bgColor: 'bg-[#00B894]/10',
       highlight: true
@@ -60,14 +60,14 @@ export default function Features() {
     {
       icon: Shield,
       title: 'Advanced Analytics',
-      desc: 'Track performance, win rates and optimize your automated trading strategies with detailed insights.',
+      desc: 'Track performance, delivery rates and optimize your automated workflow strategies with detailed insights.',
       color: 'text-[#004859]',
       bgColor: 'bg-[#004859]/10'
     },
     {
       icon: Radio,
-      title: 'Signal Provider Integration',
-      desc: 'Subscribe to proven signal providers and automate their strategies instantly with one click.',
+      title: 'Data Feed Integration',
+      desc: 'Connect to verified data feeds and automate their payload routing instantly with one click.',
       color: 'text-[#00B894]',
       bgColor: 'bg-[#00B894]/10'
     },
@@ -85,7 +85,7 @@ export default function Features() {
             Powerful Features, <span className="text-[#00B894]">Simplified</span>
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            We stripped away the complexity of pro tools and kept the power. Everything you need to automate your trading strategy Tadex executes signals exactly as defined.
+            We stripped away the complexity of enterprise tools and kept the power. Everything you need to automate your event-driven routing rules. Tadex dispatches requests exactly as defined.
           </p>
         </div>
 
@@ -129,10 +129,10 @@ export default function Features() {
         <div className="text-center mt-16">
           <div className="bg-gradient-to-r from-[#004859] to-[#006B7C] rounded-2xl p-8 lg:p-12 text-white shadow-xl">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              Ready to Experience Automated Trading?
+              Ready to Experience Automated Workflows?
             </h3>
             <p className="text-blue-100 mb-8 max-w-2xl mx-auto text-lg">
-              Join thousands of traders who've transformed their trading with Tadex
+              Join thousands of users who've transformed their operations with Tadex
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link 

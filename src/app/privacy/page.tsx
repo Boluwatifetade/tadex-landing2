@@ -79,14 +79,14 @@ export default function PrivacyPage() {
                         icon: "👤"
                       },
                       {
-                        title: "Financial Data",
-                        description: "Bybit API Keys (Encrypted), Wallet Address",
-                        note: "For payouts and trade execution",
-                        icon: "💰"
+                        title: "Destination Credentials",
+                        description: "API Keys or Access Tokens (Encrypted)",
+                        note: "For target API connection and workflow routing verification",
+                        icon: "🔑"
                       },
                       {
-                        title: "Transactional Data",
-                        description: "Trade history, Subscription status, Payment confirmation",
+                        title: "Operational Data",
+                        description: "Workflow routing history, Subscription status, Payment confirmation",
                         note: "From M-Pesa/Paystack for billing verification",
                         icon: "📊"
                       }
@@ -114,8 +114,8 @@ export default function PrivacyPage() {
                   <h2 className="text-2xl font-bold text-[#004859] mb-4">Purpose of Processing</h2>
                   <div className="grid md:grid-cols-2 gap-4">
                     {[
-                      { icon: "⚡", title: "Execution", desc: "Transmit trade commands to your exchange account via API" },
-                      { icon: "🔔", title: "Notification", desc: "Send Telegram/Email alerts regarding trade status" },
+                      { icon: "⚡", title: "Routing", desc: "Transmit event payloads and data packages to user-configured APIs" },
+                      { icon: "🔔", title: "Notification", desc: "Send Telegram/Email alerts regarding payload routing status" },
                       { icon: "💳", title: "Billing", desc: "Verify subscription payments and manage billing" },
                       { icon: "🛡️", title: "Security", desc: "Detect abnormal IP usage indicating account compromise" }
                     ].map((item, index) => (
@@ -151,7 +151,7 @@ export default function PrivacyPage() {
                       },
                       {
                         title: "Retention Policy",
-                        description: "We retain trade logs for 5 years as required by financial auditing standards",
+                        description: "We retain routing logs for 5 years as required by standard operational auditing practices",
                         badge: "Compliant"
                       }
                     ].map((item, index) => (
@@ -185,13 +185,13 @@ export default function PrivacyPage() {
                     {[
                       {
                         title: "Right to Access",
-                        description: "Request a copy of all trade logs we hold for you",
+                        description: "Request a copy of all event routing logs we hold for you",
                         icon: "📋"
                       },
                       {
                         title: "Right to Erasure",
                         description: "Request deletion of your account and personal data",
-                        note: "Trade logs will be anonymized for platform analytics",
+                        note: "Event routing logs will be anonymized for platform analytics",
                         icon: "🗑️"
                       },
                       {
@@ -226,7 +226,7 @@ export default function PrivacyPage() {
                   <p className="text-slate-700 mb-6 text-lg font-semibold">We do NOT sell your data. We only share data with:</p>
                   <div className="grid md:grid-cols-3 gap-4">
                     {[
-                      { name: "Exchange Partners", detail: "Bybit", purpose: "Trade execution" },
+                      { name: "Integration Partners", detail: "Bybit API Endpoint", purpose: "Payload routing" },
                       { name: "Payment Processors", detail: "Paystack/M-Pesa", purpose: "Fee processing" },
                       { name: "Law Enforcement", detail: "Nigerian Courts", purpose: "Legal compliance" }
                     ].map((item, index) => (
