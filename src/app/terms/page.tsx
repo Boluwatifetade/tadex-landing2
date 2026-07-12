@@ -54,7 +54,15 @@ export default function TermsPage() {
 
           <h2 className="text-xl font-bold text-[#004859] mt-6">6. Contact Us</h2>
           <p>
-            If you have any questions about these Terms, please contact us at support@tadexapp.com.
+            If you have any questions about these Terms, please contact us at{' '}
+            <a href="mailto:tadex.team@gmail.com" className="text-[#004859] underline">tadex.team@gmail.com</a>.
+          </p>
+
+          <h2 className="text-xl font-bold text-[#004859] mt-6">7. Operating Address</h2>
+          <p>
+            Voreza Technologies<br />
+            17 Peaceland Estate, Igbe Kapo,<br />
+            Ikorodu, Lagos State, Nigeria
           </p>
         </div>
       </div>

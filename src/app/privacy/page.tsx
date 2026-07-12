@@ -44,7 +44,15 @@ export default function PrivacyPage() {
 
           <h2 className="text-xl font-bold text-[#004859] mt-6">4. Contact Us</h2>
           <p>
-            If you have any questions about this Privacy Policy or our data practices, please contact us at support@tadexapp.com.
+            If you have any questions about this Privacy Policy or our data practices, please contact us at{' '}
+            <a href="mailto:tadex.team@gmail.com" className="text-[#004859] underline">tadex.team@gmail.com</a>.
+          </p>
+
+          <h2 className="text-xl font-bold text-[#004859] mt-6">5. Operating Address</h2>
+          <p>
+            Voreza Technologies<br />
+            17 Peaceland Estate, Igbe Kapo,<br />
+            Ikorodu, Lagos State, Nigeria
           </p>
         </div>
       </div>

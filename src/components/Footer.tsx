@@ -62,7 +62,7 @@ export default function Footer() {
     { icon: Twitter, href: 'https://twitter.com/TadexTeam', label: 'Twitter' },
     { icon: Linkedin, href: 'https://www.linkedin.com/in/boluwatife-tade/', label: 'LinkedIn' },
     { icon: Github, href: 'https://github.com/Boluwatifetade', label: 'GitHub' },
-    { icon: Mail, href: 'mailto:support@tadexapp.com', label: 'Email' }
+    { icon: Mail, href: 'mailto:tadex.team@gmail.com', label: 'Email' }
 
 
   ]
@@ -191,15 +191,20 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 border-t border-slate-200">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
             <div className="text-slate-600 text-sm">© 2026 Voreza Technologies. All rights reserved.</div>
-            <div className="flex items-center gap-6 text-sm text-slate-600">
-              <span className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-[#00B894] rounded-full animate-pulse"></div>
-                All systems operational
-              </span>
-              <span>Made with ❤️ for developers</span>
+            <div className="flex flex-col sm:items-end gap-1 text-sm text-slate-500">
+              <span className="font-medium text-slate-600">Operating Address</span>
+              <span>17 Peaceland Estate, Igbe Kapo, Ikorodu, Lagos State, Nigeria</span>
+              <a href="mailto:tadex.team@gmail.com" className="text-[#004859] hover:underline">tadex.team@gmail.com</a>
             </div>
+          </div>
+          <div className="flex items-center justify-center gap-6 text-sm text-slate-600 mt-4">
+            <span className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-[#00B894] rounded-full animate-pulse"></div>
+              All systems operational
+            </span>
+            <span>Made with ❤️ for developers</span>
           </div>
         </div>
       </div>
