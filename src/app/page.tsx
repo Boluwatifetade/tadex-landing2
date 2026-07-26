@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
@@ -83,8 +84,20 @@ export default function Home() {
                 FAQ
               </button>
 
-              {/* Dual CTAs */}
+              {/* Dual CTAs & Auth Links */}
               <div className="flex items-center gap-3">
+                <Link
+                  href="/login"
+                  className="text-sm font-medium text-slate-600 hover:text-[#004859] transition-colors px-3 py-2"
+                >
+                  Log In
+                </Link>
+                <Link
+                  href="/register"
+                  className="text-sm font-medium text-[#004859] hover:text-[#00323B] transition-colors border border-[#004859]/30 hover:border-[#004859] px-4 py-1.5 rounded-full"
+                >
+                  Register
+                </Link>
                 <button
                   onClick={openWaitlistModal}
                   className="bg-[#00B894] hover:bg-[#00A085] text-white px-5 py-2 rounded-full transition-colors font-medium text-sm shadow-md hover:shadow-lg transform hover:scale-105 duration-300"
@@ -95,10 +108,16 @@ export default function Home() {
             </div>
 
             {/* Mobile Navigation */}
-            <div className="md:hidden flex items-center gap-3">
+            <div className="md:hidden flex items-center gap-2">
+              <Link
+                href="/login"
+                className="text-xs font-medium text-slate-600 px-2 py-1"
+              >
+                Log In
+              </Link>
               <button
                 onClick={openWaitlistModal}
-                className="bg-[#00B894] text-white px-4 py-2 rounded-full hover:bg-[#00A085] transition-colors font-medium text-sm shadow-md"
+                className="bg-[#00B894] text-white px-3 py-1.5 rounded-full hover:bg-[#00A085] transition-colors font-medium text-xs shadow-md"
               >
                 Waitlist
               </button>
