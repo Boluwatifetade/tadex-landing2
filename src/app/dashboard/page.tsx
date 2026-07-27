@@ -3,12 +3,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { apiClient } from "@/lib/api-client";
 import { useAuthStore } from "@/lib/auth-store";
 
 interface UserMeResponse {
-  user_id: string;
-  status: string;
+  id?: string;
+  user_id?: string;
+  email?: string;
+  status?: string;
+  email_verified?: boolean;
 }
 
 function DashboardContent() {
@@ -21,7 +25,7 @@ function DashboardContent() {
     async function fetchMe() {
       try {
         const me = await apiClient<UserMeResponse>("/me");
-        setUser(me);
+        setUser(me || {});
       } catch (err) {
         console.error("Failed to fetch user session info:", err);
       }
@@ -41,6 +45,19 @@ function DashboardContent() {
     }
   };
 
+  const getUserIdentifier = (): string => {
+    if (user?.email) {
+      return user.email.split("@")[0];
+    }
+    const rawId = user?.id || user?.user_id;
+    if (rawId && typeof rawId === "string" && rawId.length > 0) {
+      return rawId.substring(0, 8);
+    }
+    return "Trader";
+  };
+
+  const userStatus = user?.status || "active";
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Top Navbar */}
@@ -57,10 +74,10 @@ function DashboardContent() {
             {user && (
               <div className="hidden sm:flex items-center gap-2 text-xs font-medium">
                 <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">
-                  User: {user.user_id.substring(0, 8)}...
+                  User: {getUserIdentifier()}
                 </span>
                 <span className="rounded-full bg-secondary px-2.5 py-1 text-secondary-foreground capitalize">
-                  {user.status}
+                  {userStatus}
                 </span>
               </div>
             )}
@@ -134,8 +151,10 @@ function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <ProtectedRoute>
-      <DashboardContent />
-    </ProtectedRoute>
+    <ErrorBoundary>
+      <ProtectedRoute>
+        <DashboardContent />
+      </ProtectedRoute>
+    </ErrorBoundary>
   );
 }
