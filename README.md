@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tadex Web Frontend (`tadex-landing2`)
 
-## Getting Started
+Tadex is a non-custodial crypto signal execution automation platform for retail traders in Nigeria, Kenya, and Ghana. This repository contains the Next.js web application including the public marketing landing page, compliance pages, authentication system (`/login`, `/register`), and protected trading dashboard shell (`/dashboard`).
 
-First, run the development server:
+---
+
+## 🏛️ Platform Architecture Overview
+
+- **Active Frontend Workspace**: `C:\Users\user\Documents\tadex-landing2` (Next.js 16 App Router + TypeScript + Tailwind CSS + Zustand + React Hook Form + Zod)
+- **Reference Backend Repository**: `C:\Users\user\Documents\Tadex` (FastAPI Web Service + Python Trading Engine + 54 Supabase Database Migrations)
+- **Authentication System**: In-memory Access Tokens (Zustand `auth-store.ts`) + httpOnly Refresh Cookies issued by FastAPI backend (`/api/v1/auth/refresh`).
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+- Node.js 20+
+- npm 10+
+
+### 2. Environment Setup
+Create a `.env.local` file in the root directory:
+
+```env
+# FastAPI Backend URL
+NEXT_PUBLIC_API_BASE_URL=https://api.tadexapp.com/api/v1
+
+# Supabase Public Keys (for Waitlist client-side handlers)
+NEXT_PUBLIC_SUPABASE_URL=https://<your-supabase-id>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+```
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📚 Audit & Engineering Reports
 
-## Learn More
+Comprehensive engineering audit reports are available in the [`audit/`](./audit) directory:
 
-To learn more about Next.js, take a look at the following resources:
+- 📄 [TADEX_PLATFORM_AUDIT_REPORT.md](./audit/TADEX_PLATFORM_AUDIT_REPORT.md) — Master 18-section platform engineering audit report.
+- 🏛️ [ARCHITECTURE_READINESS.md](./audit/ARCHITECTURE_READINESS.md) — Backend module reusability, Telegram coupling analysis, and refactoring needs.
+- 🔌 [API_GAP_ANALYSIS.md](./audit/API_GAP_ANALYSIS.md) — Existing backend capabilities mapped against missing FastAPI endpoints and Web UI.
+- 📊 [FEATURE_MATRIX.md](./audit/FEATURE_MATRIX.md) — Feature verification matrix mapping Frontend $\rightarrow$ API $\rightarrow$ Backend $\rightarrow$ DB $\rightarrow$ Tests.
+- 🛠️ [TECHNICAL_DEBT.md](./audit/TECHNICAL_DEBT.md) — Prioritized technical debt inventory (Critical, High, Medium, Low).
+- 📜 [DOCUMENTATION_STATUS.md](./audit/DOCUMENTATION_STATUS.md) — Documentation inventory, status classifications, and discrepancy logs.
+- 🗺️ [NEXT_STEPS.md](./audit/NEXT_STEPS.md) — Dependency-ordered implementation roadmap for future development.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔒 Security & Token Rules
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Zero Hardcoded Secrets**: Never commit secrets or API keys.
+- **In-Memory Access Tokens**: Access tokens are stored exclusively in memory via Zustand (`auth-store.ts`). Never write tokens to `localStorage` or `sessionStorage`.
+- **Silent HTTP-Only Refresh**: Refresh tokens survive page reloads via `httpOnly` cookies managed securely by `ProtectedRoute.tsx` and `api-client.ts`.

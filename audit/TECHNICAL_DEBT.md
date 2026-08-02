@@ -1,0 +1,88 @@
+# Tadex Platform Technical Debt Report
+
+This document cataloging and prioritizes technical debt identified across the active Web Frontend repository (`tadex-landing2`) and the reference Backend repository (`Tadex`).
+
+---
+
+## Technical Debt Severity Summary
+
+| Severity | Count | Primary Impact Area | Immediate Action Required |
+|---|---|---|---|
+| **Critical** | 3 | Auth Security, API Key Integration, Test Automation | Yes (Before feature development) |
+| **High** | 3 | Web API Coverage, Dashboard Architecture, Backend Refactoring | Yes (Phase 1 Development) |
+| **Medium** | 3 | Migration Synchronization, Config Duplication, Schema Cleanup | Scheduled maintenance |
+| **Low** | 2 | Form Schema Sharing, Documentation Alignment | Minor refactoring |
+
+---
+
+## Technical Debt Registry
+
+### 1. Critical Severity Items
+
+#### TD-CRIT-01: Zero Automated Tests in Web Frontend
+- **Location**: `tadex-landing2/` (Root)
+- **Description**: The frontend project lacks automated test frameworks (no Jest, Vitest, React Testing Library, or Playwright).
+- **Risk**: Trading platforms carry financial risk. Modifications to authentication (`ProtectedRoute.tsx`), token refresh (`api-client.ts`), or session persistence (`auth-store.ts`) could introduce subtle regressions causing unauthenticated access or session truncation without warning.
+- **Recommended Fix**: Install Vitest + React Testing Library. Add automated test suites for `auth-store`, `api-client`, `ProtectedRoute`, and form schemas.
+- **Estimated Effort**: 2-3 Days.
+
+#### TD-CRIT-02: Missing Web API Endpoints & UI for Exchange Credentials
+- **Location**: Frontend (`src/app/dashboard/page.tsx`), Backend (`app/api/`)
+- **Description**: Backend trading execution requires user exchange API keys stored in `public.user_exchange_keys` (AES-256 encrypted). Currently, API keys can only be linked via Telegram bot (`/api_key`). FastAPI (`app/`) exposes zero endpoints for key management, and the Web Dashboard displays a static "Connected" card placeholder.
+- **Risk**: Users registered via the Web App cannot execute trades without opening Telegram to link keys.
+- **Recommended Fix**: Add FastAPI endpoints (`POST /api/v1/keys`, `GET /api/v1/keys`, `DELETE /api/v1/keys`) and build an API Key Management component in the Web Dashboard.
+- **Estimated Effort**: 3-4 Days.
+
+#### TD-CRIT-03: Hardcoded API Base URL Fallbacks in Client Wrappers
+- **Location**: `tadex-landing2/src/lib/api-client.ts`, `src/components/auth/ProtectedRoute.tsx`
+- **Description**: `api-client.ts` hardcodes a fallback production URL (`https://api.tadexapp.com/api/v1`) when `NEXT_PUBLIC_API_BASE_URL` is undefined, whereas `ProtectedRoute.tsx` leaves `API_BASE_URL` undefined without a fallback, causing fetch calls to `/auth/refresh` to hit relative `/auth/refresh` on the Next.js server instead of FastAPI.
+- **Risk**: Environment misconfiguration in staging/dev could silently hit production endpoints or trigger 404 HTML responses during session restoration.
+- **Recommended Fix**: Consolidate `API_BASE_URL` resolution into `src/lib/config.ts` with strict environment variable validation.
+- **Estimated Effort**: 0.5 Days.
+
+---
+
+### 2. High Severity Items
+
+#### TD-HIGH-01: Single-Page Dashboard Stub Architecture
+- **Location**: `tadex-landing2/src/app/dashboard/page.tsx` (161 lines)
+- **Description**: `/dashboard` is a single monolithic client component containing a header, static metric cards, and a placeholder table. There are no sub-routes (e.g. `/dashboard/signals`, `/dashboard/positions`, `/dashboard/settings`, `/dashboard/billing`).
+- **Risk**: Monolithic page layout prevents deep linking, tabular navigation, and modular state management for trading UI.
+- **Recommended Fix**: Restructure `/dashboard` into a Next.js nested layout (`src/app/dashboard/layout.tsx`) with dedicated sub-routes and Zustand/React Query state hooks.
+- **Estimated Effort**: 4-5 Days.
+
+#### TD-HIGH-02: Monolithic Backend Telegram Bot (`telegram_bot.py`)
+- **Location**: `Tadex/bybit-client/bybit_client/telegram_bot.py` (1.13 MB, 30,000+ lines)
+- **Description**: `telegram_bot.py` contains the entire Telegram bot controller, callback handlers, UI keyboard builders, billing integrations, and admin menus in one file.
+- **Risk**: Extremely hard to maintain or refactor. Business logic (e.g. subscription pricing resolution, execution checks) embedded inside bot callbacks cannot be reused easily by the FastAPI web service without extraction.
+- **Recommended Fix**: Continue extracting core domain logic into modular service classes (e.g. `billing_service.py`, `execution_service.py`) shared by both FastAPI and Telegram interfaces.
+- **Estimated Effort**: Ongoing / Core Refactoring.
+
+#### TD-HIGH-03: Web API Contract Gaps Beyond Authentication
+- **Location**: Backend (`app/api/`)
+- **Description**: FastAPI currently only implements `/api/v1/auth/` (`register`, `login`, `refresh`, `logout`, `me`). It lacks routes for position monitoring, active orders, signal history, plan subscriptions, and user settings.
+- **Risk**: Frontend cannot render real-time trading metrics or billing status.
+- **Recommended Fix**: Implement FastAPI route modules: `app/api/trading.py`, `app/api/billing.py`, `app/api/keys.py`, `app/api/settings.py`.
+- **Estimated Effort**: 5-7 Days.
+
+---
+
+### 3. Medium & Low Severity Items
+
+#### TD-MED-01: Duplicate Configuration Files (`next.config.js` vs `next.config.ts`)
+- **Location**: `tadex-landing2/next.config.js` and `next.config.ts`
+- **Description**: Both `.js` and `.ts` config files exist in the root directory. Next.js might resolve one unpredictably depending on build options.
+- **Recommended Fix**: Remove `next.config.js` and standardize on `next.config.ts`.
+- **Estimated Effort**: 0.1 Days.
+
+#### TD-MED-02: Fragmented Database Migration Repositories
+- **Location**: `tadex-landing2/supabase/migrations/` (1 file) vs `Tadex/supabase/migrations/` (54 files)
+- **Description**: Frontend contains a standalone migration file `20260527000000_create_waitlist_tables.sql`.
+- **Recommended Fix**: Copy `20260527000000_create_waitlist_tables.sql` into backend `supabase/migrations/` to maintain a single canonical database migration history.
+- **Estimated Effort**: 0.2 Days.
+
+#### TD-LOW-01: Inline Zod Validation Schemas
+- **Location**: `tadex-landing2/src/app/login/page.tsx`, `src/app/register/page.tsx`
+- **Description**: Schema definitions for email and password validation are written inline in page files.
+- **Recommended Fix**: Extract to `src/lib/schemas/auth.ts`.
+- **Estimated Effort**: 0.2 Days.
