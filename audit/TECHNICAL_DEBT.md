@@ -10,7 +10,7 @@ This document cataloging and prioritizes technical debt identified across the ac
 |---|---|---|---|
 | **Critical** | 3 | Auth Security, API Key Integration, Test Automation | Yes (Before feature development) |
 | **High** | 3 | Web API Coverage, Dashboard Architecture, Backend Refactoring | Yes (Phase 1 Development) |
-| **Medium** | 3 | Migration Synchronization, Config Duplication, Schema Cleanup | Scheduled maintenance |
+| **Medium** | 4 | Migration Synchronization, Config Duplication, Schema Cleanup, Bot Key Parity | Scheduled maintenance |
 | **Low** | 2 | Form Schema Sharing, Documentation Alignment | Minor refactoring |
 
 ---
@@ -86,3 +86,10 @@ This document cataloging and prioritizes technical debt identified across the ac
 - **Description**: Schema definitions for email and password validation are written inline in page files.
 - **Recommended Fix**: Extract to `src/lib/schemas/auth.ts`.
 - **Estimated Effort**: 0.2 Days.
+
+#### TD-MED-04: Retrofit Telegram Bot Key Submission Flow with Withdrawal Check
+- **Location**: `bybit_client/telegram_bot.py` (`cmd_link_account` / key entry handler)
+- **Description**: Web `POST /api/v1/keys` now enforces trade-only key verification via `SharedUtils.verify_bybit_key_permissions()` (rejecting keys with withdrawal permissions enabled). The legacy Telegram bot key submission flow currently checks format and round-trip encryption, but does not yet invoke `verify_bybit_key_permissions()` pre-save.
+- **Recommended Fix**: Update the Telegram bot's key submission handler to call `SharedUtils.verify_bybit_key_permissions()` before storing credentials in `user_accounts`.
+- **Estimated Effort**: 0.5 Days.
+
