@@ -1,5 +1,10 @@
 # OpenAPI 3.0.3 Contract Spec
 
+> [!NOTE]
+> **Backend Reference Source**: Canonical FastAPI backend implementation is located at `C:\Users\user\Documents\Tadex\app\api\auth.py`.
+>
+> **Contract Expansion Scope**: This contract currently details implemented Auth endpoints (`/auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `/me`). Planned Phase 2 endpoints (`/keys`, `/trading/*`, `/billing/*`) will be added to this specification prior to implementation.
+
 ```json
 {
   "openapi": "3.1.0",
