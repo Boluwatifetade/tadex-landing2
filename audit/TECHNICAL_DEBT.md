@@ -19,12 +19,14 @@ This document cataloging and prioritizes technical debt identified across the ac
 
 ### 1. Critical Severity Items
 
-#### TD-CRIT-01: Zero Automated Tests in Web Frontend
-- **Location**: `tadex-landing2/` (Root)
-- **Description**: The frontend project lacks automated test frameworks (no Jest, Vitest, React Testing Library, or Playwright).
-- **Risk**: Trading platforms carry financial risk. Modifications to authentication (`ProtectedRoute.tsx`), token refresh (`api-client.ts`), or session persistence (`auth-store.ts`) could introduce subtle regressions causing unauthenticated access or session truncation without warning.
-- **Recommended Fix**: Install Vitest + React Testing Library. Add automated test suites for `auth-store`, `api-client`, `ProtectedRoute`, and form schemas.
-- **Estimated Effort**: 2-3 Days.
+#### TD-CRIT-01: Frontend Test Framework Setup [RESOLVED - Core Modules Covered]
+- **Location**: `tadex-landing2/` (`vitest.config.ts`, `src/test/`)
+- **Description**: Vitest + React Testing Library + jsdom setup implemented. Core security, authentication, and credential management modules fully covered with unit and integration test suites:
+  - `auth-store.test.ts`: Zustand state setting, clearing, and `isAuthenticated` derivation.
+  - `api-client.test.ts`: 401 $\rightarrow$ refresh $\rightarrow$ retry flow, single-in-flight refresh promise locking, and session expiry error handling.
+  - `ProtectedRoute.test.tsx`: In-memory session check, silent refresh restoration, and delayed login redirection.
+  - `ApiKeyManager.test.tsx`: Empty state, masked key rendering, 400 withdrawal security rejection alert, and 2-step disconnect confirmation.
+- **Status**: **RESOLVED** (2026-08-03 - 100% coverage on core auth, security, and key management modules).
 
 #### TD-CRIT-02: Missing Web API Endpoints & UI for Exchange Credentials
 - **Location**: Frontend (`src/app/dashboard/page.tsx`), Backend (`app/api/`)

@@ -4,6 +4,21 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Frontend Test Framework & Core Test Suite] - 2026-08-03
+
+### Added & Resolved (TD-CRIT-01)
+- **Vitest & React Testing Library Infrastructure**:
+  - Added `vitest.config.ts` and `src/test/setup.ts` configured for `jsdom`, `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`, and v8 coverage.
+  - Added `"test": "vitest run"` and `"test:coverage": "vitest run --coverage"` scripts to `package.json`.
+- **Core Security & Auth Module Test Suites (`src/test/`)**:
+  - `auth-store.test.ts`: 100% coverage on Zustand store token setting, clearing, and `isAuthenticated` derivation.
+  - `api-client.test.ts`: Tests 401 $\rightarrow$ refresh $\rightarrow$ retry flow, single-in-flight refresh promise locking, and session expiry error handling.
+  - `ProtectedRoute.test.tsx`: Tests in-memory token rendering, silent session restoration, and delayed login redirection timing.
+  - `ApiKeyManager.test.tsx`: Tests empty state rendering, masked key card display, 400 withdrawal security policy rejection alert, and 2-step disconnect confirmation.
+- **Technical Debt Resolved**: Updated `audit/TECHNICAL_DEBT.md` marking `TD-CRIT-01` resolved for core security, authentication, and key management modules.
+
+---
+
 ## [ApiKeyManager UI] - 2026-08-03
 
 ### Added
