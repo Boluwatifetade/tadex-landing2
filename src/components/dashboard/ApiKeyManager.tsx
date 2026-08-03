@@ -435,11 +435,21 @@ export default function ApiKeyManager() {
                   <ExternalLink className="h-3 w-3" />
                 </a>
               </div>
+            </form>
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
 
 
