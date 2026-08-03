@@ -4,6 +4,24 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [ApiKeyManager UI] - 2026-08-03
+
+### Added
+- **Exchange API Key Management Component (`src/components/dashboard/ApiKeyManager.tsx`)**:
+  - Consumes `GET /api/v1/keys`, `POST /api/v1/keys`, and `DELETE /api/v1/keys/{id}` endpoints via `apiClient`.
+  - Displays loading skeleton on fetch and empty state when no keys are connected (*"No exchange connected yet — connect Bybit to start trading"*).
+  - Displays connected key cards with masked key representation (`...a1b2`), environment badge ("Testnet" / "Mainnet"), status, and formatted creation date. Zero code path assumes full key/secret returned by backend.
+  - Security Explainer Panel explicitly instructing users to create trade-only API keys on Bybit with **Withdrawal DISABLED**.
+  - Form connects Bybit keys with multi-second verification loading state (*"Verifying Bybit Permissions..."*).
+  - Handles 400 withdrawal-rejection error specifically: displays a prominent security policy rejection alert box with actionable instructions on how to disable withdrawal on Bybit.
+  - 2-step confirmation step for key revocation (`DELETE /api/v1/keys/{id}`).
+  - Built strictly using semantic design tokens (`bg-card`, `bg-background`, `text-foreground`, `text-muted-foreground`, `border-border`, `bg-primary`, `bg-destructive`, `bg-secondary`).
+- **Dashboard Integration**:
+  - Integrated `ApiKeyManager` into `src/app/dashboard/page.tsx`, updating the "Exchange API Keys" quick metric card with live connected key count.
+  - Added dedicated route `src/app/dashboard/keys/page.tsx` wrapped with `ProtectedRoute` and `ErrorBoundary`.
+
+---
+
 ## [Audit & Reconciliation] - 2026-08-02
 
 ### Added & Reconciled

@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import ApiKeyManager, { KeyResponse } from "@/components/dashboard/ApiKeyManager";
 import { apiClient } from "@/lib/api-client";
 import { useAuthStore } from "@/lib/auth-store";
 
@@ -20,18 +21,29 @@ function DashboardContent() {
   const { clear } = useAuthStore();
   const [user, setUser] = useState<UserMeResponse | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [connectedKeysCount, setConnectedKeysCount] = useState<number>(0);
+
+  const fetchSessionAndKeys = useCallback(async () => {
+    try {
+      const me = await apiClient<UserMeResponse>("/me");
+      setUser(me || {});
+    } catch (err) {
+      console.error("Failed to fetch user session info:", err);
+    }
+
+    try {
+      const keys = await apiClient<KeyResponse[]>("/keys");
+      if (Array.isArray(keys)) {
+        setConnectedKeysCount(keys.length);
+      }
+    } catch {
+      /* non-blocking metrics fetch */
+    }
+  }, []);
 
   useEffect(() => {
-    async function fetchMe() {
-      try {
-        const me = await apiClient<UserMeResponse>("/me");
-        setUser(me || {});
-      } catch (err) {
-        console.error("Failed to fetch user session info:", err);
-      }
-    }
-    fetchMe();
-  }, []);
+    fetchSessionAndKeys();
+  }, [fetchSessionAndKeys]);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -95,7 +107,7 @@ function DashboardContent() {
 
       {/* Main Content Area */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="space-y-6">
+        <div className="space-y-8">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">Trading Dashboard</h1>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -119,8 +131,12 @@ function DashboardContent() {
                 <span className="text-sm font-medium text-muted-foreground">Exchange API Keys</span>
                 <span className="rounded-full bg-secondary px-2 py-0.5 text-xs text-secondary-foreground">Read/Trade Only</span>
               </div>
-              <p className="mt-4 text-2xl font-bold text-card-foreground">Connected</p>
-              <p className="mt-1 text-xs text-muted-foreground">Non-custodial permission enforced</p>
+              <p className="mt-4 text-2xl font-bold text-card-foreground">
+                {connectedKeysCount > 0 ? `${connectedKeysCount} Connected` : "Not Connected"}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {connectedKeysCount > 0 ? "Non-custodial execution ready" : "Connect Bybit key below"}
+              </p>
             </div>
 
             <div className="rounded-xl border border-border bg-card p-6 shadow-sm sm:col-span-2 lg:col-span-1">
@@ -133,7 +149,12 @@ function DashboardContent() {
             </div>
           </div>
 
-          {/* Placeholder Signal Execution Activity Table */}
+          {/* Exchange API Key Management Section */}
+          <section className="pt-2">
+            <ApiKeyManager />
+          </section>
+
+          {/* Signal Execution Activity Table */}
           <div className="rounded-xl border border-border bg-card shadow-sm">
             <div className="border-b border-border p-6">
               <h2 className="text-base font-semibold text-card-foreground">Recent Signal Executions</h2>
