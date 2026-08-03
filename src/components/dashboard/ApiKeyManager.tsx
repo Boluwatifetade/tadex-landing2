@@ -31,6 +31,7 @@ export default function ApiKeyManager() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isWithdrawalError, setIsWithdrawalError] = useState(false);
+  const [lastSubmittedIsTestnet, setLastSubmittedIsTestnet] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
 
   // Disconnection Confirmation State
@@ -59,6 +60,8 @@ export default function ApiKeyManager() {
     e.preventDefault();
     if (!apiKey.trim() || !apiSecret.trim()) return;
 
+    const submittedTestnet = isTestnet;
+    setLastSubmittedIsTestnet(submittedTestnet);
     setSubmitting(true);
     setSubmitError(null);
     setIsWithdrawalError(false);
@@ -71,7 +74,7 @@ export default function ApiKeyManager() {
           exchange: "bybit",
           api_key: apiKey.trim(),
           api_secret: apiSecret.trim(),
-          is_testnet: isTestnet,
+          is_testnet: submittedTestnet,
         }),
       });
 
@@ -126,6 +129,11 @@ export default function ApiKeyManager() {
     }
   };
 
+  const getBybitApiUrl = (testnet: boolean) =>
+    testnet
+      ? "https://testnet.bybit.com/app/user/api-management"
+      : "https://www.bybit.com/app/user/api-management";
+
   return (
     <div className="space-y-6">
       {/* Header Banner */}
@@ -143,8 +151,19 @@ export default function ApiKeyManager() {
       <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 sm:p-6 text-foreground">
         <div className="flex items-start gap-3">
           <ShieldAlert className="h-6 w-6 text-primary shrink-0 mt-0.5" />
-          <div className="space-y-2 text-sm">
-            <h3 className="font-semibold text-foreground">Mandatory Security Instructions for Bybit</h3>
+          <div className="space-y-2 text-sm w-full">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <h3 className="font-semibold text-foreground">Mandatory Security Instructions for Bybit</h3>
+              <a
+                href={getBybitApiUrl(isTestnet)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-primary hover:underline font-medium inline-flex items-center gap-1"
+              >
+                Open Bybit {isTestnet ? "Testnet" : "Mainnet"} API Settings
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
             <p className="text-muted-foreground leading-relaxed">
               Tadex is strictly non-custodial and <strong>never requests withdrawal access</strong> to your exchange account. 
               When creating your API key on Bybit, follow these rules:
@@ -320,8 +339,19 @@ export default function ApiKeyManager() {
                   </div>
                   <p className="text-xs leading-relaxed text-foreground">{submitError}</p>
                   {isWithdrawalError && (
-                    <div className="pt-2 text-xs font-medium text-muted-foreground border-t border-destructive/20 mt-2">
-                      💡 <strong>How to fix:</strong> Go to Bybit API Management, edit or recreate your key, and ensure the <strong>"Withdrawal"</strong> checkbox is completely unchecked.
+                    <div className="pt-2 text-xs font-medium text-muted-foreground border-t border-destructive/20 mt-2 flex items-center justify-between flex-wrap gap-2">
+                      <span>
+                        💡 <strong>How to fix:</strong> Edit or recreate your key on Bybit and ensure <strong>"Withdrawal"</strong> permission is completely unchecked.
+                      </span>
+                      <a
+                        href={getBybitApiUrl(lastSubmittedIsTestnet)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-destructive hover:underline font-bold inline-flex items-center gap-1 shrink-0"
+                      >
+                        Bybit {lastSubmittedIsTestnet ? "Testnet" : "Mainnet"} API Settings
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
                     </div>
                   )}
                 </div>
@@ -396,19 +426,20 @@ export default function ApiKeyManager() {
               <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t border-border">
                 <span>Need help generating a key?</span>
                 <a
-                  href="https://www.bybit.com/app/user/api-management"
+                  href={getBybitApiUrl(isTestnet)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary hover:underline flex items-center gap-1 font-medium"
                 >
-                  Bybit API Settings
+                  Bybit {isTestnet ? "Testnet" : "Mainnet"} API Settings
                   <ExternalLink className="h-3 w-3" />
                 </a>
               </div>
-            </form>
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
+
+
