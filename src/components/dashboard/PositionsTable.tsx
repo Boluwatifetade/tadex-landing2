@@ -8,7 +8,7 @@ import { Loader2, RefreshCw, TrendingUp, TrendingDown, Layers } from "lucide-rea
 
 export interface PositionOut {
   id: string;
-  symbol: str;
+  symbol: string;
   side: string;
   size: number;
   entry_price?: number | null;
