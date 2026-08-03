@@ -26,7 +26,9 @@ This document cataloging and prioritizes technical debt identified across the ac
   - `api-client.test.ts`: 401 $\rightarrow$ refresh $\rightarrow$ retry flow, single-in-flight refresh promise locking, and session expiry error handling.
   - `ProtectedRoute.test.tsx`: In-memory session check, silent refresh restoration, and delayed login redirection.
   - `ApiKeyManager.test.tsx`: Empty state, masked key rendering, 400 withdrawal security rejection alert, and 2-step disconnect confirmation.
-- **Status**: **RESOLVED** (2026-08-03 - 100% coverage on core auth, security, and key management modules).
+  - `PositionsTable.test.tsx` & `OrdersTable.test.tsx`: Active positions, PnL formatting, order history status filtering, and error retries.
+  - `SubscriptionCard.test.tsx`, `PricingGrid.test.tsx`, & `CheckoutQuoteModal.test.tsx`: Free/active subscription states, multi-currency grid switching, and transparent itemized fee breakdown assertions.
+- **Status**: **RESOLVED** (2026-08-04 - 100% coverage on core auth, security, key management, trading, and billing quote modules).
 
 #### TD-CRIT-02: Missing Web API Endpoints & UI for Exchange Credentials
 - **Location**: Frontend (`src/app/dashboard/page.tsx`), Backend (`app/api/`)
@@ -93,4 +95,10 @@ This document cataloging and prioritizes technical debt identified across the ac
 - **Location**: `bybit_client/telegram_bot.py` (`handle_api_keys`)
 - **Description**: Retrofitted `SharedUtils.verify_bybit_key_permissions()` into the Telegram bot's `handle_api_keys` handler pre-storage gate. Mandates rejection of withdrawal-enabled keys with user-facing security messages, matching the `/api/v1/keys` web behavior.
 - **Status**: **RESOLVED** (2026-08-03).
+
+#### TD-LOW-02: JPY Subunit Currency Formatting Quirk in PlanPricingService
+- **Location**: `Tadex/bybit-client/bybit_client/billing/plan_pricing_service.py`, `app/api/billing.py` (`_cents_to_amount`)
+- **Description**: Amount minor unit conversion assumes 2 decimal subunits for all currencies (`amount_cents / 100.0`), resulting in `amount_cents: 12` converting to `0.12` for JPY. Japanese Yen has no fractional subunit in ISO 4217 (100 JPY is written as `100`, not `1.00`).
+- **Recommended Fix**: Add a currency-aware exponent lookup (e.g. exponent = 0 for JPY, 2 for NGN/USD/EUR/USDT) in price formatting helpers so JPY minor amounts display accurately to Japanese users.
+- **Estimated Effort**: 0.2 Days.
 

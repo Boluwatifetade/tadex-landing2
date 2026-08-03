@@ -4,6 +4,29 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Billing Dashboard View & Transparent Checkout Quote] - 2026-08-04
+
+### Added
+- **SubscriptionCard Component (`src/components/dashboard/SubscriptionCard.tsx`)**:
+  - Consumes `GET /api/v1/billing/subscription` via `apiClient`.
+  - Displays current subscription tier, status badges (`active`, `past_due`, `canceled`), renewal/expiry dates, and system notification alerts.
+  - Handles free / demo tier state with a clean *"No active subscription"* prompt.
+- **PricingGrid Component (`src/components/dashboard/PricingGrid.tsx`)**:
+  - Consumes `GET /api/v1/billing/plans` via `apiClient`.
+  - Displays active execution plans, plan descriptions, provider base prices, and multi-currency selector (`NGN`, `USD`, `USDT`, `KES`, `GHS`).
+- **CheckoutQuoteModal Component (`src/components/dashboard/CheckoutQuoteModal.tsx`)**:
+  - Consumes `POST /api/v1/billing/checkout-quote` via `apiClient`.
+  - Provides duration (1, 3, 6, 12 months) and currency selectors.
+  - Renders a **trust-critical, transparent itemized cost breakdown**: displays Provider Base Price, Platform Service & Automation Fee as a separate clearly-labeled line item equal in visibility, and Total Checkout Quote.
+  - Action button rendered as informational disabled placeholder (*"Proceed to Payment (Integration Coming Soon)"*).
+- **Dashboard Navigation**:
+  - Added `Billing` tab (`/dashboard/billing`) to `DashboardHeader.tsx`.
+  - Built `src/app/dashboard/billing/page.tsx` route rendering `SubscriptionCard` and `PricingGrid` inside `ProtectedRoute` + `ErrorBoundary`.
+- **Test Suites (`src/test/`)**:
+  - Added `SubscriptionCard.test.tsx`, `PricingGrid.test.tsx`, and `CheckoutQuoteModal.test.tsx` verifying empty/active subscription states, multi-currency grid switching, and asserting the platform fee line item is present and visibly separate from total quote.
+
+---
+
 ## [Trading Dashboard & Positions/Orders View] - 2026-08-03
 
 ### Added
