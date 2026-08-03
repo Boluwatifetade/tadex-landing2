@@ -4,6 +4,25 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Trading Dashboard & Positions/Orders View] - 2026-08-03
+
+### Added
+- **PositionsTable Component (`src/components/dashboard/PositionsTable.tsx`)**:
+  - Consumes `GET /api/v1/trading/positions` via `apiClient`.
+  - Displays symbol, side badge ("Buy/Long" vs "Sell/Short"), size, entry price, leverage multiplier, and color-coded unrealized PnL (`text-emerald-500` vs `text-destructive`).
+  - Empty state *"No active positions."* and error retry state.
+- **OrdersTable Component (`src/components/dashboard/OrdersTable.tsx`)**:
+  - Consumes `GET /api/v1/trading/orders` via `apiClient` with status filtering (`all`, `filled`, `pending`, `cancelled`, `failed`).
+  - Displays timestamp, symbol, side badge, order type, size, price, status badges, and SL/TP limits.
+  - Empty state *"No orders yet."* and error retry state.
+- **Dashboard Layout & Navigation**:
+  - Added `DashboardHeader.tsx` providing active navigation tabs: `Overview` (`/dashboard`), `API Keys` (`/dashboard/keys`), and `Trading` (`/dashboard/trading`).
+  - Added dedicated route `src/app/dashboard/trading/page.tsx` rendering `PositionsTable` and `OrdersTable` inside `ProtectedRoute` + `ErrorBoundary`.
+- **Test Suites (`src/test/`)**:
+  - Added `PositionsTable.test.tsx` and `OrdersTable.test.tsx` verifying empty states, populated data rendering with color-coded PnL/status badges, and error state retries.
+
+---
+
 ## [Frontend Test Framework & Core Test Suite] - 2026-08-03
 
 ### Added & Resolved (TD-CRIT-01)

@@ -19,6 +19,8 @@ export default defineConfig({
         "src/lib/api-client.ts",
         "src/components/auth/ProtectedRoute.tsx",
         "src/components/dashboard/ApiKeyManager.tsx",
+        "src/components/dashboard/PositionsTable.tsx",
+        "src/components/dashboard/OrdersTable.tsx",
       ],
     },
   },

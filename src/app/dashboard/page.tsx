@@ -8,6 +8,8 @@ import ApiKeyManager, { KeyResponse } from "@/components/dashboard/ApiKeyManager
 import { apiClient } from "@/lib/api-client";
 import { useAuthStore } from "@/lib/auth-store";
 
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+
 interface UserMeResponse {
   id?: string;
   user_id?: string;
@@ -17,10 +19,7 @@ interface UserMeResponse {
 }
 
 function DashboardContent() {
-  const router = useRouter();
-  const { clear } = useAuthStore();
   const [user, setUser] = useState<UserMeResponse | null>(null);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [connectedKeysCount, setConnectedKeysCount] = useState<number>(0);
 
   const fetchSessionAndKeys = useCallback(async () => {
@@ -45,65 +44,9 @@ function DashboardContent() {
     fetchSessionAndKeys();
   }, [fetchSessionAndKeys]);
 
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    try {
-      await apiClient("/auth/logout", { method: "POST" });
-    } catch (err) {
-      console.error("Logout request failed:", err);
-    } finally {
-      clear();
-      router.push("/login");
-    }
-  };
-
-  const getUserIdentifier = (): string => {
-    if (user?.email) {
-      return user.email.split("@")[0];
-    }
-    const rawId = user?.id || user?.user_id;
-    if (rawId && typeof rawId === "string" && rawId.length > 0) {
-      return rawId.substring(0, 8);
-    }
-    return "Trader";
-  };
-
-  const userStatus = user?.status || "active";
-
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Top Navbar */}
-      <header className="sticky top-0 z-40 border-b border-border bg-card/90 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground">
-              T
-            </div>
-            <span className="text-xl font-bold tracking-tight text-foreground">Tadex Trading App</span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            {user && (
-              <div className="hidden sm:flex items-center gap-2 text-xs font-medium">
-                <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">
-                  User: {getUserIdentifier()}
-                </span>
-                <span className="rounded-full bg-secondary px-2.5 py-1 text-secondary-foreground capitalize">
-                  {userStatus}
-                </span>
-              </div>
-            )}
-
-            <button
-              onClick={handleLogout}
-              disabled={isLoggingOut}
-              className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 transition-colors"
-            >
-              {isLoggingOut ? "Logging out..." : "Log Out"}
-            </button>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader userEmail={user?.email} userStatus={user?.status} />
 
       {/* Main Content Area */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
