@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import ErrorBoundary from "@/components/dashboard/ErrorBoundary";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import ProviderDetailView from "@/components/dashboard/ProviderDetailView";
 
