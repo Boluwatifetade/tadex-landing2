@@ -69,6 +69,13 @@ This document cataloging and prioritizes technical debt identified across the ac
 - **Recommended Fix**: Implement FastAPI route modules: `app/api/trading.py`, `app/api/billing.py`, `app/api/keys.py`, `app/api/settings.py`.
 - **Estimated Effort**: 5-7 Days.
 
+#### TD-HIGH-04: Outstanding Live End-to-End Verification for Web-Only Checkout Flow
+- **Location**: `bybit-client/bybit_client/supabase_models.py`, `tests/test_web_only_users.py`, `src/components/dashboard/CheckoutQuoteModal.tsx`
+- **Description**: The `telegram_id` nullability fix (`Optional[int] = None`) and web-only-user regression tests are implemented and unit-tested, but not yet live-verified end-to-end against a real web-only test account (no Telegram history) completing an actual payment through the real frontend button.
+- **Risk**: Potential undiscovered runtime gaps when web-registered users interact with third-party payment gateways through the frontend UI.
+- **Recommended Action**: This must be confirmed before considering web-only-user checkout production-safe — outstanding until a test account is available.
+- **Estimated Effort**: 0.5 Days (Pending live test account).
+
 ---
 
 ### 3. Medium & Low Severity Items

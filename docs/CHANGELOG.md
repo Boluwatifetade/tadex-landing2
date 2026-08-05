@@ -16,8 +16,10 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
   - Displays dynamic status return banners (Verifying, Success, Cancelled, Failed).
   - Polls `GET /api/v1/billing/transactions/{reference}` every 2 seconds (up to 8 attempts / ~16s) to verify payment status against active backend polling sync.
   - Automatically triggers a refresh on `SubscriptionCard` (`refreshTrigger`) upon transaction resolution to `"success"`, updating the UI seamlessly without requiring a full manual page reload.
-- **Test Suite Updates (`src/test/CheckoutQuoteModal.test.tsx`)**:
+- **Test Suite Updates (`src/test/CheckoutQuoteModal.test.tsx`) & Schema Fixes**:
   - Added tests asserting active "Proceed to Payment" click triggers `POST /api/v1/billing/checkout` payload and renders loading spinner state.
+  - Updated backend `User.telegram_id` model to `Optional[int] = None` and added `tests/test_web_only_users.py` regression suite.
+  - **Outstanding Verification Note**: The `telegram_id` nullability fix and web-only-user regression tests are implemented and unit-tested, but not yet live-verified end-to-end against a real web-only test account (no Telegram history) completing an actual payment through the real frontend button. This must be confirmed before considering web-only-user checkout production-safe — outstanding until a test account is available.
 
 ---
 
