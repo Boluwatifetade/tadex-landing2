@@ -29,6 +29,7 @@ describe("SubscriptionCard", () => {
       subscription: {
         id: "sub_123",
         user_id: "user_456",
+        provider_status: "active",
         tier: "pro",
         status: "active",
         is_active: true,
@@ -44,6 +45,31 @@ describe("SubscriptionCard", () => {
     expect(await screen.findByText("pro")).toBeInTheDocument();
     expect(screen.getByText("active")).toBeInTheDocument();
     expect(screen.getByText("⚠️ Your subscription payment is past due.")).toBeInTheDocument();
+  });
+
+  it("renders suspended provider warning state and banner when provider_status is suspended", async () => {
+    const mockResponse = {
+      has_active_subscription: true,
+      subscription: {
+        id: "sub_999",
+        user_id: "user_456",
+        provider_id: "prov_suspended",
+        provider_status: "suspended",
+        tier: "pro",
+        status: "active",
+        is_active: true,
+        current_period_end: "2026-08-30T00:00:00Z",
+      },
+      notifications: ["⚠️ Your signal provider is currently suspended — signal execution is paused."],
+    };
+
+    vi.spyOn(apiClientModule, "apiClient").mockResolvedValueOnce(mockResponse);
+
+    render(<SubscriptionCard />);
+
+    expect(await screen.findByText("Signal Execution Paused")).toBeInTheDocument();
+    expect(screen.getByText("suspended")).toBeInTheDocument();
+    expect(screen.getByText(/Your signal provider is currently suspended/i)).toBeInTheDocument();
   });
 
   it("renders error state when fetch fails and allows retry", async () => {

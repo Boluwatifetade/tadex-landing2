@@ -11,6 +11,8 @@ describe("PricingGrid", () => {
   const mockPlans = [
     {
       id: "plan_pro_101",
+      provider_id: "prov_101",
+      provider_name: "Alpha Signal Master",
       name: "Pro Trader Plan",
       description: "Automated trading execution plan for Bybit traders.",
       currency: "NGN",
@@ -27,12 +29,17 @@ describe("PricingGrid", () => {
     },
   ];
 
-  it("renders active plans and handles currency switching correctly", async () => {
+  it("renders active plans with prominent provider identity header and handles currency switching correctly", async () => {
     vi.spyOn(apiClientModule, "apiClient").mockResolvedValueOnce(mockPlans);
 
     render(<PricingGrid />);
 
     expect(await screen.findByText("Pro Trader Plan")).toBeInTheDocument();
+
+    // Assert prominent provider identity header is rendered
+    expect(screen.getByText("Alpha Signal Master")).toBeInTheDocument();
+    expect(screen.getByText(/Provider:/i)).toBeInTheDocument();
+
     // Default NGN display
     expect(screen.getByText("₦15,000.00")).toBeInTheDocument();
 
@@ -66,7 +73,7 @@ describe("PricingGrid", () => {
           provider_total_amount: 15000.0,
           platform_total_amount: 3000.0,
           total_amount: 18000.0,
-          provider_name: "Bybit Pro Signal Provider",
+          provider_name: "Alpha Signal Master",
         };
       }
       return [];

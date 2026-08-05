@@ -10,6 +10,7 @@ export interface SubscriptionOut {
   id: string;
   user_id: string;
   provider_id?: string | null;
+  provider_status?: string | null;
   plan_id?: string | null;
   tier?: string | null;
   status: string;
@@ -122,8 +123,22 @@ export default function SubscriptionCard({ refreshTrigger = 0 }: SubscriptionCar
           </div>
         ) : (
           <div className="space-y-4">
+            {/* Suspended Provider Warning Banner */}
+            {sub?.provider_status && sub.provider_status !== "active" && (
+              <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-4 text-xs text-destructive flex items-start gap-3">
+                <AlertTriangle className="h-5 w-5 shrink-0 mt-0.5 text-destructive" />
+                <div className="space-y-1">
+                  <h4 className="font-bold text-sm text-destructive">Signal Execution Paused</h4>
+                  <p>
+                    {notifications.find((n) => n.toLowerCase().includes("provider")) ||
+                      "⚠️ Your signal provider is currently suspended — signal execution is temporarily paused."}
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Active Subscription Details Grid */}
-            <div className="rounded-xl border border-border bg-card/60 p-4 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border border-border bg-card/60 p-4 grid gap-4 sm:grid-cols-4">
               <div>
                 <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Tier / Plan</span>
                 <p className="text-base font-bold text-foreground capitalize mt-0.5">{sub?.tier || "Standard"}</p>
@@ -145,6 +160,19 @@ export default function SubscriptionCard({ refreshTrigger = 0 }: SubscriptionCar
               </div>
 
               <div>
+                <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Provider Status</span>
+                <div className="mt-1">
+                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${
+                    !sub?.provider_status || sub?.provider_status === "active"
+                      ? "bg-emerald-500/10 text-emerald-500"
+                      : "bg-destructive/10 text-destructive"
+                  }`}>
+                    {sub?.provider_status || "Active"}
+                  </span>
+                </div>
+              </div>
+
+              <div>
                 <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Renewal / Expiry</span>
                 <p className="text-sm font-medium text-foreground mt-1 flex items-center gap-1">
                   <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
@@ -153,8 +181,8 @@ export default function SubscriptionCard({ refreshTrigger = 0 }: SubscriptionCar
               </div>
             </div>
 
-            {/* Notifications Banner if present */}
-            {notifications.length > 0 && (
+            {/* Notifications Banner if present (excluding already rendered provider warning) */}
+            {notifications.length > 0 && (!sub?.provider_status || sub.provider_status === "active") && (
               <div className="space-y-2">
                 {notifications.map((note, i) => (
                   <div

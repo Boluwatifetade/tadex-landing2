@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { apiClient } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Loader2, RefreshCw, Zap, Check, Coins } from "lucide-react";
+import { Loader2, RefreshCw, Zap, Check, Coins, BadgeCheck, User } from "lucide-react";
 import CheckoutQuoteModal from "./CheckoutQuoteModal";
 
 export interface PlanPriceItem {
@@ -17,6 +17,7 @@ export interface PlanPriceItem {
 export interface PlanOut {
   id: string;
   provider_id?: string | null;
+  provider_name?: string | null;
   name: string;
   description?: string | null;
   currency: string;
@@ -170,7 +171,16 @@ export default function PricingGrid() {
 
             return (
               <Card key={plan.id} className="flex flex-col justify-between border-border hover:border-primary/40 transition-colors">
-                <CardHeader>
+                <CardHeader className="space-y-2">
+                  {/* Provider Identity Badge Row */}
+                  <div className="flex items-center gap-2 rounded-lg bg-primary/10 px-2.5 py-1 border border-primary/20 text-xs font-medium text-primary">
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-[10px]">
+                      {(plan.provider_name || "P").charAt(0).toUpperCase()}
+                    </div>
+                    <span className="truncate">Provider: <strong className="font-semibold text-foreground">{plan.provider_name || "Signal Provider"}</strong></span>
+                    <BadgeCheck className="h-3.5 w-3.5 fill-emerald-500/20 text-emerald-500 shrink-0 ml-auto" />
+                  </div>
+
                   <CardTitle className="text-lg font-bold text-foreground">{plan.name}</CardTitle>
                   <CardDescription className="line-clamp-2 min-h-[40px] text-xs leading-relaxed">
                     {plan.description || "Automated trading execution plan for Bybit traders."}

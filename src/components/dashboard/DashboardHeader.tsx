@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { useAuthStore } from "@/lib/auth-store";
 import { apiClient } from "@/lib/api-client";
-import { LayoutDashboard, KeyRound, LineChart, CreditCard, LogOut } from "lucide-react";
+import { LayoutDashboard, KeyRound, LineChart, Users, CreditCard, LogOut } from "lucide-react";
 
 interface DashboardHeaderProps {
   userEmail?: string;
@@ -35,7 +35,8 @@ export default function DashboardHeader({ userEmail, userStatus = "active" }: Da
     { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { label: "API Keys", href: "/dashboard/keys", icon: KeyRound },
     { label: "Trading", href: "/dashboard/trading", icon: LineChart },
-    { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
+    { label: "Browse Providers", href: "/dashboard/providers", icon: Users },
+    { label: "All Plans", href: "/dashboard/billing", icon: CreditCard },
   ];
 
   const userIdentifier = userEmail ? userEmail.split("@")[0] : "Trader";

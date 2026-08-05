@@ -4,6 +4,32 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Provider Directory & Provider-First Pricing Restructure] - 2026-08-05
+
+### Added & Restructured
+- **ProviderDirectory Component (`src/components/dashboard/ProviderDirectory.tsx`)**:
+  - Consumes `GET /api/v1/providers`.
+  - Displays signal provider cards with provider name, description, verified badge (`is_verified`), win rate %, total signals executed, subscriber count, and last active timestamp.
+  - Added dedicated route `src/app/dashboard/providers/page.tsx` rendering `ProviderDirectory` inside `ProtectedRoute` + `ErrorBoundary`.
+- **Provider Detail View (`src/components/dashboard/ProviderDetailView.tsx`)**:
+  - Consumes `GET /api/v1/providers/{id}` and `GET /api/v1/providers/{id}/plans`.
+  - Displays full provider profile metrics header alongside provider-scoped active execution plans.
+  - Action buttons open `CheckoutQuoteModal` with that plan pre-selected.
+  - Added nested route `src/app/dashboard/providers/[id]/page.tsx`.
+- **Provider Identity Header on Plan Cards (`src/components/dashboard/PricingGrid.tsx`)**:
+  - Rendered a prominent provider badge header (icon/avatar + `provider_name` + verified badge) at the top of every card in flat view (`/dashboard/billing`), clarifying provider identity prior to plan selection.
+- **Honest Suspended Provider Status Alert (`src/components/dashboard/SubscriptionCard.tsx`)**:
+  - Updated `SubscriptionOut` interface to parse `provider_status`.
+  - Added high-visibility warning state (`Signal Execution Paused`) when `sub.provider_status === "suspended"`, directly displaying backend notification strings.
+- **Dashboard Navigation (`src/components/dashboard/DashboardHeader.tsx`)**:
+  - Updated navigation items to frame provider-first browsing vs flat plan browsing intentionally: `"Browse Providers"` (`/dashboard/providers`) vs `"All Plans"` (`/dashboard/billing`).
+- **Test Automation (`src/test/`)**:
+  - Added `ProviderDirectory.test.tsx` and `ProviderDetailView.test.tsx` verifying provider list rendering, win rate formatting, subscriber counts, scoped plan selection, empty states, and error handling.
+  - Updated `PricingGrid.test.tsx` to assert provider identity header rendering.
+  - Updated `SubscriptionCard.test.tsx` to assert suspended provider warning state rendering.
+
+---
+
 ## [Checkout Payment Integration & Transaction Polling] - 2026-08-05
 
 ### Added & Wired
