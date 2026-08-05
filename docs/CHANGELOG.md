@@ -4,6 +4,23 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Checkout Payment Integration & Transaction Polling] - 2026-08-05
+
+### Added & Wired
+- **Active Checkout Initiation (`src/components/dashboard/CheckoutQuoteModal.tsx`)**:
+  - Wired "Proceed to Payment" button to `POST /api/v1/billing/checkout` via `apiClient`.
+  - Added full loading state (`isInitiatingPayment` with spinner) while payment initiation is in flight.
+  - Redirects browser via `window.location.href = res.authorization_url` to Flutterwave hosted checkout.
+- **Return Redirect & Polling Handler (`src/app/dashboard/billing/page.tsx`)**:
+  - Parses return query parameters (`status` and `ref`).
+  - Displays dynamic status return banners (Verifying, Success, Cancelled, Failed).
+  - Polls `GET /api/v1/billing/transactions/{reference}` every 2 seconds (up to 8 attempts / ~16s) to verify payment status against active backend polling sync.
+  - Automatically triggers a refresh on `SubscriptionCard` (`refreshTrigger`) upon transaction resolution to `"success"`, updating the UI seamlessly without requiring a full manual page reload.
+- **Test Suite Updates (`src/test/CheckoutQuoteModal.test.tsx`)**:
+  - Added tests asserting active "Proceed to Payment" click triggers `POST /api/v1/billing/checkout` payload and renders loading spinner state.
+
+---
+
 ## [Billing Dashboard View & Transparent Checkout Quote] - 2026-08-04
 
 ### Added

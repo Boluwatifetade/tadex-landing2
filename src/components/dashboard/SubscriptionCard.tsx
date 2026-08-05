@@ -27,7 +27,11 @@ export interface UserSubscriptionResponse {
   notifications: string[];
 }
 
-export default function SubscriptionCard() {
+export interface SubscriptionCardProps {
+  refreshTrigger?: number;
+}
+
+export default function SubscriptionCard({ refreshTrigger = 0 }: SubscriptionCardProps) {
   const [subscriptionData, setSubscriptionData] = useState<UserSubscriptionResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -48,7 +52,7 @@ export default function SubscriptionCard() {
 
   useEffect(() => {
     fetchSubscription();
-  }, [fetchSubscription]);
+  }, [fetchSubscription, refreshTrigger]);
 
   const formatDate = (dateStr?: string | null) => {
     if (!dateStr) return "-";

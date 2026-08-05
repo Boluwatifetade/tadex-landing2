@@ -24,6 +24,13 @@ export interface CheckoutQuoteResponse {
   provider_name?: string | null;
 }
 
+export interface CheckoutInitiateResponse {
+  authorization_url: string;
+  reference: string;
+  provider_name: string;
+  status: string;
+}
+
 interface CheckoutQuoteModalProps {
   plan: PlanOut | null;
   isOpen: boolean;
@@ -36,6 +43,39 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
   const [quote, setQuote] = useState<CheckoutQuoteResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [quoteError, setQuoteError] = useState<string | null>(null);
+
+  const [isInitiatingPayment, setIsInitiatingPayment] = useState(false);
+  const [initiateError, setInitiateError] = useState<string | null>(null);
+
+  const handleProceedToPayment = async () => {
+    if (!plan || !quote) return;
+    setIsInitiatingPayment(true);
+    setInitiateError(null);
+
+    try {
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
+      const res = await apiClient<CheckoutInitiateResponse>("/billing/checkout", {
+        method: "POST",
+        body: JSON.stringify({
+          plan_id: plan.id,
+          currency: selectedCurrency,
+          duration_months: durationMonths,
+          success_url: `${origin}/dashboard/billing?status=success&ref={reference}`,
+          cancel_url: `${origin}/dashboard/billing?status=cancelled&ref={reference}`,
+        }),
+      });
+
+      if (res?.authorization_url) {
+        window.location.href = res.authorization_url;
+      } else {
+        throw new Error("No payment authorization URL returned.");
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to initiate payment process";
+      setInitiateError(msg);
+      setIsInitiatingPayment(false);
+    }
+  };
 
   // Initialize selected currency when plan changes
   useEffect(() => {
@@ -210,14 +250,31 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
           ) : null}
         </div>
 
-        {/* Informational Action Button */}
+        {/* Action Button & Disclaimer */}
         <div className="space-y-2">
-          <Button disabled className="w-full text-xs font-semibold py-3 cursor-not-allowed opacity-75">
-            Proceed to Payment (Integration Coming Soon)
+          {initiateError && (
+            <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-2.5 text-xs text-destructive flex items-center justify-between">
+              <span>{initiateError}</span>
+            </div>
+          )}
+
+          <Button
+            onClick={handleProceedToPayment}
+            disabled={isLoading || !quote || isInitiatingPayment}
+            className="w-full text-xs font-semibold py-3 flex items-center justify-center gap-2"
+          >
+            {isInitiatingPayment ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Initiating Payment...
+              </>
+            ) : (
+              "Proceed to Payment"
+            )}
           </Button>
           <p className="text-[11px] text-center text-muted-foreground flex items-center justify-center gap-1">
             <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-            Tadex never holds your funds. API keys remain trade-only.
+            Tadex never holds your funds. Payment processed via secure hosted checkout.
           </p>
         </div>
       </div>

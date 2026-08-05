@@ -60,8 +60,37 @@ describe("CheckoutQuoteModal", () => {
     expect(screen.getByText("Total Checkout Quote")).toBeInTheDocument();
     expect(screen.getByText("$30.00")).toBeInTheDocument();
 
-    // 5. Assert informational action button is disabled / placeholder
-    const submitBtn = screen.getByRole("button", { name: /Proceed to Payment \(Integration Coming Soon\)/i });
-    expect(submitBtn).toBeDisabled();
+    // 5. Assert active action button
+    const submitBtn = screen.getByRole("button", { name: "Proceed to Payment" });
+    expect(submitBtn).toBeEnabled();
+  });
+
+  it("triggers checkout initiation API call and displays loading state when 'Proceed to Payment' is clicked", async () => {
+    const apiClientSpy = vi.spyOn(apiClientModule, "apiClient").mockImplementation(async (path) => {
+      if (path === "/billing/checkout-quote") return mockQuoteResponse;
+      if (path === "/billing/checkout") {
+        return {
+          authorization_url: "https://checkout.flutterwave.com/v3/hosted/pay/test12345",
+          reference: "tx_ref_999",
+          provider_name: "flutterwave",
+          status: "pending",
+        };
+      }
+      return {};
+    });
+
+    render(<CheckoutQuoteModal plan={mockPlan} isOpen={true} onClose={vi.fn()} />);
+
+    expect(await screen.findByText("Total Checkout Quote")).toBeInTheDocument();
+
+    const submitBtn = screen.getByRole("button", { name: "Proceed to Payment" });
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(apiClientSpy).toHaveBeenCalledWith("/billing/checkout", expect.objectContaining({
+        method: "POST",
+        body: expect.stringContaining("plan_pro_101"),
+      }));
+    });
   });
 });
