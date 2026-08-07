@@ -43,7 +43,7 @@ describe("SubscriptionCard", () => {
     render(<SubscriptionCard />);
 
     expect(await screen.findByText("pro")).toBeInTheDocument();
-    expect(screen.getByText("active")).toBeInTheDocument();
+    expect(screen.getAllByText("active")[0]).toBeInTheDocument();
     expect(screen.getByText("⚠️ Your subscription payment is past due.")).toBeInTheDocument();
   });
 

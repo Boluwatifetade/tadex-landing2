@@ -130,7 +130,8 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
       GHS: "GH₵ ",
     };
     const sym = symbols[curr.toUpperCase()] || `${curr} `;
-    return `${sym}${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const num = typeof amount === "number" ? amount : 0;
+    return `${sym}${num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   const durationOptions = [
