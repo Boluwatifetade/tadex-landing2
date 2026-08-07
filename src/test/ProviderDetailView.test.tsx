@@ -64,7 +64,7 @@ describe("ProviderDetailView", () => {
 
     // Scoped plan card
     expect(screen.getByText("Alpha VIP Monthly")).toBeInTheDocument();
-    expect(screen.getByText("₦15,000")).toBeInTheDocument();
+    expect(screen.getByText("₦15,000.00")).toBeInTheDocument();
   });
 
   it("opens CheckoutQuoteModal when 'Subscribe to Plan' is clicked", async () => {

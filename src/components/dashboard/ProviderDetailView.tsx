@@ -9,6 +9,7 @@ import { Loader2, RefreshCw, BadgeCheck, Users, Signal, TrendingUp, ArrowLeft, C
 import CheckoutQuoteModal from "@/components/dashboard/CheckoutQuoteModal";
 import { PlanOut } from "@/components/dashboard/PricingGrid";
 import { ProviderOut } from "@/components/dashboard/ProviderDirectory";
+import { resolvePlanPrice, formatCurrencyAmount } from "@/lib/currency";
 
 export interface ProviderDetailViewProps {
   providerId: string;
@@ -186,17 +187,7 @@ export default function ProviderDetailView({ providerId }: ProviderDetailViewPro
             ) : (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {plans.map((plan) => {
-                  const priceObj = plan.prices?.find((p) => p.currency === currency) || {
-                    currency: plan.currency,
-                    amount: plan.monthly_price,
-                  };
-
-                  const formattedPrice =
-                    priceObj.currency === "NGN"
-                      ? `₦${(priceObj.amount || 0).toLocaleString()}`
-                      : priceObj.currency === "USDT"
-                      ? `${priceObj.amount} USDT`
-                      : `$${(priceObj.amount || 0).toFixed(2)}`;
+                  const resolvedPrice = resolvePlanPrice(plan, currency);
 
                   return (
                     <Card key={plan.id} className="flex flex-col justify-between border-border hover:border-primary/50 transition-all shadow-sm">
@@ -213,11 +204,16 @@ export default function ProviderDetailView({ providerId }: ProviderDetailViewPro
                       </CardHeader>
 
                       <CardContent className="space-y-4">
-                        <div className="border-t border-b border-border py-3">
+                        <div className="border-t border-b border-border py-3 space-y-1">
                           <div className="text-2xl font-extrabold text-foreground">
-                            {formattedPrice}
+                            {formatCurrencyAmount(resolvedPrice.amount, resolvedPrice.currency)}
                             <span className="text-xs font-normal text-muted-foreground ml-1">/ month</span>
                           </div>
+                          {!resolvedPrice.isSupported && (
+                            <div className="inline-flex items-center rounded-md bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-500 border border-amber-500/20">
+                              Only available in {resolvedPrice.currency}
+                            </div>
+                          )}
                         </div>
 
                         <ul className="space-y-1.5 text-xs text-muted-foreground">

@@ -5,6 +5,7 @@ import { apiClient } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Loader2, X, ShieldCheck, HelpCircle, Receipt } from "lucide-react";
+import { formatCurrencyAmount } from "@/lib/currency";
 import { PlanOut } from "./PricingGrid";
 
 export interface CheckoutQuoteResponse {
@@ -120,18 +121,7 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
   if (!isOpen || !plan) return null;
 
   const formatCurrency = (amount: number, curr: string) => {
-    const symbols: Record<string, string> = {
-      NGN: "₦",
-      USD: "$",
-      USDT: "USDT ",
-      EUR: "€",
-      GBP: "£",
-      KES: "KSh ",
-      GHS: "GH₵ ",
-    };
-    const sym = symbols[curr.toUpperCase()] || `${curr} `;
-    const num = typeof amount === "number" ? amount : 0;
-    return `${sym}${num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return formatCurrencyAmount(amount, curr);
   };
 
   const durationOptions = [

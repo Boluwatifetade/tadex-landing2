@@ -5,6 +5,7 @@ import { apiClient } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Loader2, RefreshCw, Zap, Check, Coins, BadgeCheck, User } from "lucide-react";
+import { resolvePlanPrice, formatCurrencyAmount } from "@/lib/currency";
 import CheckoutQuoteModal from "./CheckoutQuoteModal";
 
 export interface PlanPriceItem {
@@ -167,7 +168,7 @@ export default function PricingGrid() {
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {plans.map((plan) => {
-            const displayPrice = getPriceForCurrency(plan, selectedCurrency);
+            const resolvedPrice = resolvePlanPrice(plan, selectedCurrency);
 
             return (
               <Card key={plan.id} className="flex flex-col justify-between border-border hover:border-primary/40 transition-colors">
@@ -187,11 +188,18 @@ export default function PricingGrid() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="pt-2">
-                    <span className="text-3xl font-extrabold font-mono text-foreground">
-                      {formatAmount(displayPrice, selectedCurrency)}
-                    </span>
-                    <span className="text-xs text-muted-foreground font-medium"> / month</span>
+                  <div className="pt-2 space-y-1">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-3xl font-extrabold font-mono text-foreground">
+                        {formatCurrencyAmount(resolvedPrice.amount, resolvedPrice.currency)}
+                      </span>
+                      <span className="text-xs text-muted-foreground font-medium"> / month</span>
+                    </div>
+                    {!resolvedPrice.isSupported && (
+                      <div className="inline-flex items-center rounded-md bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-500 border border-amber-500/20">
+                        Only available in {resolvedPrice.currency}
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-2 pt-2 text-xs border-t border-border">

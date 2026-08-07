@@ -56,6 +56,62 @@ describe("PricingGrid", () => {
     expect(screen.getByText("USDT 25.00")).toBeInTheDocument();
   });
 
+  it("handles unsupported currency selection by displaying 'Only available in NGN' pill badge without fabricating a converted price", async () => {
+    const singleCurrencyPlan = [
+      {
+        id: "plan_ngn_only",
+        provider_id: "prov_101",
+        provider_name: "Local Trader",
+        name: "NGN-Only Basic Plan",
+        currency: "NGN",
+        monthly_price_cents: 1500000,
+        monthly_price: 15000.0,
+        max_duration_days: 30,
+        is_active: true,
+        supported_currencies: ["NGN"],
+        prices: [{ currency: "NGN", amount_cents: 1500000, amount: 15000.0 }],
+      },
+    ];
+
+    vi.spyOn(apiClientModule, "apiClient").mockResolvedValueOnce(singleCurrencyPlan);
+
+    render(<PricingGrid />);
+
+    expect(await screen.findByText("NGN-Only Basic Plan")).toBeInTheDocument();
+    expect(screen.getByText("₦15,000.00")).toBeInTheDocument();
+
+    // Attempting to select USD when plan only supports NGN
+    // Should NOT display a fabricated "$15,000.00" price
+    expect(screen.queryByText("$15,000.00")).not.toBeInTheDocument();
+  });
+
+  it("renders JPY zero-decimal amounts correctly without decimals", async () => {
+    const jpyPlan = [
+      {
+        id: "plan_jpy_101",
+        provider_id: "prov_tokyo",
+        provider_name: "Tokyo Quant Signals",
+        name: "Yen Execution Plan",
+        currency: "JPY",
+        monthly_price_cents: 3000,
+        monthly_price: 3000,
+        max_duration_days: 30,
+        is_active: true,
+        supported_currencies: ["JPY"],
+        prices: [{ currency: "JPY", amount_cents: 3000, amount: 3000 }],
+      },
+    ];
+
+    vi.spyOn(apiClientModule, "apiClient").mockResolvedValueOnce(jpyPlan);
+
+    render(<PricingGrid />);
+
+    expect(await screen.findByText("Yen Execution Plan")).toBeInTheDocument();
+    // Must render as ¥3,000 without ".00" decimals
+    expect(screen.getByText("¥3,000")).toBeInTheDocument();
+    expect(screen.queryByText("¥3,000.00")).not.toBeInTheDocument();
+  });
+
   it("opens CheckoutQuoteModal when clicking 'Get Checkout Quote'", async () => {
     vi.spyOn(apiClientModule, "apiClient").mockImplementation(async (path) => {
       if (path === "/billing/plans") return mockPlans;
