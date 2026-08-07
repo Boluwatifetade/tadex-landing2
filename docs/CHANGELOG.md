@@ -4,6 +4,21 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Currency Selector & Zero-Decimal JPY Subunit Fixes] - 2026-08-07
+
+### Fixed & Tested
+- **Currency Selector Resolution (`src/lib/currency.ts`, `PricingGrid.tsx`, `ProviderDetailView.tsx`)**:
+  - Fixed fallback bug where selecting an unpriced currency (e.g. USD) on a single-currency plan (e.g. NGN only) fabricated a converted price using raw numbers (e.g. `$15,000.00`).
+  - Added `resolvePlanPrice` helper: if a plan does not support the selected currency, it renders the plan's native base price alongside an explicit pill badge (`Only available in NGN`) rather than fabricating converted figures.
+- **Zero-Decimal Currency Subunit Support (JPY, KRW, etc.)**:
+  - Updated backend `_cents_to_amount(cents, currency)` in `app/api/billing.py` and `app/api/providers.py` to recognize zero-decimal currencies (`JPY`, `KRW`, `UGX`, `VND`, etc.), mapping 1 subunit = 1 unit (e.g. `1000` cents $\rightarrow$ `1000.0` JPY).
+  - Updated frontend `formatCurrencyAmount` in `src/lib/currency.ts` to format zero-decimal currencies without decimal places (`¥1,000` rather than `¥1,000.00`).
+- **Regression Tests (`src/test/PricingGrid.test.tsx`, `src/test/ProviderDetailView.test.tsx`, `tests/test_billing_api.py`)**:
+  - Added tests verifying unsupported currency selection displays the native currency pill badge without fabricating converted prices.
+  - Added tests verifying JPY plans render correctly without decimal places.
+
+---
+
 ## [Provider Directory & Provider-First Pricing Restructure] - 2026-08-05
 
 ### Added & Restructured
