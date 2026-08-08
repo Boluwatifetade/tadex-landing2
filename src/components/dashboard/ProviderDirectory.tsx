@@ -150,7 +150,7 @@ export default function ProviderDirectory() {
                   <div className="grid grid-cols-2 gap-2 rounded-lg bg-card/60 p-3 border border-border text-xs">
                     <div>
                       <span className="text-muted-foreground flex items-center gap-1">
-                        <TrendingUp className="h-3 w-3 text-emerald-500" /> Win Rate
+                        <TrendingUp className="h-3 w-3 text-emerald-500" /> Signal Delivery Rate
                       </span>
                       <p className="font-bold text-foreground text-sm mt-0.5">{winRateFormatted}</p>
                     </div>
@@ -164,7 +164,7 @@ export default function ProviderDirectory() {
 
                     <div>
                       <span className="text-muted-foreground flex items-center gap-1">
-                        <Signal className="h-3 w-3 text-secondary-foreground" /> Total Signals
+                        <Signal className="h-3 w-3 text-secondary-foreground" /> Signals Received
                       </span>
                       <p className="font-medium text-foreground mt-0.5">{p.total_signals_sent || 0}</p>
                     </div>

@@ -143,7 +143,7 @@ export default function ProviderDetailView({ providerId }: ProviderDetailViewPro
             <div className="grid grid-cols-2 gap-4 rounded-xl bg-card/60 p-4 border border-border sm:grid-cols-4 text-xs">
               <div>
                 <span className="text-muted-foreground flex items-center gap-1">
-                  <TrendingUp className="h-3.5 w-3.5 text-emerald-500" /> Historical Win Rate
+                  <TrendingUp className="h-3.5 w-3.5 text-emerald-500" /> Signal Delivery Rate
                 </span>
                 <p className="text-lg font-bold text-foreground mt-0.5">{winRateFormatted}</p>
               </div>
@@ -157,7 +157,7 @@ export default function ProviderDetailView({ providerId }: ProviderDetailViewPro
 
               <div>
                 <span className="text-muted-foreground flex items-center gap-1">
-                  <Signal className="h-3.5 w-3.5 text-secondary-foreground" /> Total Signals Executed
+                  <Signal className="h-3.5 w-3.5 text-secondary-foreground" /> Signals Received
                 </span>
                 <p className="text-lg font-bold text-foreground mt-0.5">{provider.total_signals_sent || 0}</p>
               </div>
