@@ -4,6 +4,26 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Mobile Responsiveness Overhaul] - 2026-08-13
+
+### Fixed & Enhanced
+- **Priority 1: Checkout Quote Modal Scroll Container (`CheckoutQuoteModal.tsx`)**:
+  - Added `max-h-[90vh] overflow-y-auto` to the modal content card container.
+  - Resolved revenue-blocking mobile bug where the primary CTA button (`Proceed to Payment`) and security disclaimer clipped offscreen on short viewports (375x667).
+- **Priority 2: Dashboard Navigation Drawer (`DashboardHeader.tsx`)**:
+  - Implemented responsive mobile hamburger toggle button (`md:hidden`).
+  - Added collapsible slide-down mobile navigation drawer providing access to all 6 destinations (`Overview`, `API Keys`, `Trading`, `Browse Providers`, `All Plans`, `Log Out`) and user session badges on 375px/390px viewports without horizontal clipping.
+- **Priority 3: Responsive Mobile Trade Card Views (`OrdersTable.tsx`, `PositionsTable.tsx`)**:
+  - Replaced horizontal-scroll table layouts on `< sm:` viewports with stacked, high-readability key-value card views.
+  - Added mobile `<select>` dropdown for order status filtering, replacing overcrowded filter buttons on mobile viewports.
+  - Preserved standard multi-column desktop tables on `sm:` viewports and above.
+- **Priority 4: Connected Key Card Header Flex Layout (`ApiKeyManager.tsx`)**:
+  - Applied `flex-wrap` and gap spacing to connected exchange key card headers, ensuring exchange title, `Mainnet/Testnet` badges, `Active` status badges, and `Disconnect` buttons wrap cleanly on 375px viewports.
+- **Automated Tests (`src/test/DashboardHeader.test.tsx`, `CheckoutQuoteModal.test.tsx`, `OrdersTable.test.tsx`, `PositionsTable.test.tsx`)**:
+  - Added unit tests covering hamburger menu drawer toggle, modal container overflow attributes, mobile select filters, and mobile card view elements.
+
+---
+
 ## [Currency Selector & Zero-Decimal JPY Subunit Fixes] - 2026-08-07
 
 ### Fixed & Tested
