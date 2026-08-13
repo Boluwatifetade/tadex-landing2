@@ -4,6 +4,25 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Account Settings Page: Password Change & Logout-All] - 2026-08-14
+
+### Added & Wired
+- **Account Settings Page (`src/app/dashboard/settings/page.tsx`, `AccountSettings.tsx`)**:
+  - Added new `/dashboard/settings` route nested in dashboard layout with `ProtectedRoute` and `ErrorBoundary`.
+  - Added `Settings` link to `DashboardHeader` nav items across both desktop navigation and responsive mobile menu drawer.
+- **Password Change Form (`AccountSettings.tsx`)**:
+  - React Hook Form + Zod schema validation requiring current password, new password (min 8 chars), and confirm password match.
+  - Wired to `POST /auth/change-password`. On 204 success, displays clear confirmation: `"Your password has been changed successfully. You've been logged out of all other devices."`.
+  - Handled invalid current password error message (`"Current password is invalid"`).
+- **Log Out of All Devices (`AccountSettings.tsx`)**:
+  - Deliberately separated security section with an inline confirmation gate before executing destructive action.
+  - Wired to `POST /auth/logout-all`. On 204 success, clears local auth state (`useAuthStore.clear()`) and redirects user to `/login`.
+- **Automated Tests & Backend Verification (`src/test/AccountSettings.test.tsx`, `tests/test_password_change_revokes_all_existing_sessions.py`, `tests/test_logout_all_devices.py`)**:
+  - Added Vitest unit test suite covering password change success, wrong current password error, password mismatch validation, logout-all confirmation gate, and logout-all redirect to `/login`.
+  - Verified against backend contract: `POST /auth/change-password` revokes all active refresh tokens in DB and deletes refresh cookie while keeping in-memory access token valid; `POST /auth/logout-all` revokes all refresh tokens and terminates current session.
+
+---
+
 ## [Mobile Responsiveness Overhaul] - 2026-08-13
 
 ### Fixed & Enhanced
