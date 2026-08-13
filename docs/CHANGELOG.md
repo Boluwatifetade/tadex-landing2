@@ -20,6 +20,7 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 - **Automated Tests & Backend Verification (`src/test/AccountSettings.test.tsx`, `tests/test_password_change_revokes_all_existing_sessions.py`, `tests/test_logout_all_devices.py`)**:
   - Added Vitest unit test suite covering password change success, wrong current password error, password mismatch validation, logout-all confirmation gate, and logout-all redirect to `/login`.
   - Verified against backend contract: `POST /auth/change-password` revokes all active refresh tokens in DB and deletes refresh cookie while keeping in-memory access token valid; `POST /auth/logout-all` revokes all refresh tokens and terminates current session.
+  - **Operational Revocation Nuance**: `logout-all` is immediate on refresh, page navigation, or cookie-based token refresh check; a tab left open and completely idle could theoretically retain access for up to 15 minutes until its access token naturally expires.
 
 ---
 

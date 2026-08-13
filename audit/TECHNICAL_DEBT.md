@@ -78,6 +78,13 @@ This document cataloging and prioritizes technical debt identified across the ac
 
 ---
 
+#### TD-CRIT-04: Session Revocation Lag on Idle Tab Prior to Access Token Expiry
+- **Location**: `tadex-landing2/src/lib/auth-store.ts`, `Tadex/app/api/auth.py` (`logout_all`, `change_password`)
+- **Description**: `logout-all` and `change-password` revoke all refresh tokens in the database and clear the client's HTTP-only refresh cookie immediately. On refresh, page navigation, or API error, the frontend `ProtectedRoute` and `apiClient` fail to refresh tokens and immediately redirect to `/login`. However, because access tokens live in memory on the client and are valid for up to 15 minutes, an open browser tab left completely idle without firing any API calls or page navigation could theoretically retain access for up to 15 minutes until its in-memory access token naturally expires.
+- **Operational Nuance**: Revocation is effectively immediate on any navigation, page refresh, or cookie-based refresh check.
+- **Recommended Enhancement**: Option to emit a WebSocket / Server-Sent Events (SSE) session termination event or store an `issued_at` token threshold check if sub-minute immediate revocation is mandated for active idle tabs.
+- **Status**: Documented / Accepted behavior for JWT stateless access tokens.
+
 ### 3. Medium & Low Severity Items
 
 #### TD-MED-01: Duplicate Configuration Files (`next.config.js` vs `next.config.ts`)
