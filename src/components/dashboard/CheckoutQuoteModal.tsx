@@ -133,7 +133,7 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg rounded-xl border border-border bg-card shadow-2xl text-card-foreground p-6 space-y-6">
+      <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-xl border border-border bg-card shadow-2xl text-card-foreground p-6 space-y-6">
         {/* Close Button */}
         <button
           onClick={onClose}

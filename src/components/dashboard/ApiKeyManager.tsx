@@ -230,8 +230,8 @@ export default function ApiKeyManager() {
                     key={k.id}
                     className="rounded-lg border border-border bg-card p-4 transition-all hover:border-primary/40 space-y-3"
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="font-bold text-foreground capitalize text-lg">{k.exchange}</span>
                         <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
                           k.is_testnet
@@ -251,7 +251,7 @@ export default function ApiKeyManager() {
                           variant="ghost"
                           size="sm"
                           onClick={() => setDisconnectingId(k.id)}
-                          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          className="text-destructive hover:bg-destructive/10 hover:text-destructive h-8 px-2 text-xs"
                         >
                           <Trash2 className="h-4 w-4 mr-1" />
                           Disconnect

@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { useAuthStore } from "@/lib/auth-store";
 import { apiClient } from "@/lib/api-client";
-import { LayoutDashboard, KeyRound, LineChart, Users, CreditCard, LogOut } from "lucide-react";
+import { LayoutDashboard, KeyRound, LineChart, Users, CreditCard, LogOut, Menu, X } from "lucide-react";
 
 interface DashboardHeaderProps {
   userEmail?: string;
@@ -18,6 +18,7 @@ export default function DashboardHeader({ userEmail, userStatus = "active" }: Da
   const pathname = usePathname();
   const { clear } = useAuthStore();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -49,13 +50,13 @@ export default function DashboardHeader({ userEmail, userStatus = "active" }: Da
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground">
               T
             </div>
-            <span className="text-xl font-bold tracking-tight text-foreground hidden sm:inline">
+            <span className="text-xl font-bold tracking-tight text-foreground">
               Tadex App
             </span>
           </Link>
 
-          {/* Navigation Links */}
-          <nav className="flex items-center gap-1 sm:gap-2">
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -64,9 +65,9 @@ export default function DashboardHeader({ userEmail, userStatus = "active" }: Da
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs sm:text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs lg:text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-primary text-primary-foreground shadow-sm"
+                      ? "bg-primary text-primary-foreground shadow-xs"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                 >
@@ -78,9 +79,10 @@ export default function DashboardHeader({ userEmail, userStatus = "active" }: Da
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
+        {/* Desktop User Info & Logout */}
+        <div className="hidden md:flex items-center gap-4">
           {userEmail && (
-            <div className="hidden md:flex items-center gap-2 text-xs font-medium">
+            <div className="flex items-center gap-2 text-xs font-medium">
               <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">
                 User: {userIdentifier}
               </span>
@@ -93,13 +95,77 @@ export default function DashboardHeader({ userEmail, userStatus = "active" }: Da
           <button
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-xs sm:text-sm font-medium text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-xs lg:text-sm font-medium text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 transition-colors"
           >
             <LogOut className="h-4 w-4" />
             <span>{isLoggingOut ? "Logging out..." : "Log Out"}</span>
           </button>
         </div>
+
+        {/* Mobile Hamburger Toggle Button */}
+        <div className="flex items-center md:hidden">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+            className="rounded-lg border border-border bg-background p-2 text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Collapsible Navigation Drawer */}
+      {isMobileMenuOpen && (
+        <div className="border-b border-border bg-card px-4 py-4 space-y-3 md:hidden animate-in slide-in-from-top-2 duration-150">
+          {userEmail && (
+            <div className="flex items-center justify-between pb-2 border-b border-border text-xs font-medium">
+              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">
+                User: {userIdentifier}
+              </span>
+              <span className="rounded-full bg-secondary px-2.5 py-1 text-secondary-foreground capitalize">
+                {userStatus}
+              </span>
+            </div>
+          )}
+
+          <nav className="flex flex-col space-y-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-xs"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                >
+                  <Icon className="h-4 w-4 shrink-0" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="pt-2 border-t border-border">
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                handleLogout();
+              }}
+              disabled={isLoggingOut}
+              className="w-full flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-3 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>{isLoggingOut ? "Logging out..." : "Log Out"}</span>
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

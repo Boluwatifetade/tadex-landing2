@@ -114,16 +114,30 @@ export default function OrdersTable() {
             <CardDescription>Submitted automated orders and execution logs.</CardDescription>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
-            {/* Filter Buttons */}
-            <div className="flex items-center rounded-lg border border-border p-1 bg-muted/30">
+          <div className="flex items-center justify-between sm:justify-end gap-2 flex-wrap">
+            {/* Mobile Dropdown Select */}
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              aria-label="Filter orders by status"
+              className="sm:hidden rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              {filterOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+
+            {/* Desktop Filter Button Group */}
+            <div className="hidden sm:flex items-center rounded-lg border border-border p-1 bg-muted/30">
               {filterOptions.map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => setStatusFilter(opt.value)}
                   className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                     statusFilter === opt.value
-                      ? "bg-card text-foreground shadow-sm"
+                      ? "bg-card text-foreground shadow-xs"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -161,49 +175,95 @@ export default function OrdersTable() {
             <p className="text-xs text-muted-foreground">Executed trade orders will be recorded here.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm border-collapse">
-              <thead>
-                <tr className="border-b border-border text-xs uppercase text-muted-foreground">
-                  <th className="py-3 px-2 font-medium">Time</th>
-                  <th className="py-3 px-2 font-medium">Symbol</th>
-                  <th className="py-3 px-2 font-medium">Side</th>
-                  <th className="py-3 px-2 font-medium">Type</th>
-                  <th className="py-3 px-2 font-medium">Size</th>
-                  <th className="py-3 px-2 font-medium">Price</th>
-                  <th className="py-3 px-2 font-medium">Status</th>
-                  <th className="py-3 px-2 font-medium">SL / TP</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {orders.map((ord) => {
-                  const isBuy = (ord.side || "").toLowerCase().includes("buy");
+          <>
+            {/* Mobile Stacked Card View (< sm:) */}
+            <div className="space-y-3 sm:hidden">
+              {orders.map((ord) => {
+                const isBuy = (ord.side || "").toLowerCase().includes("buy");
 
-                  return (
-                    <tr key={ord.id} className="hover:bg-muted/40 transition-colors">
-                      <td className="py-3 px-2 text-xs text-muted-foreground whitespace-nowrap">{formatDate(ord.timestamp)}</td>
-                      <td className="py-3 px-2 font-bold text-foreground">{ord.symbol}</td>
-                      <td className="py-3 px-2">
+                return (
+                  <div key={ord.id} className="rounded-lg border border-border bg-card p-3.5 space-y-2.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-sm text-foreground">{ord.symbol}</span>
                         <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
                           isBuy ? "bg-emerald-500/10 text-emerald-500" : "bg-destructive/10 text-destructive"
                         }`}>
                           {ord.side}
                         </span>
-                      </td>
-                      <td className="py-3 px-2 text-xs font-medium text-foreground">{ord.order_type || "Market"}</td>
-                      <td className="py-3 px-2 font-mono text-foreground">{ord.size}</td>
-                      <td className="py-3 px-2 font-mono text-foreground">{formatPrice(ord.price)}</td>
-                      <td className="py-3 px-2">{renderStatusBadge(ord.status)}</td>
-                      <td className="py-3 px-2 text-xs text-muted-foreground font-mono">
-                        <div>SL: {formatPrice(ord.stop_loss)}</div>
-                        <div>TP: {formatPrice(ord.take_profit)}</div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                        <span className="text-muted-foreground font-medium">{ord.order_type || "Market"}</span>
+                      </div>
+                      <div>{renderStatusBadge(ord.status)}</div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 rounded-md bg-muted/30 p-2.5 font-mono text-xs">
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block uppercase font-sans">Size / Price</span>
+                        <span className="text-foreground font-semibold">{ord.size} @ {formatPrice(ord.price)}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block uppercase font-sans">Time</span>
+                        <span className="text-muted-foreground">{formatDate(ord.timestamp)}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block uppercase font-sans">Stop Loss</span>
+                        <span className="text-muted-foreground">{formatPrice(ord.stop_loss)}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block uppercase font-sans">Take Profit</span>
+                        <span className="text-muted-foreground">{formatPrice(ord.take_profit)}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop Table View (>= sm:) */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-left text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-border text-xs uppercase text-muted-foreground">
+                    <th className="py-3 px-2 font-medium">Time</th>
+                    <th className="py-3 px-2 font-medium">Symbol</th>
+                    <th className="py-3 px-2 font-medium">Side</th>
+                    <th className="py-3 px-2 font-medium">Type</th>
+                    <th className="py-3 px-2 font-medium">Size</th>
+                    <th className="py-3 px-2 font-medium">Price</th>
+                    <th className="py-3 px-2 font-medium">Status</th>
+                    <th className="py-3 px-2 font-medium">SL / TP</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {orders.map((ord) => {
+                    const isBuy = (ord.side || "").toLowerCase().includes("buy");
+
+                    return (
+                      <tr key={ord.id} className="hover:bg-muted/40 transition-colors">
+                        <td className="py-3 px-2 text-xs text-muted-foreground whitespace-nowrap">{formatDate(ord.timestamp)}</td>
+                        <td className="py-3 px-2 font-bold text-foreground">{ord.symbol}</td>
+                        <td className="py-3 px-2">
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
+                            isBuy ? "bg-emerald-500/10 text-emerald-500" : "bg-destructive/10 text-destructive"
+                          }`}>
+                            {ord.side}
+                          </span>
+                        </td>
+                        <td className="py-3 px-2 text-xs font-medium text-foreground">{ord.order_type || "Market"}</td>
+                        <td className="py-3 px-2 font-mono text-foreground">{ord.size}</td>
+                        <td className="py-3 px-2 font-mono text-foreground">{formatPrice(ord.price)}</td>
+                        <td className="py-3 px-2">{renderStatusBadge(ord.status)}</td>
+                        <td className="py-3 px-2 text-xs text-muted-foreground font-mono">
+                          <div>SL: {formatPrice(ord.stop_loss)}</div>
+                          <div>TP: {formatPrice(ord.take_profit)}</div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </CardContent>
     </Card>

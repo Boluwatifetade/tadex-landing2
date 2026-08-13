@@ -63,6 +63,12 @@ describe("CheckoutQuoteModal", () => {
     // 5. Assert active action button
     const submitBtn = screen.getByRole("button", { name: "Proceed to Payment" });
     expect(submitBtn).toBeEnabled();
+
+    // 6. Assert container applies scrollable max-h-[90vh] overflow-y-auto for mobile viewports
+    const modalTitle = screen.getByText("Transparent Checkout Quote");
+    const containerCard = modalTitle.closest("div.relative");
+    expect(containerCard).toHaveClass("max-h-[90vh]");
+    expect(containerCard).toHaveClass("overflow-y-auto");
   });
 
   it("triggers checkout initiation API call and displays loading state when 'Proceed to Payment' is clicked", async () => {

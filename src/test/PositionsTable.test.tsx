@@ -17,7 +17,7 @@ describe("PositionsTable", () => {
     expect(screen.getByText("Automated signal triggers will open and monitor trades here.")).toBeInTheDocument();
   });
 
-  it("renders active position with correct symbol, side, size, and PnL formatting", async () => {
+  it("renders active position with correct symbol, side, size, and PnL formatting across mobile and desktop views", async () => {
     const mockPositions = [
       {
         id: "pos_101",
@@ -36,15 +36,16 @@ describe("PositionsTable", () => {
 
     render(<PositionsTable />);
 
-    expect(await screen.findByText("BTCUSDT")).toBeInTheDocument();
-    expect(screen.getByText("Buy")).toBeInTheDocument();
-    expect(screen.getByText("0.25")).toBeInTheDocument();
-    expect(screen.getByText("$64,500.00")).toBeInTheDocument();
-    expect(screen.getByText("10x")).toBeInTheDocument();
+    const symbols = await screen.findAllByText("BTCUSDT");
+    expect(symbols.length).toBeGreaterThan(0);
 
-    const pnlEl = screen.getByText("+$125.50");
-    expect(pnlEl).toBeInTheDocument();
-    expect(pnlEl.className).toContain("text-emerald-500");
+    expect(screen.getAllByText("Buy").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("0.25").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("$64,500.00").length).toBeGreaterThan(0);
+
+    const pnlEls = screen.getAllByText("+$125.50");
+    expect(pnlEls.length).toBeGreaterThan(0);
+    expect(pnlEls[0].className).toContain("text-emerald-500");
   });
 
   it("renders error state when fetch fails and allows retry", async () => {

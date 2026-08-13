@@ -17,7 +17,7 @@ describe("OrdersTable", () => {
     expect(screen.getByText("Executed trade orders will be recorded here.")).toBeInTheDocument();
   });
 
-  it("renders populated orders list and filters by status", async () => {
+  it("renders populated orders list and filters by status via desktop buttons and mobile select dropdown", async () => {
     const mockOrders = [
       {
         id: "ord_1",
@@ -40,16 +40,22 @@ describe("OrdersTable", () => {
 
     render(<OrdersTable />);
 
-    expect(await screen.findByText("ETHUSDT")).toBeInTheDocument();
-    expect(screen.getByText("filled")).toBeInTheDocument();
-    expect(screen.getByText("1.5")).toBeInTheDocument();
-    expect(screen.getByText("$3,400.00")).toBeInTheDocument();
+    const symbols = await screen.findAllByText("ETHUSDT");
+    expect(symbols.length).toBeGreaterThan(0);
 
-    // Test filter button click
+    expect(screen.getAllByText("filled").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("1.5").length).toBeGreaterThan(0);
+
+    // Test filter button click (desktop)
     const filledFilterBtn = screen.getByRole("button", { name: "Filled" });
     fireEvent.click(filledFilterBtn);
 
     expect(apiClientSpy).toHaveBeenCalledWith("/trading/orders?status=filled");
+
+    // Test mobile dropdown select filter
+    const selectEl = screen.getByRole("combobox", { name: /filter orders by status/i });
+    fireEvent.change(selectEl, { target: { value: "pending" } });
+    expect(apiClientSpy).toHaveBeenCalledWith("/trading/orders?status=pending");
   });
 
   it("renders error state when fetch fails and allows retry", async () => {

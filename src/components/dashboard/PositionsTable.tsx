@@ -47,7 +47,7 @@ export default function PositionsTable() {
   };
 
   const formatPnl = (val?: number | null) => {
-    if (val === undefined || val === null) return { text: "$0.00", className: "text-muted-foreground" };
+    if (val === undefined || val === null) return { text: "$0.00", className: "text-muted-foreground bg-secondary font-medium" };
     const prefix = val > 0 ? "+" : "";
     const text = `${prefix}$${val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     if (val > 0) return { text, className: "text-emerald-500 bg-emerald-500/10 font-bold" };
@@ -94,53 +94,109 @@ export default function PositionsTable() {
             <p className="text-xs text-muted-foreground">Automated signal triggers will open and monitor trades here.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm border-collapse">
-              <thead>
-                <tr className="border-b border-border text-xs uppercase text-muted-foreground">
-                  <th className="py-3 px-2 font-medium">Symbol</th>
-                  <th className="py-3 px-2 font-medium">Side</th>
-                  <th className="py-3 px-2 font-medium">Size</th>
-                  <th className="py-3 px-2 font-medium">Entry Price</th>
-                  <th className="py-3 px-2 font-medium">Leverage</th>
-                  <th className="py-3 px-2 font-medium">Unrealized PnL</th>
-                  <th className="py-3 px-2 font-medium">SL / TP</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {positions.map((pos) => {
-                  const pnl = formatPnl(pos.unrealized_pnl);
-                  const isLong = (pos.side || "").toLowerCase().includes("buy") || (pos.side || "").toLowerCase().includes("long");
+          <>
+            {/* Mobile Stacked Card View (< sm:) */}
+            <div className="space-y-3 sm:hidden">
+              {positions.map((pos) => {
+                const pnl = formatPnl(pos.unrealized_pnl);
+                const isLong = (pos.side || "").toLowerCase().includes("buy") || (pos.side || "").toLowerCase().includes("long");
 
-                  return (
-                    <tr key={pos.id} className="hover:bg-muted/40 transition-colors">
-                      <td className="py-3 px-2 font-bold text-foreground">{pos.symbol}</td>
-                      <td className="py-3 px-2">
+                return (
+                  <div key={pos.id} className="rounded-lg border border-border bg-card p-3.5 space-y-2.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-sm text-foreground">{pos.symbol}</span>
                         <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${
                           isLong ? "bg-emerald-500/10 text-emerald-500" : "bg-destructive/10 text-destructive"
                         }`}>
                           {isLong ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                           {pos.side}
                         </span>
-                      </td>
-                      <td className="py-3 px-2 font-mono text-foreground">{pos.size}</td>
-                      <td className="py-3 px-2 font-mono text-foreground">{formatPrice(pos.entry_price)}</td>
-                      <td className="py-3 px-2 font-medium text-foreground">{pos.leverage ? `${pos.leverage}x` : "-"}</td>
-                      <td className="py-3 px-2 font-mono">
-                        <span className={`rounded-md px-2 py-1 text-xs ${pnl.className}`}>
+                        {pos.leverage && (
+                          <span className="text-xs font-semibold text-foreground bg-muted px-1.5 py-0.5 rounded">
+                            {pos.leverage}x
+                          </span>
+                        )}
+                      </div>
+                      <div>
+                        <span className={`rounded-md px-2 py-1 text-xs font-mono ${pnl.className}`}>
                           {pnl.text}
                         </span>
-                      </td>
-                      <td className="py-3 px-2 text-xs text-muted-foreground font-mono">
-                        <div>SL: {formatPrice(pos.stop_loss)}</div>
-                        <div>TP: {formatPrice(pos.take_profit)}</div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 rounded-md bg-muted/30 p-2.5 font-mono text-xs">
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block uppercase font-sans">Size</span>
+                        <span className="text-foreground font-semibold">{pos.size}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block uppercase font-sans">Entry Price</span>
+                        <span className="text-foreground">{formatPrice(pos.entry_price)}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block uppercase font-sans">Stop Loss</span>
+                        <span className="text-muted-foreground">{formatPrice(pos.stop_loss)}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-muted-foreground block uppercase font-sans">Take Profit</span>
+                        <span className="text-muted-foreground">{formatPrice(pos.take_profit)}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop Table View (>= sm:) */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-left text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-border text-xs uppercase text-muted-foreground">
+                    <th className="py-3 px-2 font-medium">Symbol</th>
+                    <th className="py-3 px-2 font-medium">Side</th>
+                    <th className="py-3 px-2 font-medium">Size</th>
+                    <th className="py-3 px-2 font-medium">Entry Price</th>
+                    <th className="py-3 px-2 font-medium">Leverage</th>
+                    <th className="py-3 px-2 font-medium">Unrealized PnL</th>
+                    <th className="py-3 px-2 font-medium">SL / TP</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {positions.map((pos) => {
+                    const pnl = formatPnl(pos.unrealized_pnl);
+                    const isLong = (pos.side || "").toLowerCase().includes("buy") || (pos.side || "").toLowerCase().includes("long");
+
+                    return (
+                      <tr key={pos.id} className="hover:bg-muted/40 transition-colors">
+                        <td className="py-3 px-2 font-bold text-foreground">{pos.symbol}</td>
+                        <td className="py-3 px-2">
+                          <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${
+                            isLong ? "bg-emerald-500/10 text-emerald-500" : "bg-destructive/10 text-destructive"
+                          }`}>
+                            {isLong ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                            {pos.side}
+                          </span>
+                        </td>
+                        <td className="py-3 px-2 font-mono text-foreground">{pos.size}</td>
+                        <td className="py-3 px-2 font-mono text-foreground">{formatPrice(pos.entry_price)}</td>
+                        <td className="py-3 px-2 font-medium text-foreground">{pos.leverage ? `${pos.leverage}x` : "-"}</td>
+                        <td className="py-3 px-2 font-mono">
+                          <span className={`rounded-md px-2 py-1 text-xs ${pnl.className}`}>
+                            {pnl.text}
+                          </span>
+                        </td>
+                        <td className="py-3 px-2 text-xs text-muted-foreground font-mono">
+                          <div>SL: {formatPrice(pos.stop_loss)}</div>
+                          <div>TP: {formatPrice(pos.take_profit)}</div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </CardContent>
     </Card>
