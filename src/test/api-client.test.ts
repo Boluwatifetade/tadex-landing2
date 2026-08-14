@@ -121,4 +121,40 @@ describe("apiClient", () => {
     expect(useAuthStore.getState().accessToken).toBeNull();
     expect(useAuthStore.getState().isAuthenticated).toBe(false);
   });
+
+  it("extracts message from structured object detail error responses (e.g. 403 EMAIL_VERIFICATION_REQUIRED)", async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce({
+      status: 403,
+      ok: false,
+      json: async () => ({
+        detail: {
+          message: "Please verify your email before initiating checkout. Check your inbox or request a new link.",
+          code: "EMAIL_VERIFICATION_REQUIRED",
+        },
+      }),
+    });
+    globalThis.fetch = fetchMock;
+
+    await expect(apiClient("/billing/checkout", { method: "POST" })).rejects.toThrow(
+      "Please verify your email before initiating checkout. Check your inbox or request a new link."
+    );
+  });
+
+  it("extracts message from array detail error responses", async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce({
+      status: 422,
+      ok: false,
+      json: async () => ({
+        detail: [
+          { msg: "Field 'amount' is required" },
+          { message: "Field 'currency' is invalid" },
+        ],
+      }),
+    });
+    globalThis.fetch = fetchMock;
+
+    await expect(apiClient("/some-endpoint", { method: "POST" })).rejects.toThrow(
+      "Field 'amount' is required, Field 'currency' is invalid"
+    );
+  });
 });

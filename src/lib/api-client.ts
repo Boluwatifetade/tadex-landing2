@@ -79,6 +79,9 @@ export async function apiClient<T>(
         message = errJson.detail;
       } else if (Array.isArray(errJson.detail) && errJson.detail.length > 0) {
         message = errJson.detail.map((e: { msg?: string; message?: string }) => e.msg || e.message).join(", ");
+      } else if (errJson.detail && typeof errJson.detail === "object") {
+        const d = errJson.detail as Record<string, unknown>;
+        message = (d.message as string) || (d.code as string) || JSON.stringify(d);
       } else if (errJson.error?.message) {
         message = errJson.error.message;
       } else if (errJson.message) {

@@ -45,7 +45,7 @@ function VerifyEmailForm() {
           if (data?.email_verified) {
             setSuccessMessage("Your email address has been verified successfully! You can now add exchange API keys and access web billing.");
           } else {
-            setSuccessMessage(data?.message || "Email verified successfully.");
+            setErrorMessage(data?.message || "Email verification was not completed. Please request a new verification link.");
           }
         }
       } catch (err: any) {
