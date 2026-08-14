@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, Suspense } from "react";
+import { useEffect, useState, useCallback, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import ErrorBoundary from "@/components/ErrorBoundary";
@@ -26,7 +26,8 @@ export interface TransactionStatusResponse {
 function BillingPageContent() {
   const searchParams = useSearchParams();
   const statusParam = searchParams.get("status");
-  const refParam = searchParams.get("ref") || searchParams.get("reference") || searchParams.get("tx_ref");
+  const rawRef = searchParams.get("tx_ref") || searchParams.get("ref") || searchParams.get("reference") || searchParams.get("trxref");
+  const refParam = rawRef && rawRef !== "{reference}" && rawRef !== "%7Breference%7D" ? rawRef : null;
 
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const [banner, setBanner] = useState<{
@@ -34,7 +35,13 @@ function BillingPageContent() {
     message: string;
   } | null>(null);
 
-  const pollTransactionStatus = useCallback(async (reference: string) => {
+  const hasPolledRef = useRef<string | null>(null);
+  const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const pollTransactionStatus = useCallback((reference: string) => {
+    if (hasPolledRef.current === reference) return;
+    hasPolledRef.current = reference;
+
     let attempts = 0;
     const maxAttempts = 8; // 16 seconds total
 
@@ -47,7 +54,7 @@ function BillingPageContent() {
         if (statusLower === "success" || statusLower === "successful" || statusLower === "paid") {
           setBanner({
             type: "success",
-            message: "✅ Payment successful! Your subscription has been activated.",
+            message: "Payment successful! Your subscription has been activated.",
           });
           setRefreshTrigger((prev) => prev + 1);
           return;
@@ -56,7 +63,7 @@ function BillingPageContent() {
         if (statusLower === "failed" || statusLower === "cancelled") {
           setBanner({
             type: "failed",
-            message: "⚠️ Payment transaction failed or was rejected.",
+            message: "Payment transaction failed or was rejected.",
           });
           return;
         }
@@ -65,12 +72,13 @@ function BillingPageContent() {
       }
 
       if (attempts < maxAttempts) {
-        setTimeout(poll, 2000);
+        pollTimerRef.current = setTimeout(poll, 2000);
       } else {
         setBanner({
           type: "failed",
-          message: "⚠️ Payment verification pending. If your account was debited, your subscription will activate shortly via webhook.",
+          message: "Payment verification is still processing. Check back shortly — your subscription will activate automatically once confirmed.",
         });
+        setRefreshTrigger((prev) => prev + 1);
       }
     };
 
@@ -81,7 +89,7 @@ function BillingPageContent() {
     if (!statusParam) return;
 
     const s = statusParam.toLowerCase();
-    if (s === "success" || s === "completed") {
+    if (s === "success" || s === "successful" || s === "completed") {
       if (refParam) {
         setBanner({
           type: "verifying",
@@ -91,16 +99,22 @@ function BillingPageContent() {
       } else {
         setBanner({
           type: "success",
-          message: "✅ Payment returned successfully. Refreshing subscription status...",
+          message: "Payment returned successfully. Refreshing subscription status...",
         });
         setRefreshTrigger((prev) => prev + 1);
       }
     } else if (s === "cancelled" || s === "cancel" || s === "failed") {
       setBanner({
         type: "cancelled",
-        message: "⚠️ Payment was cancelled or not completed. Your account remains on the current plan.",
+        message: "Payment was cancelled or not completed. Your account remains on the current plan.",
       });
     }
+
+    return () => {
+      if (pollTimerRef.current) {
+        clearTimeout(pollTimerRef.current);
+      }
+    };
   }, [statusParam, refParam, pollTransactionStatus]);
 
   return (

@@ -61,8 +61,8 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
           plan_id: plan.id,
           currency: selectedCurrency,
           duration_months: durationMonths,
-          success_url: `${origin}/dashboard/billing?status=success&ref={reference}`,
-          cancel_url: `${origin}/dashboard/billing?status=cancelled&ref={reference}`,
+          success_url: `${origin}/dashboard/billing?status=success`,
+          cancel_url: `${origin}/dashboard/billing?status=cancelled`,
         }),
       });
 
