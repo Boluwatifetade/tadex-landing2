@@ -4,6 +4,22 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Web-Only Checkout Error Surfacing & Verification Gate] - 2026-08-14
+
+### Fixed & Live-Verified
+- **Checkout Quote Error Surfacing (`CheckoutQuoteModal.tsx`)**:
+  - Fixed issue where failed `checkout-quote` requests retained stale/cached calculations. Now resets `quote` to `null` before fetching and upon error, rendering an explicit error state and disabling the payment CTA until a valid quote is resolved.
+- **Email Verification 403 Gate (`CheckoutQuoteModal.tsx`, `app/api/billing.py`)**:
+  - Identified cause of 403 Forbidden on `POST /api/v1/billing/checkout`: backend enforces `email_verified == True` for checkout initiation (`EMAIL_VERIFICATION_REQUIRED`).
+  - Added dedicated email verification required alert banner within `CheckoutQuoteModal` to clearly inform unverified users to verify their email before proceeding with payments.
+- **Live Verification against Real Flutterwave Gateway**:
+  - Live verified end-to-end against live staging backend (`168.144.72.194:8002`): web-only user registration $\rightarrow$ email verification via `/verify-email` $\rightarrow$ `POST /checkout-quote` (200 OK) $\rightarrow$ `POST /checkout` (200 OK returning live Flutterwave hosted URL: `https://checkout-v2.dev-flutterwave.com/v3/hosted/pay/...`).
+- **Automated Regression Tests (`src/test/CheckoutQuoteModal.test.tsx`, `tests/test_web_only_users.py`)**:
+  - Added frontend tests for quote 400 error state surfacing and 403 email verification required error banner.
+  - Added backend pytest for unverified web-only user receiving 403 on checkout attempt.
+
+---
+
 ## [Account Settings Page: Password Change & Logout-All] - 2026-08-14
 
 ### Added & Wired
