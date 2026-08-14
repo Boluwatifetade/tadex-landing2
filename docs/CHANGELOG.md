@@ -4,6 +4,57 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Provider Portal: Application, Verification, and Plan Management (Phases A & B)] - 2026-08-15
+
+### 1. Provider Portal Router (`src/app/dashboard/provider/page.tsx`)
+- Created `/dashboard/provider` route protected with `ProtectedRoute` and `ErrorBoundary`.
+- Added `"Provider Portal"` navigation link with `Radio` icon to `DashboardHeader` desktop menu and mobile drawer.
+- Implemented 4-state lifecycle router based on `GET /api/v1/provider/me`:
+  - **404 Unregistered**: Renders "Become a Signal Provider" value proposition hero with 3 highlight cards (Non-Custodial, Multi-Currency, Verified Trader) and CTA to open `ProviderApplyForm`.
+  - **Applicant (Pending Review)**: Renders "Provider Application Under Review" status card with submitted metadata, contact email, experience, and turnaround expectations (24–48h).
+  - **Applicant (Rejected / Needs Attention)**: Renders non-approval card displaying `rejection_reason` and an "Update & Re-apply" button opening `ProviderApplyForm` pre-filled.
+  - **Provider (Active / Suspended)**: Renders full `ProviderDashboard` with metrics header, plan manager, and verification card.
+
+### 2. Provider Application Flow (`ProviderApplyForm.tsx`)
+- Built with React Hook Form and Zod validation schema matching `ProviderApplyRequest`.
+- Collects `display_name`, `contact_email`, `experience_level`, `trading_focus` (multi-select chip selector), `bio`, `referral_source`, and mandatory `terms_accepted` checkbox.
+- Explicit `409 Conflict` duplicate handling surfacing clear guidance rather than a generic failure.
+- Confirmed live backend behavior: rejected applicants can successfully re-apply via `POST /api/v1/provider/apply` (backend filters active duplicates by `.in_("status", ["pending", "approved"])`).
+
+### 3. Provider Plan Management (`ProviderPlanManager.tsx`, `ProviderPlanModal.tsx`)
+- Fetches all owned plans (`GET /api/v1/provider/plans`) including active, paused, draft, and archived.
+- **3-Active-Plan Limit UI Enforcement**: Proactively disables "Create Plan" button with an informative badge/tooltip when 3 active plans are reached, preventing unexpected 400s.
+- **Duplicate Name Prevention**: Proactively checks plan name against existing plan list before API submission, showing an inline warning.
+- **Confirm-Before-Destructive Pattern**: Deactivating a plan opens an explicit confirmation dialog before firing soft-delete (`DELETE /api/v1/provider/plans/{id}`).
+- **Suspended Provider Guard**: Disables all plan creation and mutation actions when provider account `status === "suspended"` with prominent warning banner.
+
+### 4. Provider Verification Flow (`ProviderVerificationForm.tsx`, `ProviderVerificationCard.tsx`)
+- Multi-section verification request modal structured into 5 sections:
+  - **Section 1: Operator Identity** (Full name, Telegram handle/channel, email, region, bio).
+  - **Section 2: Signal Operation** (Subscriber count, duration providing signals, markets traded, exchanges, execution mode, frequency).
+  - **Section 3: Trading Evidence (Optional)** (Exchange UID, profile links, statement/PDF URLs).
+  - **Section 4: Historical Signals** (Dynamic repeatable array enforcing min 3 / max 10 entries with symbol, entry, SL, TP, date, result, and message link).
+  - **Section 5: Affirmations & Declarations** (5 mandatory checkboxes with full disclosure text, all strictly required).
+- Submits structured payload to `POST /api/v1/provider/request-verification`.
+- Updates UI to display pending review card with submission timestamp.
+
+### 5. Automated Tests & Build Verification
+- Added 4 test suites with 100% pass rate (61/61 total tests passing across 17 files):
+  - `src/test/ProviderPortalRouter.test.tsx` (4 tests): 404 hero, applicant pending, applicant rejected with re-apply, provider dashboard.
+  - `src/test/ProviderApplyForm.test.tsx` (4 tests): Validation, payload structure, 409 conflict alert.
+  - `src/test/ProviderPlanManager.test.tsx` (4 tests): Plan list, 3-plan cap, duplicate name validation, creation, deactivation.
+  - `src/test/ProviderVerificationForm.test.tsx` (3 tests): 5 sections, 3-signal min, all 5 declarations required.
+- Full `next build` static page generation and TypeScript type check verified (exit code 0).
+
+### 6. Live Backend Verification
+- Verified all flows live against VPS staging backend (`http://127.0.0.1:8002/api/v1`):
+  - Fresh registration $\rightarrow$ 404 $\rightarrow$ Apply (201) $\rightarrow$ Pending $\rightarrow$ Reject $\rightarrow$ Re-apply (201).
+  - Suspended account (`boluwatifewisdom23@gmail.com`) $\rightarrow$ Suspended header $\rightarrow$ Plan creation blocked with 403 Forbidden $\rightarrow$ Existing plans loaded.
+  - Active provider $\rightarrow$ Plan 1, 2, 3 created (201) $\rightarrow$ 4th plan blocked with 400 Bad Request $\rightarrow$ Duplicate name blocked with 409 Conflict $\rightarrow$ Plan 1 edited (200) $\rightarrow$ Plan 1 deactivated/archived (200).
+  - Verification submission with 3 signals & 5 declarations $\rightarrow$ 200 OK $\rightarrow$ duplicate blocked with 400 Bad Request.
+
+---
+
 ## [Session Consolidation: Mobile Responsiveness, Account Settings, Checkout Bug Chain & Lifecycle Hardening] - 2026-08-14
 
 ### 1. Mobile Responsiveness Overhaul
