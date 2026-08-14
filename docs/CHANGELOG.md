@@ -4,19 +4,22 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
-## [Web-Only Checkout Error Surfacing & Verification Gate] - 2026-08-14
+## [Payment Polling & Verification Lifecycle Fixes] - 2026-08-14
 
 ### Fixed & Live-Verified
-- **Checkout Quote Error Surfacing (`CheckoutQuoteModal.tsx`)**:
-  - Fixed issue where failed `checkout-quote` requests retained stale/cached calculations. Now resets `quote` to `null` before fetching and upon error, rendering an explicit error state and disabling the payment CTA until a valid quote is resolved.
-- **Email Verification 403 Gate (`CheckoutQuoteModal.tsx`, `app/api/billing.py`)**:
-  - Identified cause of 403 Forbidden on `POST /api/v1/billing/checkout`: backend enforces `email_verified == True` for checkout initiation (`EMAIL_VERIFICATION_REQUIRED`).
-  - Added dedicated email verification required alert banner within `CheckoutQuoteModal` to clearly inform unverified users to verify their email before proceeding with payments.
-- **Live Verification against Real Flutterwave Gateway**:
-  - Live verified end-to-end against live staging backend (`168.144.72.194:8002`): web-only user registration $\rightarrow$ email verification via `/verify-email` $\rightarrow$ `POST /checkout-quote` (200 OK) $\rightarrow$ `POST /checkout` (200 OK returning live Flutterwave hosted URL: `https://checkout-v2.dev-flutterwave.com/v3/hosted/pay/...`).
-- **Automated Regression Tests (`src/test/CheckoutQuoteModal.test.tsx`, `tests/test_web_only_users.py`)**:
-  - Added frontend tests for quote 400 error state surfacing and 403 email verification required error banner.
-  - Added backend pytest for unverified web-only user receiving 403 on checkout attempt.
+- **Structured Error Detail Parsing (`src/lib/api-client.ts`)**:
+  - Enhanced error response parser to extract human-readable error messages from structured JSON objects (`detail: { message: "...", code: "..." }`) across all endpoints (`CheckoutQuoteModal`, `ApiKeyManager`, etc.) instead of collapsing to `"Request failed with status 403"`.
+- **Transaction Reference Extraction & URL Clean-up (`src/app/dashboard/billing/page.tsx`, `CheckoutQuoteModal.tsx`)**:
+  - Removed template literal placeholder `{reference}` from `success_url` in `CheckoutQuoteModal.tsx` which caused `%7Breference%7D` polling errors under Flutterwave.
+  - Enhanced reference parser in `billing/page.tsx` to extract real transaction references from `tx_ref`, `ref`, `reference`, or `trxref` query parameters while ignoring raw `{reference}` text.
+- **Polling Deduplication & Bounded Retries (`src/app/dashboard/billing/page.tsx`)**:
+  - Guarded polling execution with `useRef<string | null>(null)` to prevent multiple duplicate interval loops spawning across re-renders.
+  - Capped polling at 8 attempts (16s window) with timeout cleanup on unmount.
+  - Automatically triggers `refreshTrigger` state update upon confirmed payment, auto-updating `SubscriptionCard` to active status without requiring manual refresh.
+- **Strict Email Verification UI (`src/app/verify-email/page.tsx`)**:
+  - Enforced `data?.email_verified === true` requirement before rendering success state to eliminate false-positive confirmation displays.
+- **Live Staging & Production Verification**:
+  - Deployed to Vercel and verified end-to-end on `https://app.tadexapp.com` with `eunicetadeabiola@gmail.com` and web-only test accounts. All 13 test files (46 tests) passing.
 
 ---
 
