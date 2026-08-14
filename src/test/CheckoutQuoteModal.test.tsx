@@ -71,6 +71,60 @@ describe("CheckoutQuoteModal", () => {
     expect(containerCard).toHaveClass("overflow-y-auto");
   });
 
+  it("renders error state and retry button when checkout quote request fails with 400", async () => {
+    const apiClientSpy = vi.spyOn(apiClientModule, "apiClient");
+    apiClientSpy.mockRejectedValueOnce(
+      new Error("No payment option available for this plan in USD: Currency 'USD' is not currently configured for this provider plan.")
+    );
+
+    render(<CheckoutQuoteModal plan={mockPlan} isOpen={true} onClose={vi.fn()} />);
+
+    // Assert error state is displayed
+    expect(
+      await screen.findByText(
+        "No payment option available for this plan in USD: Currency 'USD' is not currently configured for this provider plan."
+      )
+    ).toBeInTheDocument();
+
+    // Assert breakdown is NOT rendered
+    expect(screen.queryByText("Provider Base Price")).not.toBeInTheDocument();
+    expect(screen.queryByText("Total Checkout Quote")).not.toBeInTheDocument();
+
+    // Assert action button is disabled
+    const submitBtn = screen.getByRole("button", { name: "Proceed to Payment" });
+    expect(submitBtn).toBeDisabled();
+
+    // Test retry
+    apiClientSpy.mockResolvedValueOnce(mockQuoteResponse);
+    const retryBtn = screen.getByRole("button", { name: "Retry" });
+    fireEvent.click(retryBtn);
+
+    expect(await screen.findByText("Total Checkout Quote")).toBeInTheDocument();
+    expect(submitBtn).toBeEnabled();
+  });
+
+  it("displays email verification required error alert when checkout initiation returns 403 Forbidden", async () => {
+    const apiClientSpy = vi.spyOn(apiClientModule, "apiClient").mockImplementation(async (path) => {
+      if (path === "/billing/checkout-quote") return mockQuoteResponse;
+      if (path === "/billing/checkout") {
+        throw new Error("Please verify your email before initiating checkout. Check your inbox or request a new link.");
+      }
+      return {};
+    });
+
+    render(<CheckoutQuoteModal plan={mockPlan} isOpen={true} onClose={vi.fn()} />);
+
+    expect(await screen.findByText("Total Checkout Quote")).toBeInTheDocument();
+
+    const submitBtn = screen.getByRole("button", { name: "Proceed to Payment" });
+    fireEvent.click(submitBtn);
+
+    expect(await screen.findByText("Email Verification Required")).toBeInTheDocument();
+    expect(
+      screen.getByText("Please verify your email before initiating checkout. Check your inbox or request a new link.")
+    ).toBeInTheDocument();
+  });
+
   it("triggers checkout initiation API call and displays loading state when 'Proceed to Payment' is clicked", async () => {
     const apiClientSpy = vi.spyOn(apiClientModule, "apiClient").mockImplementation(async (path) => {
       if (path === "/billing/checkout-quote") return mockQuoteResponse;

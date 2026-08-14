@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { apiClient } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Loader2, X, ShieldCheck, HelpCircle, Receipt } from "lucide-react";
+import { Loader2, X, ShieldCheck, HelpCircle, Receipt, AlertTriangle } from "lucide-react";
 import { formatCurrencyAmount } from "@/lib/currency";
 import { PlanOut } from "./PricingGrid";
 
@@ -92,6 +92,7 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
   const fetchQuote = useCallback(async () => {
     if (!plan) return;
     setIsLoading(true);
+    setQuote(null);
     setQuoteError(null);
 
     try {
@@ -105,6 +106,7 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
       });
       setQuote(resp);
     } catch (err: unknown) {
+      setQuote(null);
       const msg = err instanceof Error ? err.message : "Failed to calculate checkout quote";
       setQuoteError(msg);
     } finally {
@@ -114,6 +116,9 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
 
   useEffect(() => {
     if (isOpen && plan) {
+      setQuote(null);
+      setQuoteError(null);
+      setInitiateError(null);
       fetchQuote();
     }
   }, [isOpen, plan, fetchQuote]);
@@ -242,10 +247,18 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
         </div>
 
         {/* Action Button & Disclaimer */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           {initiateError && (
-            <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-2.5 text-xs text-destructive flex items-center justify-between">
-              <span>{initiateError}</span>
+            <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive flex items-start gap-2">
+              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="font-semibold block">
+                  {initiateError.toLowerCase().includes("verify your email") || initiateError.toLowerCase().includes("email_verification_required")
+                    ? "Email Verification Required"
+                    : "Payment Initialization Failed"}
+                </span>
+                <span className="text-destructive/90 leading-relaxed block">{initiateError}</span>
+              </div>
             </div>
           )}
 
