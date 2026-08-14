@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { useAuthStore } from "@/lib/auth-store";
 import { apiClient } from "@/lib/api-client";
-import { LayoutDashboard, KeyRound, LineChart, Users, CreditCard, LogOut, Menu, X, Settings } from "lucide-react";
+import { LayoutDashboard, KeyRound, LineChart, Users, CreditCard, LogOut, Menu, X, Settings, Radio } from "lucide-react";
 
 interface DashboardHeaderProps {
   userEmail?: string;
@@ -37,6 +37,7 @@ export default function DashboardHeader({ userEmail, userStatus = "active" }: Da
     { label: "API Keys", href: "/dashboard/keys", icon: KeyRound },
     { label: "Trading", href: "/dashboard/trading", icon: LineChart },
     { label: "Browse Providers", href: "/dashboard/providers", icon: Users },
+    { label: "Provider Portal", href: "/dashboard/provider", icon: Radio },
     { label: "All Plans", href: "/dashboard/billing", icon: CreditCard },
     { label: "Settings", href: "/dashboard/settings", icon: Settings },
   ];
