@@ -34,6 +34,9 @@ Design is not finalized yet. Build using semantic design tokens, not hardcoded v
 - Forms: React Hook Form + Zod schema per form.
 - Every PR/change touching an execution or auth flow must include or update a test.
 
+## Verification standard
+Live end-to-end verification against real infrastructure (staging backend, real database queries, live third-party gateways) is mandatory before any task touching payments, authentication, credential management, or data integrity is considered complete. Passing unit tests alone is insufficient, as unit tests with mocked responses frequently fail to catch contract mismatches, callback parameter quirks, and state persistence gaps.
+
 ## Before ending a session
 - Leave a short note in `/docs/CHANGELOG.md`: what changed, what's incomplete, what the next session should pick up.
 - Do not leave commented-out debug code or console.logs with sensitive data in the diff.
