@@ -4,6 +4,69 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Phase Admin-1: Web Admin Dashboard (Overview & Provider Governance)] - 2026-08-18
+
+### 1. Admin Route Guard & Dedicated Layout (`AdminRoute.tsx`, `AdminHeader.tsx`, `layout.tsx`)
+- Created `/admin` route tree with strict client-side role guard `AdminRoute.tsx`:
+  - Fetches `/me`; redirects non-admin users (`role === 'user'`) directly to `/dashboard`.
+  - Redirects unauthenticated sessions directly to `/login`.
+- Built `AdminHeader.tsx` featuring brand shield badge, active navigation links (`Overview`, `Providers`, `Applications`, `Verification Queue`), and clearly labeled "Coming Soon" stubs for future phases (`Users`, `Billing & Revenue`, `Execution Engine`, `Audit Logs`).
+- Added full mobile drawer navigation supporting all destinations and exit to trading app.
+
+### 2. Platform Overview & Needs Attention Queues (`AdminOverview.tsx`, `src/app/admin/page.tsx`)
+- Real-time aggregate KPI metrics fetched from `GET /api/v1/admin/overview`:
+  - Registered Users breakdown (Active, Suspended, Banned).
+  - Signal Providers count (Active, Verified, Suspended).
+  - Connected Exchange API accounts (Bybit active, Revoked).
+  - Active Subscriptions breakdown (Total, Trialing, Cancelled).
+  - Payment Volume & Transactions (Completed, Pending, Failed).
+  - Execution Engine health (24h trade dispatch volume, success rate %, task queue depth).
+- Prominent kill switch global alert banner when `kill_switch_enabled` is active.
+- **"Needs Attention" Action Cards**: Clickable summary cards deep-linking to pending applications, verification queue dossiers, and suspended providers.
+
+### 3. Provider Directory & Governance (`AdminProviderTable.tsx`, `AdminProviderDetailModal.tsx`, `AdminSuspendModal.tsx`, `src/app/admin/providers/page.tsx`)
+- Full provider table with search (name, email, slug), status filtering tabs (`All`, `Active`, `Suspended`, `Verified`, `Deleted`), and pagination.
+- Displays identity, owner email, status badge, verification tier badge, subscriber count, signals sent, and win rate %.
+- **Admin Provider Detail Drawer**: Extends public provider view with internal owner email, owner user UUID, Telegram channel ID, and suspension/verification approval timestamps.
+- **Suspend Provider Modal**: Enforces mandatory justification reason (min 3 characters) for audit trail compliance before firing `POST /api/v1/admin/providers/{id}/suspend`.
+- **Unsuspend Action**: Single-confirm dialog before calling `POST /api/v1/admin/providers/{id}/unsuspend`.
+
+### 4. Provider Applications Queue (`AdminApplicationsQueue.tsx`, `src/app/admin/providers/applications/page.tsx`)
+- Lists incoming applicant registration submissions with status badges, trading focus chips, experience level, bio, and referral source.
+- Status filter tabs (`Pending Review`, `Approved`, `Rejected`, `All Applications`).
+- **Approve Action**: Modal with optional provider display name override and optional approval notes, calling `POST /api/v1/admin/providers/{id}/approve`.
+- **Reject Action**: Modal enforcing mandatory rejection reason (min 3 characters) visible to applicant for re-application, calling `POST /api/v1/admin/providers/{id}/reject`.
+
+### 5. Verification Review Queue & 5-Section Dossiers (`AdminVerificationQueue.tsx`, `src/app/admin/providers/verification-queue/page.tsx`)
+- Full interactive evidence dossier review with collapsible panels for 5 structured sections:
+  - **Section 1: Operator Identity** (Legal name, Telegram username, channel link, email, region, methodology).
+  - **Section 2: Signal Operation** (Subscriber count, experience duration, execution mode, signal frequency).
+  - **Section 3: Trading Evidence** (Exchange UID, clickable public leaderboard/profile links, audit PDF reports).
+  - **Section 4: Historical Signals Table** (Structured table with Symbol, Entry, SL, TP, date, outcome, and Telegram post link).
+  - **Section 5: Affirmations & Declarations** (5 verified declaration checkmarks).
+- **Verify Action**: Modal with tier selection (`basic`, `intermediate`, `advanced`, `premium`, `verified`), review notes, and risk flags calling `POST /api/v1/admin/providers/{id}/verify`.
+- **Reject Verification Action**: Modal enforcing mandatory justification reason calling `POST /api/v1/admin/providers/{id}/reject-verification`.
+
+### 6. Automated Tests & Build Verification
+- 5 comprehensive test suites with 100% pass rate (18/18 tests passing):
+  - `src/test/AdminRoute.test.tsx` (3 tests)
+  - `src/test/AdminOverview.test.tsx` (3 tests)
+  - `src/test/AdminProviderTable.test.tsx` (5 tests)
+  - `src/test/AdminApplicationsQueue.test.tsx` (4 tests)
+  - `src/test/AdminVerificationQueue.test.tsx` (3 tests)
+- Full production `next build` static page generation passed with exit code 0 across all `/admin/*` routes.
+
+### 7. Live Backend End-to-End Verification
+- Verified all flows live on staging backend (`http://127.0.0.1:8002/api/v1`):
+  - `GET /admin/overview` $\rightarrow$ 200 OK with real DB metrics.
+  - `GET /admin/providers` $\rightarrow$ 200 OK with active/suspended status filtering.
+  - `POST /admin/providers/{id}/suspend` $\rightarrow$ 200 OK $\rightarrow$ status flipped to `suspended`.
+  - `POST /admin/providers/{id}/unsuspend` $\rightarrow$ 200 OK $\rightarrow$ status restored to `active`.
+  - `POST /provider/apply` $\rightarrow$ 201 Created $\rightarrow$ `GET /admin/providers/applications?status=pending` $\rightarrow$ 200 OK $\rightarrow$ `POST /admin/providers/applications/{id}/approve` $\rightarrow$ 200 OK.
+  - `POST /admin/providers/{id}/verify` $\rightarrow$ 200 OK with tier level `advanced` $\rightarrow$ `is_verified: true`.
+
+---
+
 ## [Provider Portal: Application, Verification, and Plan Management (Phases A & B)] - 2026-08-15
 
 ### 1. Provider Portal Router (`src/app/dashboard/provider/page.tsx`)
