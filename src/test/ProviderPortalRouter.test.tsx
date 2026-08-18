@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import ProviderPortalPage from "@/app/dashboard/provider/page";
 import * as apiClientModule from "@/lib/api-client";
-import * as authStoreModule from "@/lib/auth-store";
+import { useAuthStore } from "@/lib/auth-store";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -15,12 +15,10 @@ vi.mock("next/navigation", () => ({
 describe("ProviderPortalRouter Page", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
-    vi.spyOn(authStoreModule, "useAuthStore").mockReturnValue({
-      token: "mock-jwt-token",
-      user: { email: "trader@tadex.app", id: "user-123" },
+    useAuthStore.setState({
+      accessToken: "mock-jwt-token",
       isAuthenticated: true,
-      clear: vi.fn(),
-    } as any);
+    });
   });
 
   it("branches to 404 Unregistered state and shows Become a Signal Provider hero", async () => {

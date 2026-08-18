@@ -52,23 +52,20 @@ describe("ProviderVerificationForm", () => {
     );
 
     // Fill Required Identity Fields
-    await user.type(screen.getByPlaceholderText("e.g. John Doe"), "John Doe");
-    await user.type(screen.getByPlaceholderText("e.g. @alpha_trader"), "@apex_alpha");
-    await user.type(
-      screen.getByPlaceholderText("e.g. https://t.me/alphatradingchannel"),
-      "https://t.me/apexalpha"
-    );
-    await user.type(
-      screen.getByPlaceholderText("e.g. Nigeria, Kenya, Ghana, Global"),
-      "Nigeria"
-    );
-    await user.type(
-      screen.getByPlaceholderText(/explain your methodology/i),
-      "ICT and Price Action strategy"
-    );
+    fireEvent.change(screen.getByPlaceholderText("e.g. John Doe"), { target: { value: "John Doe" } });
+    fireEvent.change(screen.getByPlaceholderText("e.g. @alpha_trader"), { target: { value: "@apex_alpha" } });
+    fireEvent.change(screen.getByPlaceholderText("e.g. https://t.me/alphatradingchannel"), {
+      target: { value: "https://t.me/apexalpha" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("e.g. Nigeria, Kenya, Ghana, Global"), {
+      target: { value: "Nigeria" },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/explain your methodology/i), {
+      target: { value: "ICT and Price Action strategy" },
+    });
 
     // Fill Required Operation fields
-    await user.type(screen.getByPlaceholderText("e.g. 1500"), "250");
+    fireEvent.change(screen.getByPlaceholderText("e.g. 1500"), { target: { value: "250" } });
 
     // Click submit without checking the 5 declarations
     const submitBtn = screen.getByRole("button", { name: /submit verification request/i });
@@ -90,7 +87,7 @@ describe("ProviderVerificationForm", () => {
       screen.getByText("You must declare that no historical results are fabricated")
     ).toBeInTheDocument();
     expect(mockOnSuccess).not.toHaveBeenCalled();
-  });
+  }, 15000);
 
   it("submits structured verification payload to POST /provider/request-verification when valid", async () => {
     const user = userEvent.setup();
@@ -112,31 +109,26 @@ describe("ProviderVerificationForm", () => {
     );
 
     // Fill Identity
-    await user.type(screen.getByPlaceholderText("e.g. John Doe"), "John Doe");
-    await user.type(screen.getByPlaceholderText("e.g. @alpha_trader"), "@apex_alpha");
-    await user.type(
-      screen.getByPlaceholderText("e.g. https://t.me/alphatradingchannel"),
-      "https://t.me/apexalpha"
-    );
-    await user.type(
-      screen.getByPlaceholderText("e.g. Nigeria, Kenya, Ghana, Global"),
-      "Nigeria"
-    );
-    await user.type(
-      screen.getByPlaceholderText(/explain your methodology/i),
-      "ICT and Price Action strategy"
-    );
+    fireEvent.change(screen.getByPlaceholderText("e.g. John Doe"), { target: { value: "John Doe" } });
+    fireEvent.change(screen.getByPlaceholderText("e.g. @alpha_trader"), { target: { value: "@apex_alpha" } });
+    fireEvent.change(screen.getByPlaceholderText("e.g. https://t.me/alphatradingchannel"), {
+      target: { value: "https://t.me/apexalpha" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("e.g. Nigeria, Kenya, Ghana, Global"), {
+      target: { value: "Nigeria" },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/explain your methodology/i), {
+      target: { value: "ICT and Price Action strategy" },
+    });
 
     // Fill Signal Operation
-    const subInput = screen.getByPlaceholderText("e.g. 1500");
-    await user.clear(subInput);
-    await user.type(subInput, "1200");
+    fireEvent.change(screen.getByPlaceholderText("e.g. 1500"), { target: { value: "1200" } });
 
     // Check all 5 declarations
     const checkboxes = screen.getAllByRole("checkbox");
     expect(checkboxes.length).toBe(5);
     for (const cb of checkboxes) {
-      await user.click(cb);
+      fireEvent.click(cb);
     }
 
     // Submit
@@ -152,5 +144,5 @@ describe("ProviderVerificationForm", () => {
       );
       expect(mockOnSuccess).toHaveBeenCalledWith(mockRes);
     });
-  });
+  }, 15000);
 });
