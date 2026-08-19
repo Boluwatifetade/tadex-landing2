@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
@@ -26,6 +26,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirect") || "/dashboard";
+  const resetSuccess = searchParams.get("reset") === "success";
   const { setAccessToken } = useAuthStore();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -94,6 +95,12 @@ function LoginForm() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-card px-4 py-8 shadow-sm sm:rounded-xl sm:px-10 border border-border">
+          {resetSuccess && (
+            <div className="mb-6 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-400">
+              Password reset successfully. Please log in with your new password.
+            </div>
+          )}
+
           {errorMessage && (
             <div className="mb-6 rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
               {errorMessage}
@@ -122,9 +129,17 @@ function LoginForm() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-foreground">
-                Password
-              </label>
+              <div className="flex items-center justify-between">
+                <label htmlFor="password" className="block text-sm font-medium text-foreground">
+                  Password
+                </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <div className="mt-1">
                 <input
                   id="password"
