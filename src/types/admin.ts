@@ -221,3 +221,140 @@ export interface AdminRejectVerificationRequest {
 export interface AdminSuspendProviderRequest {
   reason: string;
 }
+
+// --- User Management Models (Phase Admin-2) ---
+
+export interface AdminUserSummaryOut {
+  id: string;
+  email?: string | null;
+  email_verified: boolean;
+  telegram_id?: number | null;
+  username?: string | null;
+  telegram_username?: string | null;
+  phone?: string | null;
+  role: string;
+  status: "active" | "suspended" | "banned" | "deleted" | string;
+  registration_source?: string | null;
+  created_at: string;
+  last_seen?: string | null;
+  connected_accounts_count: number;
+  active_subscriptions_count: number;
+}
+
+export interface AdminUserListResponse {
+  items: AdminUserSummaryOut[];
+  total: number;
+  page: number;
+  per_page: number;
+  total_pages: number;
+}
+
+export interface AdminUserExchangeAccountOut {
+  id: string;
+  exchange: string;
+  account_name?: string | null;
+  account_type: string;
+  trading_mode: string;
+  risk_level: string;
+  current_leverage: number;
+  is_testnet: boolean;
+  status: "active" | "invalid" | "error" | "revoked" | "deleted" | string;
+  last_validated_at?: string | null;
+  validation_error?: string | null;
+  api_key_masked: string;
+  created_at: string;
+}
+
+export interface AdminUserSubscriptionOut {
+  id: string;
+  provider_id?: string | null;
+  provider_name?: string | null;
+  plan_id?: string | null;
+  plan_name?: string | null;
+  tier?: string | null;
+  status: "active" | "trialing" | "canceled" | "cancelled" | "expired" | string;
+  is_active: boolean;
+  started_at?: string | null;
+  expires_at?: string | null;
+  current_period_end?: string | null;
+  canceled_at?: string | null;
+}
+
+export interface AdminUserProviderProfileOut {
+  id: string;
+  name: string;
+  slug?: string | null;
+  status: "active" | "suspended" | "deleted" | string;
+  is_verified: boolean;
+  verification_level: string;
+  subscriber_count: number;
+  total_signals_sent: number;
+  win_rate?: number | null;
+  created_at: string;
+}
+
+export interface AdminUserPaymentOut {
+  id: string;
+  amount_cents?: number | null;
+  amount_minor?: number | null;
+  currency?: string | null;
+  payment_method?: string | null;
+  status: "completed" | "successful" | "success" | "pending" | "failed" | string;
+  provider?: string | null;
+  created_at: string;
+}
+
+export interface AdminAuditLogOut {
+  id: string;
+  action_type: string;
+  target_entity_type: string;
+  target_entity_id?: string | null;
+  admin_user_id?: string | null;
+  admin_telegram_id?: number | null;
+  reason?: string | null;
+  before_state?: Record<string, unknown> | null;
+  after_state?: Record<string, unknown> | null;
+  ip_address?: string | null;
+  user_agent?: string | null;
+  created_at: string;
+}
+
+export interface AdminUserDetail360Out {
+  id: string;
+  email?: string | null;
+  email_verified: boolean;
+  telegram_id?: number | null;
+  username?: string | null;
+  phone?: string | null;
+  role: string;
+  status: "active" | "suspended" | "banned" | "deleted" | string;
+  is_beta_tester: boolean;
+  terms_accepted: boolean;
+  terms_accepted_at?: string | null;
+  registration_source?: string | null;
+  created_at: string;
+  updated_at?: string | null;
+  last_seen?: string | null;
+  connected_exchanges: AdminUserExchangeAccountOut[];
+  subscriptions: AdminUserSubscriptionOut[];
+  provider_profile?: AdminUserProviderProfileOut | null;
+  payment_history: AdminUserPaymentOut[];
+  recent_audit_logs: AdminAuditLogOut[];
+}
+
+export interface AdminBanUserRequest {
+  reason: string;
+}
+
+export interface AdminUnbanUserRequest {
+  reason?: string | null;
+}
+
+export interface AdminLogoutAllRequest {
+  reason: string;
+}
+
+export interface AdminForceVerifyEmailRequest {
+  reason: string;
+}
+

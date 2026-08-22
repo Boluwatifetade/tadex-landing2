@@ -45,6 +45,12 @@ export default function AdminHeader({ adminEmail }: AdminHeaderProps) {
       active: pathname === "/admin",
     },
     {
+      href: "/admin/users",
+      label: "Users",
+      icon: Users,
+      active: pathname.startsWith("/admin/users"),
+    },
+    {
       href: "/admin/providers",
       label: "Providers",
       icon: Radio,
@@ -65,7 +71,6 @@ export default function AdminHeader({ adminEmail }: AdminHeaderProps) {
   ];
 
   const comingSoonStubs = [
-    { label: "Users", icon: Users },
     { label: "Billing & Revenue", icon: CreditCard },
     { label: "Execution Engine", icon: Zap },
     { label: "Audit Logs", icon: ScrollText },
@@ -200,7 +205,7 @@ export default function AdminHeader({ adminEmail }: AdminHeaderProps) {
 
           <div className="space-y-1 pt-2 border-t border-border/60">
             <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider px-2 pb-1">
-              Coming in Phase Admin-2
+              Coming in Future Phases
             </p>
             {comingSoonStubs.map((stub) => {
               const Icon = stub.icon;
