@@ -4,6 +4,54 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Phase Admin-2: Web Admin Dashboard (User Management & 360° Profile)] - 2026-08-23
+
+### 1. Navigation Promotion (`AdminHeader.tsx`)
+- Promoted `"Users"` in `AdminHeader` desktop navigation from disabled "Coming Soon" stub to active link pointing to `/admin/users`.
+- Updated mobile drawer navigation with active "Users" link and updated future stubs label.
+
+### 2. User Directory & 5-Dimension Search (`AdminUserTable.tsx`, `src/app/admin/users/page.tsx`)
+- Consumes `GET /api/v1/admin/users` with real-time server pagination (`page`, `per_page`, `total_pages`).
+- **5-Dimension Search (`q` query param)**: Single debounced search box hitting backend index across Email, Telegram Username, Telegram ID, User UUID, and Exchange UID.
+- **Filtering Controls**: Status dropdown (`All`, `Active`, `Suspended`, `Banned`, `Deleted`), Email Verification dropdown (`All`, `Verified`, `Unverified`), Role dropdown (`All`, `User`, `Admin`), and Auth Origin dropdown (`All`, `Web`, `Telegram`, `Bot`).
+- Responsive layout: Full data table on desktop with badge chips and clickable `View 360°` links; streamlined card view on mobile breakpoints.
+- Clear error, skeleton loading, and empty state treatments.
+
+### 3. User 360° Detail View (`AdminUserDetailView.tsx`, `src/app/admin/users/[id]/page.tsx`)
+- Consumes `GET /api/v1/admin/users/{id}` to assemble comprehensive 360° profile across 6 key modules:
+  - **Header Card & Quick Toolbar**: User initial avatar, email, UUID, status badge, role badge, beta tester chip, and contextual action buttons.
+  - **Section 1: Identity & Authentication**: Email, verification state, Telegram username (@handle), Telegram User ID, phone number, terms acceptance timestamp, and last seen timestamp.
+  - **Section 2: Connected Exchange Accounts (Masked Keys Only)**: Table/cards showing exchange, account name, account type, trading mode, leverage, and `api_key_masked` (e.g. `key_****7890`). Hardened DOM-level security guarantee that no raw API secret or private key is ever requested, transmitted, or rendered.
+  - **Section 3: Signal Subscriptions**: Plan name, provider name, tier badge, period start/end dates, and status pill.
+  - **Section 4: Signal Provider Profile**: Displays provider brand name, verification tier badge, subscriber count, total signals sent, and deep link to Provider Governance (`/admin/providers`).
+  - **Section 5: Billing & Payment Transactions**: Transaction ID, formatted currency amounts, payment method, provider, and status badges.
+  - **Section 6: Administrative Audit History**: Timeline of compliance and security audit logs affecting this user account, with action types, admin actor IDs, reasons, and timestamps.
+
+### 4. Administrative Action Modals (`AdminBanUserModal.tsx`, `AdminUnbanUserModal.tsx`, `AdminForceLogoutModal.tsx`, `AdminForceVerifyModal.tsx`)
+- **Ban User Modal**: Destructive dialog requiring mandatory justification reason (min 3 characters) before firing `POST /api/v1/admin/users/{id}/ban`.
+- **Unban User Modal**: Confirm dialog with optional note firing `POST /api/v1/admin/users/{id}/unban`.
+- **Admin Force Logout-All Modal**: Distinct administrative revocation notice (separated from user self-service logout) requiring mandatory justification reason before firing `POST /api/v1/admin/users/{id}/logout-all`.
+- **Force Verify Email Modal**: Administrative override modal (only enabled for unverified users) requiring mandatory audit reason before firing `POST /api/v1/admin/users/{id}/force-verify-email`.
+- **Resend Verification Button**: One-click action button (only enabled for unverified users) dispatching `POST /api/v1/admin/users/{id}/resend-verification`.
+
+### 5. Automated Tests & Build Verification
+- 100% test pass rate across entire repository (26/26 test files, 97/97 tests passing).
+- Dedicated test suites:
+  - `src/test/AdminUserTable.test.tsx` (4 tests)
+  - `src/test/AdminUserDetailView.test.tsx` (5 tests) — includes DOM-level secret leak assertions.
+- Next.js production build (`next build --turbopack`) completed with zero errors and generated both `/admin/users` and `/admin/users/[id]` static/dynamic routes.
+
+### 6. Live Backend End-to-End Verification
+- Verified all flows live on staging backend (`http://127.0.0.1:8002/api/v1`):
+  - Admin login & token generation.
+  - Directory listing & pagination (26 users).
+  - 5-dimension search by email and UUID snippet.
+  - Filtering by status (`active`), verification (`email_verified=true`), and role (`admin`).
+  - Throwaway user registration $\rightarrow$ 360° detail view $\rightarrow$ resend verification $\rightarrow$ force verify email $\rightarrow$ admin force logout-all $\rightarrow$ ban user $\rightarrow$ unban user $\rightarrow$ audit logs inspection $\rightarrow$ clean database purge of throwaway fixture and 5 audit logs.
+- Deployed to production (`https://app.tadexapp.com`) via `origin/main` commit `4c42ab3`.
+
+---
+
 ## [Phase Admin-1: Web Admin Dashboard (Overview & Provider Governance)] - 2026-08-18
 
 ### 1. Admin Route Guard & Dedicated Layout (`AdminRoute.tsx`, `AdminHeader.tsx`, `layout.tsx`)
