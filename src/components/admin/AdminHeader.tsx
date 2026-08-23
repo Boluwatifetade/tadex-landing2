@@ -51,6 +51,12 @@ export default function AdminHeader({ adminEmail }: AdminHeaderProps) {
       active: pathname.startsWith("/admin/users"),
     },
     {
+      href: "/admin/billing/transactions",
+      label: "Billing & Revenue",
+      icon: CreditCard,
+      active: pathname.startsWith("/admin/billing"),
+    },
+    {
       href: "/admin/providers",
       label: "Providers",
       icon: Radio,
@@ -71,7 +77,6 @@ export default function AdminHeader({ adminEmail }: AdminHeaderProps) {
   ];
 
   const comingSoonStubs = [
-    { label: "Billing & Revenue", icon: CreditCard },
     { label: "Execution Engine", icon: Zap },
     { label: "Audit Logs", icon: ScrollText },
   ];

@@ -358,3 +358,153 @@ export interface AdminForceVerifyEmailRequest {
   reason: string;
 }
 
+// --- Billing & Revenue Models (Phase Admin-3) ---
+
+export interface AdminTransactionItemOut {
+  id: string;
+  user_id?: string | null;
+  user_email?: string | null;
+  user_username?: string | null;
+  user_telegram_id?: number | null;
+  provider?: string | null;
+  provider_reference?: string | null;
+  amount_minor?: number | null;
+  fee_minor?: number | null;
+  provider_amount_minor?: number | null;
+  total_amount_minor?: number | null;
+  amount_cents?: number | null;
+  currency?: string | null;
+  status: "success" | "successful" | "completed" | "pending" | "failed" | string;
+  payment_method?: string | null;
+  provider_name?: string | null;
+  plan_id?: string | null;
+  provider_plan_id?: string | null;
+  platform_tier_id?: string | null;
+  is_test?: boolean;
+  created_at: string;
+  updated_at?: string | null;
+}
+
+export interface AdminTransactionListResponse {
+  items: AdminTransactionItemOut[];
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+}
+
+export interface AdminTransactionDetailOut {
+  id: string;
+  user_id?: string | null;
+  user_email?: string | null;
+  user_username?: string | null;
+  user_telegram_id?: number | null;
+  provider?: string | null;
+  provider_reference?: string | null;
+  amount_minor?: number | null;
+  fee_minor?: number | null;
+  provider_amount_minor?: number | null;
+  total_amount_minor?: number | null;
+  amount_cents?: number | null;
+  currency?: string | null;
+  status: "success" | "successful" | "completed" | "pending" | "failed" | string;
+  payment_method?: string | null;
+  provider_name?: string | null;
+  plan_id?: string | null;
+  provider_plan_id?: string | null;
+  platform_tier_id?: string | null;
+  is_test?: boolean;
+  error_message?: string | null;
+  manual_review_status?: string | null;
+  meta?: Record<string, unknown> | null;
+  raw_webhook_payload?: Record<string, unknown> | null;
+  created_at: string;
+  updated_at?: string | null;
+  associated_subscription?: AdminUserSubscriptionOut | null;
+  user?: AdminUserSummaryOut | null;
+  provider_profile?: AdminUserProviderProfileOut | null;
+  recent_audit_logs: AdminAuditLogOut[];
+}
+
+export interface AdminReconcilePaymentRequest {
+  reason: string;
+}
+
+export interface AdminReconcilePaymentResponse {
+  success: boolean;
+  status: string;
+  applied: boolean;
+  transaction_id?: string | null;
+  provider_reference?: string | null;
+  message: string;
+  audit_log_id?: string | null;
+}
+
+export interface AdminSubscriptionLedgerItemOut {
+  id: string;
+  user_id: string;
+  user_email?: string | null;
+  user_username?: string | null;
+  user_telegram_id?: number | null;
+  provider_id?: string | null;
+  provider_name?: string | null;
+  provider_slug?: string | null;
+  provider_plan_id?: string | null;
+  platform_tier_id?: string | null;
+  tier?: string | null;
+  status: "active" | "trialing" | "past_due" | "paused" | "canceled" | "expired" | string;
+  is_active: boolean;
+  auto_renew: boolean;
+  current_period_start?: string | null;
+  current_period_end?: string | null;
+  expires_at?: string | null;
+  trial_ends_at?: string | null;
+  canceled_at?: string | null;
+  created_at: string;
+  updated_at?: string | null;
+}
+
+export interface AdminSubscriptionListResponse {
+  items: AdminSubscriptionLedgerItemOut[];
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+}
+
+export interface AdminCancelSubscriptionRequest {
+  mode: "immediate" | "period_end";
+  reason: string;
+}
+
+export interface AdminSetSubscriptionStatusRequest {
+  status: string;
+  reason: string;
+}
+
+export interface AdminPlatformFeeConfigOut {
+  id: string;
+  settlement_method: string;
+  currency_code: string;
+  amount_minor: number;
+  amount: number;
+  active: boolean;
+  created_by_admin_id?: number | null;
+  type?: string | null;
+  rate?: number | null;
+  created_at: string;
+  updated_at?: string | null;
+}
+
+export interface AdminPlatformFeesResponse {
+  active_fees: AdminPlatformFeeConfigOut[];
+  history: AdminPlatformFeeConfigOut[];
+}
+
+export interface AdminSetPlatformFeeRequest {
+  currency: string;
+  amount_minor?: number;
+  amount?: number;
+  reason: string;
+}
+

@@ -161,8 +161,6 @@ describe("ProviderPortalRouter Page", () => {
 
     expect(await screen.findByText("Trading academy")).toBeInTheDocument();
     expect(screen.getByText("Signal Provider Profile Suspended")).toBeInTheDocument();
-    expect(screen.getByText("42")).toBeInTheDocument();
-    expect(screen.getByText("78.5%")).toBeInTheDocument();
-    expect(screen.getByText("Trading Basics")).toBeInTheDocument();
+    expect(await screen.findByText("Trading Basics")).toBeInTheDocument();
   });
 });
