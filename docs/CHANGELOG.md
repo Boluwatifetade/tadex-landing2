@@ -4,6 +4,57 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Phase Admin-3: Web Admin Dashboard (Billing & Revenue)] - 2026-08-23
+
+### 1. Navigation & Subnavigation (`AdminHeader.tsx`, `AdminBillingNav.tsx`)
+- Promoted `"Billing & Revenue"` in `AdminHeader` desktop and mobile drawer navigation from "Coming Soon" stub to active link `/admin/billing/transactions`.
+- Built shared tabbed sub-navigation `AdminBillingNav.tsx` providing quick switching across `Transaction Ledger`, `Subscription Ledger`, and `Platform Fees & Splits`.
+
+### 2. Transaction Ledger (`AdminTransactionsTable.tsx`, `src/app/admin/billing/transactions/page.tsx`)
+- Consumes `GET /api/v1/admin/billing/transactions` with server-side pagination.
+- **Search & Filters**: Debounced search box `q` (Tx ID, Gateway Ref, Email, Username), status filter (`All`, `Success`, `Pending`, `Failed`), gateway filter (`All`, `Flutterwave`, `Paystack`, `Crypto Manual`), currency filter (`All`, `NGN`, `USDT`, `USD`).
+- Responsive tabular format on desktop and card layout on mobile with gross amount, platform fee deduction chip, and direct `Diagnostics` link.
+
+### 3. Transaction 360° Diagnostics & Reconcile (`AdminTransactionDetailView.tsx`, `AdminReconcileModal.tsx`)
+- Consumes `GET /api/v1/admin/billing/transactions/{id}`.
+- 360° Financial Diagnostics: Gross Paid, Platform Retained Fee, Provider Net Payout, and Failure callout banner with `error_message` and `manual_review_status`.
+- **Linked Context Cards**: Customer Account (deep link to `/admin/users/[id]`), Signal Provider (deep link to `/admin/providers`), and Associated Subscription.
+- **Raw Webhook Payload & Diagnostics Viewer**: Collapsible JSON inspector with syntax styling and one-click "Copy JSON" action.
+- **Payment Reconciliation Action Modal (`AdminReconcileModal.tsx`)**: Reconcile action with prominent manual override warning callout and mandatory compliance audit reason ($\ge 3$ characters), dispatching `POST /api/v1/admin/billing/transactions/{id}/reconcile`.
+
+### 4. Cross-User Subscription Ledger & Governance (`AdminSubscriptionLedgerTable.tsx`, `AdminCancelSubscriptionModal.tsx`, `AdminSetSubscriptionStatusModal.tsx`)
+- Consumes `GET /api/v1/admin/billing/subscriptions` across all platform users with status, tier, and access state filters.
+- **Cancel Subscription Modal**: Mode selection (`immediate` vs `period_end`) with mandatory audit reason ($\ge 3$ characters), dispatching `POST /api/v1/admin/billing/subscriptions/{id}/cancel`.
+- **Override Status Modal**: Target status dropdown (`trialing`, `active`, `past_due`, `paused`, `canceled`, `expired`) with mandatory audit reason ($\ge 3$ characters), dispatching `POST /api/v1/admin/billing/subscriptions/{id}/set-status`.
+
+### 5. Platform Fee Configuration & Audit Trail (`AdminPlatformFeesView.tsx`, `AdminUpdateFeeModal.tsx`)
+- Consumes `GET /api/v1/admin/billing/fees`.
+- Active Fee Cards: Prominently renders **NGN (₦1,500)** and **USDT ($10.00)** with settlement methods and last modified dates.
+- Revenue Split Explanation Card: Clarifies automated split formula between Tadex treasury and provider payouts.
+- Fee Revision Change History Table: Historical audit log table showing effective dates, currency, fee amounts, and admin IDs.
+- **Update Global Fee Modal (High-Consequence Dialog)**: Deliberately designed with extra visual gravity (bold red/amber danger ring, critical badge, immediate revenue split consequence warning callout, major/minor unit conversion, mandatory rationale, and double-confirmation acknowledgment checkmark). Dispatches `POST /api/v1/admin/billing/fees`.
+
+### 6. Automated Tests & Build Verification
+- Full Vitest suite: 30 test files, 107 tests passing (100%).
+- Dedicated Phase Admin-3 test suites:
+  - `src/test/AdminTransactionsTable.test.tsx` (3 tests passed)
+  - `src/test/AdminTransactionDetailView.test.tsx` (2 tests passed)
+  - `src/test/AdminSubscriptionLedger.test.tsx` (3 tests passed)
+  - `src/test/AdminPlatformFees.test.tsx` (2 tests passed)
+- Next.js Turbopack build (`next build --turbopack`) completed with zero errors and generated all static and dynamic billing routes.
+
+### 7. Live Backend End-to-End Verification
+- Verified all flows on staging backend (`168.144.72.194`):
+  - `GET /admin/billing/transactions` $\rightarrow$ 200 OK (55 items, NGN/USDT filtering).
+  - `GET /admin/billing/transactions/{id}` $\rightarrow$ 200 OK with payload diagnostics.
+  - `POST /admin/billing/transactions/{id}/reconcile` validation check ($<3$ chars rejected with 422).
+  - `GET /admin/billing/subscriptions` $\rightarrow$ 200 OK (18 items).
+  - Throwaway user & subscription lifecycle $\rightarrow$ `POST /admin/billing/subscriptions/{id}/set-status` $\rightarrow$ 200 OK $\rightarrow$ `POST /admin/billing/subscriptions/{id}/cancel` $\rightarrow$ 200 OK $\rightarrow$ clean database purge.
+  - `GET /admin/billing/fees` $\rightarrow$ 200 OK (verified active fees: NGN ₦1,500 / USDT $10.00) $\rightarrow$ `POST /admin/billing/fees` validation check ($<3$ chars rejected with 422).
+- Production deployment verified on `https://app.tadexapp.com` (HTTP 200 on all billing routes).
+
+---
+
 ## [Phase Admin-2: Web Admin Dashboard (User Management & 360° Profile)] - 2026-08-23
 
 ### 1. Navigation Promotion (`AdminHeader.tsx`)
