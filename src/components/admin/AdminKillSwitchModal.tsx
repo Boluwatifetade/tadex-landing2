@@ -21,7 +21,7 @@ import {
   SystemControlMutationResponse,
   ExchangeConnectivityResponse,
 } from "@/types/admin";
-import { getAuthHeader } from "@/lib/auth-store";
+import { apiClient } from "@/lib/api-client";
 
 interface AdminKillSwitchModalProps {
   isOpen: boolean;
@@ -55,16 +55,9 @@ export default function AdminKillSwitchModal({
     setIsCheckingConnectivity(true);
     setConnectivityError(null);
     try {
-      const authHeader = getAuthHeader();
-      const res = await fetch("/api/v1/admin/execution/connectivity", {
-        headers: {
-          ...authHeader,
-        },
-      });
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: Failed to reach Bybit connectivity endpoint`);
-      }
-      const data = await res.json();
+      const data = await apiClient<ExchangeConnectivityResponse>(
+        "/admin/execution/connectivity"
+      );
       setConnectivityData(data);
     } catch (err: any) {
       setConnectivityError(err.message || "Failed to ping exchange endpoint");
@@ -106,7 +99,6 @@ export default function AdminKillSwitchModal({
     const expectedUpdatedAt = controlState.db_row?.updated_at || null;
 
     try {
-      const authHeader = getAuthHeader();
       const payload: any = {
         enable: targetEnable,
         reason: reason.trim(),
@@ -117,35 +109,25 @@ export default function AdminKillSwitchModal({
         payload.confirmation_phrase = "HALT TRADING";
       }
 
-      const res = await fetch("/api/v1/admin/execution/kill-switch", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...authHeader,
-        },
-        body: JSON.stringify(payload),
-      });
+      const data = await apiClient<SystemControlMutationResponse>(
+        "/admin/execution/kill-switch",
+        {
+          method: "POST",
+          body: JSON.stringify(payload),
+        }
+      );
 
-      if (res.status === 409) {
-        const errData = await res.json().catch(() => ({}));
-        setConflictError(
-          errData.detail ||
-            "State conflict: The system controls state was modified by another administrator since you loaded this page. Please refresh to load the latest state before retrying."
-        );
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.detail || `Request failed with status ${res.status}`);
-      }
-
-      const data: SystemControlMutationResponse = await res.json();
       onSuccess(data);
       onClose();
     } catch (err: any) {
-      setGeneralError(err.message || "Failed to update emergency kill switch");
+      const msg = err.message || "Failed to update emergency kill switch";
+      if (msg.toLowerCase().includes("conflict") || msg.toLowerCase().includes("modified concurrently") || msg.includes("409")) {
+        setConflictError(
+          "State conflict: The system controls state was modified by another administrator since you loaded this page. Please refresh to load the latest state before retrying."
+        );
+      } else {
+        setGeneralError(msg);
+      }
     } finally {
       setIsSubmitting(false);
     }

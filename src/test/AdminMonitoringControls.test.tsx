@@ -3,13 +3,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import AdminMonitoringControlsCard from "@/components/admin/AdminMonitoringControlsCard";
 import AdminMonitoringModal from "@/components/admin/AdminMonitoringModal";
 import { SystemControlState } from "@/types/admin";
+import { apiClient } from "@/lib/api-client";
 
-vi.mock("@/lib/auth-store", () => ({
-  useAuthStore: vi.fn(() => ({
-    token: "mock-admin-token",
-    user: { id: "123", email: "admin@tadexapp.com", role: "admin" },
-  })),
-  getAuthHeader: vi.fn(() => ({ Authorization: "Bearer mock-admin-token" })),
+vi.mock("@/lib/api-client", () => ({
+  apiClient: vi.fn(),
 }));
 
 describe("Phase Admin-4b: AdminMonitoringControls Tests", () => {
@@ -67,6 +64,12 @@ describe("Phase Admin-4b: AdminMonitoringControls Tests", () => {
 
   it("enforces reason gating and sends optimistic lock payload on monitoring toggle", async () => {
     const onSuccess = vi.fn();
+    (apiClient as any).mockResolvedValueOnce({
+      success: true,
+      message: "Monitoring stream disabled",
+      control: { ...mockControls["monitoring_enabled"], effective_value: false },
+    });
+
     render(
       <AdminMonitoringModal
         isOpen={true}
@@ -86,20 +89,11 @@ describe("Phase Admin-4b: AdminMonitoringControls Tests", () => {
     fireEvent.change(textarea, { target: { value: "Pause streaming for upgrade" } });
     expect(submitBtn).not.toBeDisabled();
 
-    global.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        success: true,
-        message: "Monitoring stream disabled",
-        control: { ...mockControls["monitoring_enabled"], effective_value: false },
-      }),
-    });
-
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
-        "/api/v1/admin/execution/monitoring",
+      expect(apiClient).toHaveBeenCalledWith(
+        "/admin/execution/monitoring",
         expect.objectContaining({
           method: "POST",
           body: JSON.stringify({
@@ -115,6 +109,10 @@ describe("Phase Admin-4b: AdminMonitoringControls Tests", () => {
   });
 
   it("handles 409 conflict when monitoring state was changed concurrently", async () => {
+    (apiClient as any).mockRejectedValueOnce(
+      new Error("State conflict: monitoring control modified concurrently")
+    );
+
     render(
       <AdminMonitoringModal
         isOpen={true}
@@ -128,14 +126,6 @@ describe("Phase Admin-4b: AdminMonitoringControls Tests", () => {
 
     const textarea = screen.getByPlaceholderText(/Explain why this monitoring control/i);
     fireEvent.change(textarea, { target: { value: "Block automated closes immediately" } });
-
-    global.fetch = vi.fn().mockResolvedValueOnce({
-      status: 409,
-      ok: false,
-      json: async () => ({
-        detail: "State conflict: monitoring control modified concurrently",
-      }),
-    });
 
     fireEvent.click(screen.getByRole("button", { name: /Confirm Mutation/i }));
 

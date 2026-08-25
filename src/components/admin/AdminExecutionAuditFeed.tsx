@@ -12,7 +12,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getAuthHeader } from "@/lib/auth-store";
+import { apiClient } from "@/lib/api-client";
 
 interface ExecutionAuditLogItem {
   id: string;
@@ -43,45 +43,26 @@ export default function AdminExecutionAuditFeed({
     setIsLoading(true);
     setError(null);
     try {
-      const authHeader = getAuthHeader();
-      const res = await fetch(
-        "/api/v1/admin/audit-logs?target_entity_type=system_control&page=1&per_page=10",
-        {
-          headers: {
-            ...authHeader,
-          },
-        }
-      );
-
-      if (!res.ok) {
-        // Fallback: fetch without target_entity_type filter
-        const fallbackRes = await fetch(
-          "/api/v1/admin/audit-logs?page=1&per_page=20",
-          {
-            headers: {
-              ...authHeader,
-            },
-          }
+      let items: any[] = [];
+      try {
+        const data = await apiClient<any>(
+          "/admin/audit-logs?target_entity_type=system_control&page=1&per_page=10"
         );
-        if (!fallbackRes.ok) {
-          throw new Error(`HTTP ${fallbackRes.status}: Failed to load audit feed`);
-        }
-        const data = await fallbackRes.json();
-        const items = data.items || data.audit_logs || [];
-        const filtered = items.filter(
+        items = data.items || data.audit_logs || [];
+      } catch {
+        const fallbackData = await apiClient<any>(
+          "/admin/audit-logs?page=1&per_page=20"
+        );
+        const raw = fallbackData.items || fallbackData.audit_logs || [];
+        items = raw.filter(
           (item: any) =>
             item.target_entity_type === "system_control" ||
             String(item.action_type || "").includes("kill_switch") ||
             String(item.action_type || "").includes("monitoring") ||
             String(item.action_type || "").includes("cohort")
         );
-        setLogs(filtered.slice(0, 10));
-        return;
       }
-
-      const data = await res.json();
-      const items = data.items || data.audit_logs || [];
-      setLogs(items);
+      setLogs(items.slice(0, 10));
     } catch (err: any) {
       setError(err.message || "Failed to load audit logs");
     } finally {

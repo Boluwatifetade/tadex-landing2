@@ -4,18 +4,15 @@ import AdminReadOnlyControlsGrid from "@/components/admin/AdminReadOnlyControlsG
 import AdminExecutionAuditFeed from "@/components/admin/AdminExecutionAuditFeed";
 import AdminExecutionNav from "@/components/admin/AdminExecutionNav";
 import { SystemControlState } from "@/types/admin";
+import { apiClient } from "@/lib/api-client";
 
 vi.mock("next/navigation", () => ({
   usePathname: vi.fn(() => "/admin/execution"),
   useRouter: vi.fn(() => ({ push: vi.fn() })),
 }));
 
-vi.mock("@/lib/auth-store", () => ({
-  useAuthStore: vi.fn(() => ({
-    token: "mock-admin-token",
-    user: { id: "123", email: "admin@tadexapp.com", role: "admin" },
-  })),
-  getAuthHeader: vi.fn(() => ({ Authorization: "Bearer mock-admin-token" })),
+vi.mock("@/lib/api-client", () => ({
+  apiClient: vi.fn(),
 }));
 
 describe("Phase Admin-4b: Execution Overview & Read-Only Grid Tests", () => {
@@ -142,21 +139,18 @@ describe("Phase Admin-4b: Execution Overview & Read-Only Grid Tests", () => {
   });
 
   it("renders execution audit activity feed front-and-center", async () => {
-    global.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        items: [
-          {
-            id: "audit-1",
-            action_type: "kill_switch_toggle",
-            target_entity_type: "system_control",
-            target_entity_id: "kill_switch",
-            reason: "Resumed trading after stabilization",
-            admin_email: "tadex.team@gmail.com",
-            created_at: new Date().toISOString(),
-          },
-        ],
-      }),
+    (apiClient as any).mockResolvedValueOnce({
+      items: [
+        {
+          id: "audit-1",
+          action_type: "kill_switch_toggle",
+          target_entity_type: "system_control",
+          target_entity_id: "kill_switch",
+          reason: "Resumed trading after stabilization",
+          admin_email: "tadex.team@gmail.com",
+          created_at: new Date().toISOString(),
+        },
+      ],
     });
 
     render(<AdminExecutionAuditFeed />);

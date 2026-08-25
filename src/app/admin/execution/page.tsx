@@ -21,7 +21,7 @@ import {
   ExecutionCohortResponse,
   SystemControlMutationResponse,
 } from "@/types/admin";
-import { getAuthHeader } from "@/lib/auth-store";
+import { apiClient } from "@/lib/api-client";
 
 export default function AdminExecutionPage() {
   const [overview, setOverview] = useState<ExecutionOverviewResponse | null>(null);
@@ -40,27 +40,13 @@ export default function AdminExecutionPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const authHeader = getAuthHeader();
-      const [overviewRes, cohortRes] = await Promise.all([
-        fetch("/api/v1/admin/execution/overview", {
-          headers: { ...authHeader },
-        }),
-        fetch("/api/v1/admin/execution/cohort", {
-          headers: { ...authHeader },
-        }),
+      const [overviewData, cohortData] = await Promise.all([
+        apiClient<ExecutionOverviewResponse>("/admin/execution/overview"),
+        apiClient<ExecutionCohortResponse>("/admin/execution/cohort").catch(() => null),
       ]);
 
-      if (!overviewRes.ok) {
-        throw new Error(
-          `HTTP ${overviewRes.status}: Failed to load system controls overview`
-        );
-      }
-
-      const overviewData: ExecutionOverviewResponse = await overviewRes.json();
       setOverview(overviewData);
-
-      if (cohortRes.ok) {
-        const cohortData: ExecutionCohortResponse = await cohortRes.json();
+      if (cohortData) {
         setCohort(cohortData);
       }
     } catch (err: any) {

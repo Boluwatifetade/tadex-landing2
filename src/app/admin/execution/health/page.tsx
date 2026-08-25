@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import AdminExecutionNav from "@/components/admin/AdminExecutionNav";
 import { ExecutionHealthResponse } from "@/types/admin";
-import { getAuthHeader } from "@/lib/auth-store";
+import { apiClient } from "@/lib/api-client";
 
 export default function AdminExecutionHealthPage() {
   const [windowHours, setWindowHours] = useState<number>(24);
@@ -26,17 +26,9 @@ export default function AdminExecutionHealthPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const authHeader = getAuthHeader();
-      const res = await fetch(
-        `/api/v1/admin/execution/health?window_hours=${windowHours}`,
-        {
-          headers: { ...authHeader },
-        }
+      const data = await apiClient<ExecutionHealthResponse>(
+        `/admin/execution/health?window_hours=${windowHours}`
       );
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: Failed to load execution health`);
-      }
-      const data: ExecutionHealthResponse = await res.json();
       setHealth(data);
     } catch (err: any) {
       setError(err.message || "Failed to load execution health metrics");

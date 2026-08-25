@@ -3,13 +3,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import AdminCohortControlCard from "@/components/admin/AdminCohortControlCard";
 import AdminCohortModal from "@/components/admin/AdminCohortModal";
 import { SystemControlState, ExecutionCohortResponse } from "@/types/admin";
+import { apiClient } from "@/lib/api-client";
 
-vi.mock("@/lib/auth-store", () => ({
-  useAuthStore: vi.fn(() => ({
-    token: "mock-admin-token",
-    user: { id: "123", email: "admin@tadexapp.com", role: "admin" },
-  })),
-  getAuthHeader: vi.fn(() => ({ Authorization: "Bearer mock-admin-token" })),
+vi.mock("@/lib/api-client", () => ({
+  apiClient: vi.fn(),
 }));
 
 describe("Phase Admin-4b: AdminCohortControl Tests", () => {
@@ -63,6 +60,12 @@ describe("Phase Admin-4b: AdminCohortControl Tests", () => {
 
   it("allows setting percentage and enforces reason validation", async () => {
     const onSuccess = vi.fn();
+    (apiClient as any).mockResolvedValueOnce({
+      success: true,
+      message: "Cohort updated to 50%",
+      control: { ...mockControlState, effective_value: 50 },
+    });
+
     render(
       <AdminCohortModal
         isOpen={true}
@@ -86,20 +89,11 @@ describe("Phase Admin-4b: AdminCohortControl Tests", () => {
     fireEvent.change(textarea, { target: { value: "Scale rollout to 50% accounts" } });
     expect(submitBtn).not.toBeDisabled();
 
-    global.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        success: true,
-        message: "Cohort updated to 50%",
-        control: { ...mockControlState, effective_value: 50 },
-      }),
-    });
-
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
-        "/api/v1/admin/execution/cohort",
+      expect(apiClient).toHaveBeenCalledWith(
+        "/admin/execution/cohort",
         expect.objectContaining({
           method: "POST",
           body: JSON.stringify({
@@ -114,6 +108,10 @@ describe("Phase Admin-4b: AdminCohortControl Tests", () => {
   });
 
   it("handles 409 conflict when cohort state was modified concurrently", async () => {
+    (apiClient as any).mockRejectedValueOnce(
+      new Error("State conflict: cohort changed concurrently")
+    );
+
     render(
       <AdminCohortModal
         isOpen={true}
@@ -126,14 +124,6 @@ describe("Phase Admin-4b: AdminCohortControl Tests", () => {
 
     const textarea = screen.getByPlaceholderText(/Explain the operational rationale/i);
     fireEvent.change(textarea, { target: { value: "Scale cohort to 100%" } });
-
-    global.fetch = vi.fn().mockResolvedValueOnce({
-      status: 409,
-      ok: false,
-      json: async () => ({
-        detail: "State conflict: cohort changed concurrently",
-      }),
-    });
 
     fireEvent.click(screen.getByRole("button", { name: /Apply Cohort Rollout/i }));
 

@@ -15,7 +15,7 @@ import {
   SystemControlState,
   SystemControlMutationResponse,
 } from "@/types/admin";
-import { getAuthHeader } from "@/lib/auth-store";
+import { apiClient } from "@/lib/api-client";
 
 interface AdminMonitoringModalProps {
   isOpen: boolean;
@@ -78,7 +78,6 @@ export default function AdminMonitoringModal({
     const expectedUpdatedAt = controlState.db_row?.updated_at || null;
 
     try {
-      const authHeader = getAuthHeader();
       const payload = {
         control: controlKey,
         enable: targetEnable,
@@ -86,35 +85,25 @@ export default function AdminMonitoringModal({
         expected_updated_at: expectedUpdatedAt,
       };
 
-      const res = await fetch("/api/v1/admin/execution/monitoring", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...authHeader,
-        },
-        body: JSON.stringify(payload),
-      });
+      const data = await apiClient<SystemControlMutationResponse>(
+        "/admin/execution/monitoring",
+        {
+          method: "POST",
+          body: JSON.stringify(payload),
+        }
+      );
 
-      if (res.status === 409) {
-        const errData = await res.json().catch(() => ({}));
-        setConflictError(
-          errData.detail ||
-            "State conflict: Monitoring control state changed since you loaded this page. Please refresh to load the latest state."
-        );
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.detail || `Request failed with status ${res.status}`);
-      }
-
-      const data: SystemControlMutationResponse = await res.json();
       onSuccess(data);
       onClose();
     } catch (err: any) {
-      setGeneralError(err.message || "Failed to update monitoring control");
+      const msg = err.message || "Failed to update monitoring control";
+      if (msg.toLowerCase().includes("conflict") || msg.toLowerCase().includes("modified concurrently") || msg.includes("409")) {
+        setConflictError(
+          "State conflict: Monitoring control state changed since you loaded this page. Please refresh to load the latest state."
+        );
+      } else {
+        setGeneralError(msg);
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import AdminExecutionNav from "@/components/admin/AdminExecutionNav";
 import { ExecutionReconciliationResponse } from "@/types/admin";
-import { getAuthHeader } from "@/lib/auth-store";
+import { apiClient } from "@/lib/api-client";
 
 export default function AdminExecutionReconciliationPage() {
   const [reconciliation, setReconciliation] =
@@ -26,14 +26,9 @@ export default function AdminExecutionReconciliationPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const authHeader = getAuthHeader();
-      const res = await fetch("/api/v1/admin/execution/reconciliation", {
-        headers: { ...authHeader },
-      });
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: Failed to load reconciliation status`);
-      }
-      const data: ExecutionReconciliationResponse = await res.json();
+      const data = await apiClient<ExecutionReconciliationResponse>(
+        "/admin/execution/reconciliation"
+      );
       setReconciliation(data);
     } catch (err: any) {
       setError(err.message || "Failed to load position reconciliation");
