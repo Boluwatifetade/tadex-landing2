@@ -42,15 +42,11 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 - `/admin/execution/health`: Consumes `GET /api/v1/admin/execution/health` with window selector (6h, 24h, 72h, 7d), rendering signaling ingest rates, dispatch queue rates, and Bybit order success percentages.
 - `/admin/execution/reconciliation`: Consumes `GET /api/v1/admin/execution/reconciliation`, rendering open positions vs active monitors alignment, drift status (`CLEAN`), and autonomous corrective action history.
 
-### 8. Automated Tests & Production Build
+### 8. Client API Routing Resolution & Production Deployment
+- **Root-Cause Resolution**: Replaced ad-hoc relative `fetch("/api/v1/admin/execution/...")` calls in the execution dashboard and modals with the central `apiClient` wrapper (`@/lib/api-client`), which correctly routes requests to the configured `API_BASE_URL` (`https://api.tadexapp.com/api/v1`), manages in-memory JWT authorization headers, and seamlessly handles token refresh and error envelopes.
 - Full Vitest suite: 34 test files, 121 tests passing (100%).
-- Dedicated Phase Admin-4b test suites:
-  - `src/test/AdminKillSwitch.test.tsx` (5 tests passed)
-  - `src/test/AdminMonitoringControls.test.tsx` (3 tests passed)
-  - `src/test/AdminCohortControl.test.tsx` (3 tests passed)
-  - `src/test/AdminExecutionOverview.test.tsx` (3 tests passed)
 - Next.js Turbopack build (`next build --turbopack`) completed with zero errors across all 34 routes.
-- Live staging backend verification (`168.144.72.194`) passed 100%. Production deployment verified on `https://app.tadexapp.com`.
+- Live production verification on `https://app.tadexapp.com/admin/execution`: Confirmed `GET /admin/execution/overview`, `GET /admin/execution/cohort`, `GET /admin/execution/health`, `GET /admin/execution/reconciliation`, and `GET /admin/execution/connectivity` all return HTTP 200 OK.
 
 ---
 
