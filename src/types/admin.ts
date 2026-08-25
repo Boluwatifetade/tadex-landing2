@@ -508,3 +508,145 @@ export interface AdminSetPlatformFeeRequest {
   reason: string;
 }
 
+// ============================================================================
+// Phase Admin-4a / Admin-4b: Execution & System Controls Types
+// ============================================================================
+
+export interface SystemControlDbRow {
+  id: string;
+  control_type: string;
+  is_enabled: boolean;
+  enabled_at?: string | null;
+  enabled_by?: string | null;
+  reason?: string | null;
+  metadata?: Record<string, any> | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SystemControlState {
+  control_type: string;
+  effective_value: any;
+  source: 'database' | 'env_fallback' | 'default_fallback' | string;
+  is_db_override: boolean;
+  db_row?: SystemControlDbRow | null;
+  env_default?: any;
+  description?: string | null;
+}
+
+export interface ExecutionOverviewSummary {
+  kill_switch_active: boolean;
+  trading_allowed: boolean;
+  monitoring_active: boolean;
+  monitoring_actions_allowed: boolean;
+  effective_cohort_percent: number;
+  total_controls_tracked: number;
+  db_overrides_count: number;
+  timestamp: string;
+}
+
+export interface ExecutionOverviewResponse {
+  controls: Record<string, SystemControlState>;
+  summary: ExecutionOverviewSummary;
+}
+
+export interface ExecutionHealthSignaling {
+  total_signals: number;
+  dispatched_signals: number;
+  failed_signals: number;
+  parsing_success_rate: number;
+  avg_ingest_latency_seconds: number;
+}
+
+export interface ExecutionHealthDispatch {
+  total_dispatches: number;
+  completed_dispatches: number;
+  failed_dispatches: number;
+  dispatch_success_rate: number;
+  avg_dispatch_latency_seconds: number;
+}
+
+export interface ExecutionHealthOrdering {
+  total_orders: number;
+  filled_orders: number;
+  failed_orders: number;
+  ordering_success_rate: number;
+}
+
+export interface ExecutionHealthResponse {
+  window_hours: number;
+  signaling: ExecutionHealthSignaling;
+  dispatch: ExecutionHealthDispatch;
+  ordering: ExecutionHealthOrdering;
+  overall_healthy: boolean;
+}
+
+export interface ExecutionReconciliationResponse {
+  active_monitors_count: number;
+  open_positions_count: number;
+  monitors_by_status: Record<string, number>;
+  monitors_by_mode: Record<string, number>;
+  drift_status: 'CLEAN' | 'DRIFT_DETECTED' | string;
+  is_consistent: boolean;
+  invariants_check: Record<string, any>;
+  recent_corrective_actions: Array<{
+    id?: string;
+    action_type?: string;
+    target_entity_type?: string;
+    target_entity_id?: string;
+    before_state?: any;
+    after_state?: any;
+    reason?: string;
+    created_at?: string;
+    source_table?: string;
+  }>;
+}
+
+export interface ExecutionCohortResponse {
+  cohort_percent: number;
+  source: 'database' | 'env_fallback' | string;
+  is_db_override: boolean;
+  total_users: number;
+  users_in_cohort: number;
+  users_excluded: number;
+  enabled_environments: string[];
+}
+
+export interface ExchangeConnectivityResponse {
+  exchange: string;
+  status: 'online' | 'degraded' | 'offline' | string;
+  latency_ms: number;
+  server_time?: string | number | null;
+  checked_at: string;
+  status_code?: number;
+}
+
+export interface SystemKillSwitchRequest {
+  enable: boolean;
+  reason: string;
+  confirmation_phrase?: string;
+  expected_updated_at?: string | null;
+}
+
+export interface SystemMonitoringRequest {
+  control: 'monitoring_enabled' | 'monitoring_actions_kill_switch';
+  enable: boolean;
+  reason: string;
+  expected_updated_at?: string | null;
+}
+
+export interface SystemCohortRequest {
+  percent: number;
+  reason: string;
+  expected_updated_at?: string | null;
+}
+
+export interface SystemControlMutationResponse {
+  success: boolean;
+  control: SystemControlState;
+  exchange_connectivity?: ExchangeConnectivityResponse | null;
+  audit_log_id?: string | null;
+  message: string;
+}
+
+

@@ -18,3 +18,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ accessToken: token, isAuthenticated: !!token }),
   clear: () => set({ accessToken: null, isAuthenticated: false }),
 }));
+
+export function getAuthHeader(): Record<string, string> {
+  const token = useAuthStore.getState().accessToken;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+

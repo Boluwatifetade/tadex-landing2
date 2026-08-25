@@ -57,6 +57,12 @@ export default function AdminHeader({ adminEmail }: AdminHeaderProps) {
       active: pathname.startsWith("/admin/billing"),
     },
     {
+      href: "/admin/execution",
+      label: "System Controls",
+      icon: Zap,
+      active: pathname.startsWith("/admin/execution"),
+    },
+    {
       href: "/admin/providers",
       label: "Providers",
       icon: Radio,
@@ -77,7 +83,6 @@ export default function AdminHeader({ adminEmail }: AdminHeaderProps) {
   ];
 
   const comingSoonStubs = [
-    { label: "Execution Engine", icon: Zap },
     { label: "Audit Logs", icon: ScrollText },
   ];
 
