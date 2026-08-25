@@ -4,6 +4,56 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Phase Admin-4b: Web Admin Dashboard (System Controls & Execution Engine)] - 2026-08-25
+
+### 1. Navigation & Sub-Navigation (`AdminHeader.tsx`, `AdminExecutionNav.tsx`)
+- Promoted `"System Controls"` (formerly "Execution Engine") in `AdminHeader` desktop and mobile drawer navigation from "Coming Soon" stub to active link `/admin/execution`.
+- Built shared tabbed sub-navigation `AdminExecutionNav.tsx` providing fast switching across `System Controls & Kill Switch`, `Pipeline Health & Telemetry`, and `Position Reconciliation`.
+
+### 2. High-Gravity Global Emergency Kill Switch (`AdminKillSwitchCard.tsx`, `AdminKillSwitchModal.tsx`)
+- Centerpiece of the execution dashboard with permanently visible, heavy-duty visual treatment and pulsing status indicators.
+- Displays runtime status (`ACTIVE / NORMAL` vs `EMERGENCY STOP ACTIVE`), source attribution (`Database Override` vs `Default Fallback`), last modified timestamp, and enabled_by actor.
+- **Emergency Halt Modal (2-Step Safety Gate)**:
+  - *Step 1*: Consequence impact breakdown (instant halt of all new Bybit order dispatches, signal ingestion pause, order placement locking).
+  - *Step 2*: Exact uppercase typed phrase `"HALT TRADING"` strictly enforced + mandatory audit reason ($\ge 3$ characters). Submit button is disabled until exact match. Dispatches `POST /api/v1/admin/execution/kill-switch` with `{ enable: true, reason, confirmation_phrase: "HALT TRADING", expected_updated_at }`.
+- **Resume Trading Modal (Live Pre-Flight Ping)**:
+  - Consumes live Bybit exchange connectivity check (`GET /api/v1/admin/execution/connectivity`, querying Bybit public `/v5/market/time`), displaying real-time exchange status (`online` / `degraded`), latency in ms, server time, verified timestamp, and manual "Re-check Ping" trigger.
+  - Re-activation consequences disclosure + mandatory audit reason ($\ge 3$ characters). Dispatches `POST /api/v1/admin/execution/kill-switch` with `{ enable: false, reason, expected_updated_at }`.
+- **Optimistic Locking & 409 Conflict Handling**: Passes `expected_updated_at`; when 409 Conflict is returned, surfaces specialized *"State changed since you loaded this page"* banner with a forced state refresh action.
+
+### 3. Spatially Isolated Monitoring Controls (`AdminMonitoringControlsCard.tsx`, `AdminMonitoringModal.tsx`)
+- Positioned in a dedicated, visually and spatially separate container per audit guardrail requirements.
+- Governs `monitoring_enabled` (WebSocket telemetry stream) and `monitoring_actions_kill_switch` (Automated SL/TP closes).
+- Modal with impact disclosures, reason validation ($\ge 3$ characters), optimistic locking, and 409 conflict handling. Dispatches `POST /api/v1/admin/execution/monitoring`.
+
+### 4. Rollout Cohort Distribution Control (`AdminCohortControlCard.tsx`, `AdminCohortModal.tsx`)
+- Consumes `GET /api/v1/admin/execution/cohort`.
+- Displays real user counts: Total Platform Users, In-Cohort Accounts, Excluded Accounts, and visual progress gauge.
+- Modal enabling target rollout percentage adjustment (0–100%) via slider and numeric presets, reason validation ($\ge 3$ characters), optimistic locking, and 409 conflict handling. Dispatches `POST /api/v1/admin/execution/cohort`.
+
+### 5. Read-Only System Controls Matrix (`AdminReadOnlyControlsGrid.tsx`)
+- Dynamically loads and renders non-operational controls directly from `ExecutionOverviewResponse.controls` without hardcoding: `beta_mode`, `allow_new_providers`, `allow_new_subscribers`, `max_beta_providers`, `max_beta_subscribers`, `beta_whitelist_enabled`.
+- Displays effective values, source badges (`DB Override` vs `Default`), metadata descriptions, and numeric limits.
+
+### 6. Front-and-Center Execution Audit Feed (`AdminExecutionAuditFeed.tsx`)
+- Prominently positioned on `/admin/execution`, fetching recent system control and emergency stop actions from `admin_audit_logs`.
+
+### 7. Telemetry & Reconciliation Views
+- `/admin/execution/health`: Consumes `GET /api/v1/admin/execution/health` with window selector (6h, 24h, 72h, 7d), rendering signaling ingest rates, dispatch queue rates, and Bybit order success percentages.
+- `/admin/execution/reconciliation`: Consumes `GET /api/v1/admin/execution/reconciliation`, rendering open positions vs active monitors alignment, drift status (`CLEAN`), and autonomous corrective action history.
+
+### 8. Automated Tests & Production Build
+- Full Vitest suite: 34 test files, 121 tests passing (100%).
+- Dedicated Phase Admin-4b test suites:
+  - `src/test/AdminKillSwitch.test.tsx` (5 tests passed)
+  - `src/test/AdminMonitoringControls.test.tsx` (3 tests passed)
+  - `src/test/AdminCohortControl.test.tsx` (3 tests passed)
+  - `src/test/AdminExecutionOverview.test.tsx` (3 tests passed)
+- Next.js Turbopack build (`next build --turbopack`) completed with zero errors across all 34 routes.
+- Live staging backend verification (`168.144.72.194`) passed 100%. Production deployment verified on `https://app.tadexapp.com`.
+
+---
+
 ## [Phase Admin-3: Web Admin Dashboard (Billing & Revenue)] - 2026-08-23
 
 ### 1. Navigation & Subnavigation (`AdminHeader.tsx`, `AdminBillingNav.tsx`)
