@@ -46,7 +46,7 @@
     "typescript": "^5",
     "vitest": "^3.0.5"
   },
-  "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
+  "description": "Tadex Web Frontend - Non-custodial crypto signal execution automation platform",
   "main": "index.js",
   "keywords": [],
   "author": "",

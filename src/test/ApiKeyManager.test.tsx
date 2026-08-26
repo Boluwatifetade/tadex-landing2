@@ -129,4 +129,30 @@ describe("ApiKeyManager", () => {
       expect(screen.queryByText("...9999")).not.toBeInTheDocument();
     });
   });
+
+  it("dynamically toggles Bybit API management URL between Mainnet and Testnet when isTestnet checkbox is changed", async () => {
+    vi.spyOn(apiClientModule, "apiClient").mockResolvedValueOnce([]);
+
+    render(<ApiKeyManager />);
+
+    await screen.findByText("No exchange connected yet");
+
+    // Initially Mainnet
+    const mainnetLinks = screen.getAllByRole("link", { name: /Bybit Mainnet API Settings/i });
+    expect(mainnetLinks.length).toBeGreaterThan(0);
+    expect(mainnetLinks[0]).toHaveAttribute("href", "https://www.bybit.com/app/user/api-management");
+
+    // Toggle testnet checkbox
+    const testnetCheckbox = screen.getByLabelText(/Use Bybit Testnet environment/i);
+    expect(testnetCheckbox).not.toBeChecked();
+
+    await userEvent.click(testnetCheckbox);
+    expect(testnetCheckbox).toBeChecked();
+
+    // Now Testnet
+    const testnetLinks = screen.getAllByRole("link", { name: /Bybit Testnet API Settings/i });
+    expect(testnetLinks.length).toBeGreaterThan(0);
+    expect(testnetLinks[0]).toHaveAttribute("href", "https://testnet.bybit.com/app/user/api-management");
+  });
 });
+

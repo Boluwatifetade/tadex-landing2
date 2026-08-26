@@ -1,17 +1,11 @@
-﻿"use client";
+"use client";
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { apiClient } from "@/lib/api-client";
-
-const forgotPasswordSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
-});
-
-type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+import { forgotPasswordSchema, type ForgotPasswordFormData } from "@/lib/schemas/auth";
 
 function ForgotPasswordForm() {
   const [submitted, setSubmitted] = useState(false);

@@ -5,20 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { apiClient } from "@/lib/api-client";
 import { useAuthStore } from "@/lib/auth-store";
-
-const registerSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
-  confirmPassword: z.string().min(1, "Please confirm your password"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
-
-type RegisterFormValues = z.infer<typeof registerSchema>;
+import { registerSchema, type RegisterFormValues } from "@/lib/schemas/auth";
 
 interface UserOut {
   id: string;
@@ -204,6 +193,17 @@ export default function RegisterPage() {
                   "Create Account"
                 )}
               </button>
+              <p className="mt-3 text-center text-xs text-muted-foreground">
+                By continuing, you agree to Tadex&apos;s{" "}
+                <Link href="/terms" className="font-medium text-primary hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link href="/privacy" className="font-medium text-primary hover:underline">
+                  Privacy Policy
+                </Link>
+                .
+              </p>
             </div>
           </form>
         </div>

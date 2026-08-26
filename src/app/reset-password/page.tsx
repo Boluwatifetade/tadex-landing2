@@ -1,28 +1,12 @@
-﻿"use client";
+"use client";
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { apiClient } from "@/lib/api-client";
-
-const resetPasswordSchema = z
-  .object({
-    new_password: z
-      .string()
-      .min(8, "Password must be at least 8 characters long"),
-    confirm_password: z
-      .string()
-      .min(1, "Please confirm your password"),
-  })
-  .refine((data) => data.new_password === data.confirm_password, {
-    message: "Passwords do not match",
-    path: ["confirm_password"],
-  });
-
-type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+import { resetPasswordSchema, type ResetPasswordFormData } from "@/lib/schemas/auth";
 
 function ResetPasswordForm() {
   const router = useRouter();

@@ -4,7 +4,45 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Pre-Launch Audit & Tech Debt Cleanup] - 2026-08-26
+
+### 1. Privacy Policy Fix (`src/app/privacy/page.tsx`)
+- Completely overhauled `/privacy` to eliminate the false "we do not collect or store credentials/financial data" claim and replace it with an accurate, production-aligned data collection inventory:
+  - Encrypted exchange API keys and secrets (AES-256 encrypted at rest, never stored in plaintext, trade-only enforced, withdrawal permissions blocked).
+  - Account credentials (email, hashed passwords, verification status).
+  - Telegram IDs and usernames for execution bot syncing.
+  - Signal Provider verification data (operational identity, track record evidence, referral sources).
+  - Billing and transaction metadata (NGN/USDT/USD currencies, gross amounts, platform fee splits, payment gateway references via Flutterwave and Paystack).
+  - Telemetry and security audit logs (masked keys, execution timestamps, emergency kill-switch logs).
+- Added explicit Data Retention & Deletion section: states that exchange API keys are **immediately and permanently deleted from the database upon user revocation** in `/dashboard/keys`, user account closure is handled upon request via email, and statutory financial audit records are retained per accounting regulations.
+- Added NDPR compliance section and essential first-party `httpOnly` cookie disclosure.
+
+### 2. Tech Debt Cleanup (4 Approved Items)
+- **Zod Schema Extraction (`TD-LOW-01`)**: Created `src/lib/schemas/auth.ts` and extracted `loginSchema`, `registerSchema`, `forgotPasswordSchema`, and `resetPasswordSchema`. Refactored all 4 auth pages (`/login`, `/register`, `/forgot-password`, `/reset-password`).
+- **Database Migration Canonicalization (`TD-MED-02`)**: Copied `20260527000000_create_waitlist_tables.sql` into backend `Tadex/supabase/migrations/` to preserve a single canonical migration history.
+- **Footer Navigation Cleanup**: Removed dead `{ name: 'Cookie Policy', href: '#' }` link and added active link `{ name: 'Security & Transparency', href: '/security' }` to the legal column in `Footer.tsx`.
+- **Registration Agreement Helper**: Added `"By continuing, you agree to Tadex's Terms of Service and Privacy Policy"` helper text with direct links beneath the "Create Account" button on `/register`.
+
+### 3. Terms of Service Overhaul (`src/app/terms/page.tsx`)
+- Completely overhauled `/terms` with comprehensive, platform-aligned operational terms:
+  - **Provider-Marketplace Distinction**: Explicitly states Tadex is a software automation marketplace, not a financial advisor or investment manager. Providers are independent third parties; past performance metrics do not guarantee future returns.
+  - **Non-Custodial Architecture**: Discloses trade-only API key requirements and strict prohibition of withdrawal permissions.
+  - **Cryptocurrency & Execution Risk Disclosures**: Discloses market volatility, execution slippage, latency, order book liquidity, and exchange infrastructure dependencies (Bybit).
+  - **Billing & Cancellation/Refund Policy**: Itemized platform fee disclosures, cancel-at-period-end behavior, and non-refundable digital service fee policy.
+  - **Account Suspension Grounds**: Immediate suspension grounds including submission of withdrawal keys, fraudulent provider track records, chargebacks, and API abuse.
+  - **Legal Review Notice**: Prominently displays legal review banner indicating the document is an operational draft pending formal legal counsel in Nigeria, Kenya, and Ghana.
+
+### 4. Waitlist Database Consolidation (Infrastructure)
+- **Suspended Project Audit**: Investigated old standalone waitlist project (`uoguvoiszggbsgpergou.supabase.co`) from `.env`. Verified via DNS lookup that the host has been completely terminated (`ENOTFOUND`, zero recoverable data).
+- **Consolidation on Main Backend Supabase Project (`ybkeodfhuffubjppauew.supabase.co`)**: Applied `20260527000000_create_waitlist_tables.sql` directly to the active backend Supabase database via Management API query. Created `public.waitlist` and `public.plan_waitlist` tables with Row Level Security and anonymous insert policies.
+- **Environment Unification**: Updated `.env` to match `.env.local`, pointing to the single consolidated Supabase backend project.
+- **Automated Route Testing**: Added `src/test/WaitlistRoutes.test.ts` testing `POST /api/waitlist` and `POST /api/plan-waitlist` validation and database insertion flows.
+- **Test Suite & Build Verification**: Full Vitest suite (35 test files, 127 tests) passing 100%. Next.js Turbopack build compiling all 34 routes cleanly.
+
+---
+
 ## [Phase Admin-4b: Web Admin Dashboard (System Controls & Execution Engine)] - 2026-08-25
+
 
 ### 1. Navigation & Sub-Navigation (`AdminHeader.tsx`, `AdminExecutionNav.tsx`)
 - Promoted `"System Controls"` (formerly "Execution Engine") in `AdminHeader` desktop and mobile drawer navigation from "Coming Soon" stub to active link `/admin/execution`.

@@ -69,17 +69,17 @@ This document catalogs and prioritizes technical debt identified across the acti
 
 ### 3. Medium & Low Severity Items
 
-#### TD-MED-01: Duplicate Configuration Files (`next.config.js` vs `next.config.ts`)
+#### TD-MED-01: Duplicate Configuration Files (`next.config.js` vs `next.config.ts`) [RESOLVED]
 - **Location**: `tadex-landing2/next.config.js` and `next.config.ts`
-- **Description**: Both `.js` and `.ts` config files exist in the root directory.
-- **Recommended Fix**: Remove `next.config.js` and standardize on `next.config.ts`.
-- **Estimated Effort**: 0.1 Days.
+- **Description**: Both `.js` and `.ts` config files existed in the root directory.
+- **Resolution**: Removed `next.config.js` and standardized on `next.config.ts` with Next.js Turbopack build verified.
+- **Status**: **RESOLVED** (2026-08-26).
 
-#### TD-MED-02: Fragmented Database Migration Repositories
+#### TD-MED-02: Fragmented Database Migration Repositories [RESOLVED]
 - **Location**: `tadex-landing2/supabase/migrations/` vs `Tadex/supabase/migrations/`
-- **Description**: Frontend contains a standalone migration file `20260527000000_create_waitlist_tables.sql`.
-- **Recommended Fix**: Copy into backend `supabase/migrations/` to maintain a single canonical database migration history.
-- **Estimated Effort**: 0.2 Days.
+- **Description**: Frontend contained a standalone migration file `20260527000000_create_waitlist_tables.sql`.
+- **Resolution**: Copied `20260527000000_create_waitlist_tables.sql` into backend `Tadex/supabase/migrations/` maintaining a single canonical database migration history.
+- **Status**: **RESOLVED** (2026-08-26).
 
 #### TD-MED-04: Retrofit Telegram Bot Key Submission Flow with Withdrawal Check [RESOLVED]
 - **Location**: `bybit_client/telegram_bot.py` (`handle_api_keys`)
@@ -92,11 +92,11 @@ This document catalogs and prioritizes technical debt identified across the acti
 - **Recommended Fix**: Define a standardized Pydantic `ErrorDetail` schema across FastAPI route handlers.
 - **Estimated Effort**: 1-2 Days.
 
-#### TD-LOW-01: Inline Zod Validation Schemas
-- **Location**: `tadex-landing2/src/app/login/page.tsx`, `src/app/register/page.tsx`
-- **Description**: Schema definitions for email and password validation are written inline in page files.
-- **Recommended Fix**: Extract to `src/lib/schemas/auth.ts`.
-- **Estimated Effort**: 0.2 Days.
+#### TD-LOW-01: Inline Zod Validation Schemas [RESOLVED]
+- **Location**: `tadex-landing2/src/app/login/page.tsx`, `src/app/register/page.tsx`, `src/app/forgot-password/page.tsx`, `src/app/reset-password/page.tsx`
+- **Description**: Schema definitions for email and password validation were written inline across page files.
+- **Resolution**: Extracted shared schemas (`loginSchema`, `registerSchema`, `forgotPasswordSchema`, `resetPasswordSchema`) into `src/lib/schemas/auth.ts` and refactored all auth pages.
+- **Status**: **RESOLVED** (2026-08-26).
 
 #### TD-LOW-02: JPY Subunit Currency Formatting Quirk [RESOLVED]
 - **Location**: `Tadex/bybit-client/bybit_client/billing/plan_pricing_service.py`, `app/api/billing.py`, `src/lib/currency.ts`
