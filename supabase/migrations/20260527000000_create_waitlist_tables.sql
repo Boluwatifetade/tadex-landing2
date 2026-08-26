@@ -20,12 +20,14 @@ alter table public.waitlist enable row level security;
 alter table public.plan_waitlist enable row level security;
 
 -- Allow public (anonymous) inserts to waitlist
+drop policy if exists "Allow anonymous inserts to waitlist" on public.waitlist;
 create policy "Allow anonymous inserts to waitlist"
   on public.waitlist
   for insert
   with check (true);
 
 -- Allow public (anonymous) inserts to plan_waitlist
+drop policy if exists "Allow anonymous inserts to plan_waitlist" on public.plan_waitlist;
 create policy "Allow anonymous inserts to plan_waitlist"
   on public.plan_waitlist
   for insert
