@@ -16,6 +16,8 @@ interface UserMeResponse {
   email?: string;
   status?: string;
   email_verified?: boolean;
+  telegram_linked?: boolean;
+  telegram_username?: string | null;
 }
 
 function DashboardContent() {
@@ -46,7 +48,7 @@ function DashboardContent() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <DashboardHeader userEmail={user?.email} userStatus={user?.status} />
+      <DashboardHeader userEmail={user?.email} userStatus={user?.status} userEmailVerified={user?.email_verified} telegramLinked={user?.telegram_linked} telegramUsername={user?.telegram_username} />
 
       {/* Main Content Area */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -85,10 +87,32 @@ function DashboardContent() {
             <div className="rounded-xl border border-border bg-card p-6 shadow-sm sm:col-span-2 lg:col-span-1">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-muted-foreground">Account Security</span>
-                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">HttpOnly Cookie</span>
+                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                  user?.email_verified
+                    ? "bg-emerald-500/10 text-emerald-500"
+                    : "bg-amber-500/10 text-amber-500"
+                }`}>
+                  {user?.email_verified ? "Email Verified" : "Unverified"}
+                </span>
               </div>
-              <p className="mt-4 text-2xl font-bold text-card-foreground">Verified</p>
-              <p className="mt-1 text-xs text-muted-foreground">In-memory access token active</p>
+              <p className={`mt-4 text-base font-bold leading-tight ${
+                user?.email_verified ? "text-emerald-500" : "text-amber-500"
+              }`}>
+                {user?.email_verified
+                  ? "Email Verified"
+                  : "Action Required: Email Unverified. Trading Disabled"}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground truncate" title={user?.email}>
+                {user?.email || "In-memory access token active"}
+              </p>
+              <div className="mt-3 pt-3 border-t border-border flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Telegram Sync:</span>
+                <span className="font-medium text-card-foreground">
+                  {user?.telegram_linked
+                    ? `@${user.telegram_username || "Connected"}`
+                    : "Not Connected"}
+                </span>
+              </div>
             </div>
           </div>
 

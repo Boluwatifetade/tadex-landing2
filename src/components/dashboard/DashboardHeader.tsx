@@ -11,9 +11,12 @@ import { LayoutDashboard, KeyRound, LineChart, Users, CreditCard, LogOut, Menu, 
 interface DashboardHeaderProps {
   userEmail?: string;
   userStatus?: string;
+  userEmailVerified?: boolean;
+  telegramLinked?: boolean;
+  telegramUsername?: string | null;
 }
 
-export default function DashboardHeader({ userEmail, userStatus = "active" }: DashboardHeaderProps) {
+export default function DashboardHeader({ userEmail, userStatus = "active", userEmailVerified, telegramLinked, telegramUsername }: DashboardHeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { clear } = useAuthStore();
@@ -85,8 +88,13 @@ export default function DashboardHeader({ userEmail, userStatus = "active" }: Da
         <div className="hidden md:flex items-center gap-4">
           {userEmail && (
             <div className="flex items-center gap-2 text-xs font-medium">
-              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">
-                User: {userIdentifier}
+              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary" title={userEmail}>
+                {userEmail}
+              </span>
+              <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                userEmailVerified ? "bg-emerald-500/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"
+              }`}>
+                {userEmailVerified ? "Verified" : "Unverified"}
               </span>
               <span className="rounded-full bg-secondary px-2.5 py-1 text-secondary-foreground capitalize">
                 {userStatus}
@@ -121,12 +129,19 @@ export default function DashboardHeader({ userEmail, userStatus = "active" }: Da
         <div className="border-b border-border bg-card px-4 py-4 space-y-3 md:hidden animate-in slide-in-from-top-2 duration-150">
           {userEmail && (
             <div className="flex items-center justify-between pb-2 border-b border-border text-xs font-medium">
-              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">
-                User: {userIdentifier}
+              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary truncate max-w-[200px]" title={userEmail}>
+                {userEmail}
               </span>
-              <span className="rounded-full bg-secondary px-2.5 py-1 text-secondary-foreground capitalize">
-                {userStatus}
-              </span>
+              <div className="flex items-center gap-1.5">
+                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                  userEmailVerified ? "bg-emerald-500/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"
+                }`}>
+                  {userEmailVerified ? "Verified" : "Unverified"}
+                </span>
+                <span className="rounded-full bg-secondary px-2.5 py-1 text-secondary-foreground capitalize">
+                  {userStatus}
+                </span>
+              </div>
             </div>
           )}
 

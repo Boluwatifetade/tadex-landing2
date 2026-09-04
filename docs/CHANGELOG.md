@@ -4,6 +4,18 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Design System & Master Handoff Specification v2] - 2026-08-28
+
+### 1. Specification Audit & Master Handoff Document (`docs/Tadex_Web_Design_Handoff_v2.md`, `Tadex_Web_Design_Handoff_v2.md`)
+- Conducted exhaustive audit of legacy PDF specification (`Tadex_Web_Implementation_Design_Specification.pdf`, July 2026) against live production code.
+- Created `Tadex_Web_Design_Handoff_v2.md` as the active master design specification for Figma lead designer Kemi:
+  - **Screen-by-screen inventory** across all public/legal pages (`/`, `/terms`, `/privacy`, `/security`), auth flows (`/login`, `/register`, `/forgot-password`, `/reset-password`, `/verify-email`, `/claim`), authenticated dashboard shell (`DashboardHeader.tsx`), user trading center (`/dashboard`, `/dashboard/keys`, `/dashboard/trading`), billing & checkout (`/dashboard/billing`, `CheckoutQuoteModal.tsx`), provider directory & detail (`/dashboard/providers`, `/dashboard/providers/[id]`), 4-stage provider self-service portal (`/dashboard/provider`), account settings (`/dashboard/settings`), and all 6 phases of internal admin governance (`/admin/*`).
+  - **Complete Design System Foundations Token Scale**: mapped 16 token domains (colors, brand palette, semantic status, typography, 4px spacing grid, corner radius, elevation/shadows, focus/interactions, component variants, layout/breakpoints, Lucide iconography, motion curves, and token architecture hierarchy).
+  - **Figma Sprint Breakdown**: prioritized user-facing screens (P1), legal/settings (P2), and internal ops tooling (P3).
+- Archived legacy PDF as historical reference.
+
+---
+
 ## [Pre-Launch Audit & Tech Debt Cleanup] - 2026-08-26
 
 ### 1. Privacy Policy Fix (`src/app/privacy/page.tsx`)

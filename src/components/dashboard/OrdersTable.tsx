@@ -73,7 +73,7 @@ export default function OrdersTable() {
         </span>
       );
     }
-    if (s === "pending" || s === "submitted" || s === "open") {
+    if (s === "pending" || s === "submitted" || s === "new" || s === "partially_filled" || s === "open") {
       return (
         <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-500 capitalize">
           <Clock className="h-3 w-3" />
