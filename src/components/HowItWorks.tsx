@@ -1,149 +1,145 @@
 'use client';
-import { Send, Settings, Link as LinkIcon, BarChart3, ArrowRight, CheckCircle, Play } from 'lucide-react';
+
+import { UserCheck, Key, Sliders, Zap, ArrowRight, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 export default function HowItWorks() {
   const steps = [
     {
-      number: '1',
-      icon: Send,
-      title: 'Access the Platform',
-      desc: 'Open Tadex on any web browser. No complex installations or system down times.',
-      features: ['Instant access', 'No installation', 'Mobile-friendly']
+      number: '01',
+      icon: UserCheck,
+      title: 'Create Your Account',
+      bullets: [
+        'Open Tadex in your browser.',
+        'Sign up in under 2 minutes.',
+        'No software to install.',
+      ],
     },
     {
-      number: '2',
-      icon: LinkIcon,
-      title: 'Connect Destination API',
-      desc: 'Configure API keys for your preferred target destination and link them securely.',
-      features: ['Secure integration', 'Scoped permissions', '2-minute setup']
+      number: '02',
+      icon: Key,
+      title: 'Connect Your Accounts',
+      bullets: [
+        'Add your exchange API keys (Bybit, Binance, OKX, etc.).',
+        'Link your Telegram groups or webhooks.',
+        'Everything is encrypted and secure.',
+      ],
     },
     {
-      number: '3',
-      icon: Settings,
-      title: 'Send a Payload',
-      desc: 'Send an event payload or webhook stream to the platform. Tadex parses the structured data instantly.',
-      features: ['Smart parsing', 'Multiple formats', 'Payload parsing']
+      number: '03',
+      icon: Sliders,
+      title: 'Set Your Rules',
+      bullets: [
+        'Choose which signals to act on.',
+        'Define position size, stop loss, and risk limits.',
+        'Add filters like “only trade BTC” or “only during London session.”',
+      ],
     },
     {
-      number: '4',
-      icon: BarChart3,
-      title: 'See Live Routing Logs',
-      desc: 'Tadex validates the payload, routes the request, and logs the execution status in real time.',
-      features: ['Real-time routing', 'Live delivery logs', 'System metrics']
+      number: '04',
+      icon: Zap,
+      title: 'Let Tadex Handle the Rest',
+      bullets: [
+        'Signals come in → Tadex checks your rules → trades are placed.',
+        'Watch live logs of every action.',
+        'Adjust or pause anytime from your dashboard.',
+      ],
     },
   ];
 
   return (
-    <section className="py-20 lg:py-32 bg-white relative" id="how-it-works">
+    <section className="py-20 lg:py-28 bg-white" id="how-it-works">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center bg-[#004859]/10 text-[#004859] px-4 py-2 rounded-full text-sm font-medium mb-4">
-            Get Started in Minutes
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="inline-flex items-center gap-2 bg-[#004859]/10 text-[#004859] px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase mb-4">
+            Simple 4-Step Process
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#004859]">
-            From Feed to Routed Event Instantly
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#004859]">
+            Set Up in Minutes, Not Days
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Tadex runs as a cloud automation utility. Here's how to route your first automated payload in 4 simple steps.
+          <p className="mt-4 text-lg text-slate-600">
+            No downloads. No complex code. Just connect, configure, and go.
           </p>
         </div>
 
-        {/* Steps Grid */}
-        <div className="relative">
-          {/* Connection Line */}
-          <div className="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-gradient-to-r from-[#004859]/20 via-[#00B894]/50 to-[#004859]/20 z-0 w-11/12 mx-auto"></div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-            {steps.map((step, index) => {
-              const IconComponent = step.icon;
-              return (
-                <div
-                  key={step.number}
-                  className="relative group"
-                >
-                  {/* Card */}
-                  <div className="bg-white p-8 rounded-2xl border border-slate-200 hover:border-[#004859]/30 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 text-center h-full flex flex-col">
-                    {/* Step Number with Animation */}
-                    <div className="relative mx-auto mb-6">
-                      <div className="w-16 h-16 bg-gradient-to-br from-[#004859] to-[#006B7C] rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">
-                        {step.number}
-                      </div>
-                      <div className="absolute inset-0 bg-[#00B894] rounded-full animate-ping opacity-20"></div>
-                    </div>
+        {/* Signal Flow Simulation Diagram */}
+        <div className="mb-14 p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white max-w-4xl mx-auto border border-slate-700 shadow-md">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono">
+            <div className="flex items-center gap-2 bg-slate-800/80 px-3 py-2 rounded-lg border border-slate-700 w-full sm:w-auto justify-center">
+              <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+              <span>1. Telegram Signal</span>
+            </div>
+            <ArrowRight className="w-4 h-4 text-[#00B894] hidden sm:block" />
+            <div className="flex items-center gap-2 bg-slate-800/80 px-3 py-2 rounded-lg border border-slate-700 w-full sm:w-auto justify-center">
+              <span className="w-2 h-2 rounded-full bg-[#00B894]"></span>
+              <span>2. Tadex Risk Engine</span>
+            </div>
+            <ArrowRight className="w-4 h-4 text-[#00B894] hidden sm:block" />
+            <div className="flex items-center gap-2 bg-slate-800/80 px-3 py-2 rounded-lg border border-slate-700 w-full sm:w-auto justify-center">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>3. Bybit API (Trade-Only)</span>
+            </div>
+            <ArrowRight className="w-4 h-4 text-[#00B894] hidden sm:block" />
+            <div className="flex items-center gap-2 bg-emerald-950/80 text-emerald-300 px-3 py-2 rounded-lg border border-emerald-800 w-full sm:w-auto justify-center">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span className="font-bold">4. Order Filled</span>
+            </div>
+          </div>
+        </div>
 
-                    {/* Icon */}
-                    <div className="mx-auto mb-4 w-12 h-12 bg-[#004859]/10 rounded-xl flex items-center justify-center group-hover:bg-[#00B894]/20 transition-colors duration-300">
-                      <IconComponent className="w-6 h-6 text-[#004859] group-hover:text-[#00B894] transition-colors duration-300" />
-                    </div>
-
-                    {/* Content */}
-                    <h3 className="text-xl font-bold mb-4 text-[#004859] group-hover:text-[#006B7C] transition-colors">
-                      {step.title}
-                    </h3>
-                    <p className="text-slate-600 mb-6 leading-relaxed flex-grow">
-                      {step.desc}
-                    </p>
-
-                    {/* Features List */}
-                    <div className="space-y-2">
-                      {step.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center justify-center gap-2 text-sm text-slate-500">
-                          <CheckCircle className="w-4 h-4 text-[#00B894]" />
-                          <span>{feature}</span>
-                        </div>
-                      ))}
+        {/* 4 Steps Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          {steps.map((step, idx) => {
+            const Icon = step.icon;
+            return (
+              <div
+                key={idx}
+                className="relative bg-slate-50 hover:bg-white rounded-2xl p-6 lg:p-7 border border-slate-200 hover:border-[#004859]/30 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-2xl font-black text-[#004859]/30 font-mono">
+                      {step.number}
+                    </span>
+                    <div className="w-12 h-12 rounded-xl bg-[#004859]/10 text-[#004859] flex items-center justify-center">
+                      <Icon className="w-6 h-6" />
                     </div>
                   </div>
 
-                  {/* Arrow Connector */}
-                  {index < steps.length - 1 && (
-                    <div className="hidden lg:flex absolute top-24 -right-4 z-20 w-8 h-8 items-center justify-center">
-                      <ArrowRight className="w-6 h-6 text-[#00B894] opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-                  )}
+                  <h3 className="text-lg font-bold text-slate-900 mb-4">
+                    {step.title}
+                  </h3>
+
+                  <ul className="space-y-3">
+                    {step.bullets.map((bullet, bIdx) => (
+                      <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        <Check className="w-4 h-4 text-[#00B894] flex-shrink-0 mt-0.5" />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Quick Start CTA */}
-        <div className="mt-16 text-center">
-          <Link 
-            href="#pricing" 
-            className="inline-flex items-center gap-3 bg-[#00B894] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#00A085] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            <Send className="w-5 h-5" />
-            Start the Simulation Now
-            <ArrowRight className="w-5 h-5" />
-          </Link>
-          <p className="text-slate-500 text-sm mt-4">
-            No complex setup required • Instant web access
-          </p>
-        </div>
-
-        {/* Bottom CTA Section */}
-        <div className="mt-20 text-center bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-8 lg:p-12 border border-slate-200 shadow-sm">
-          <h3 className="text-2xl md:text-3xl font-bold text-[#004859] mb-4">
-            Ready to Start Automated Event Routing?
-          </h3>
-          <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
-            Join thousands of users who've already automated their workflows with Tadex
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link 
-              href="#pricing" 
-              className="inline-flex items-center bg-[#004859] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#00323B] transition-all duration-300 shadow-lg hover:shadow-xl"
+        {/* CTA Under Steps */}
+        <div className="text-center">
+          <Link href="#pricing">
+            <Button
+              size="lg"
+              className="bg-[#00B894] hover:bg-[#00A085] text-slate-950 font-bold px-8 py-6 text-base rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
             >
-              <Play className="w-5 h-5 mr-2" />
-              Start Free Trial
-            </Link>
-            <div className="text-slate-500 text-sm">
-              No credit card required • Instant setup
-            </div>
-          </div>
+              Start Free
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </Link>
+          <p className="text-xs text-slate-500 mt-2 font-medium">
+            No credit card required
+          </p>
         </div>
       </div>
     </section>

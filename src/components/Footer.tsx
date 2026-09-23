@@ -1,213 +1,93 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Mail, Twitter, Linkedin, Github, ArrowRight, ExternalLink } from 'lucide-react'
+import Link from 'next/link';
 
 export default function Footer() {
-  const [email, setEmail] = useState('')
-  const [isSubmitted, setIsSubmitted] = useState(false)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      })
-
-      const data = await res.json()
-
-      if (!res.ok) {
-        // show the error from backend if it exists
-        alert(data?.error || 'Error sending email')
-        return
-      }
-
-      setIsSubmitted(true)
-      setEmail('')
-      setTimeout(() => setIsSubmitted(false), 3000)
-    } catch (err) {
-      console.error('Network error:', err)
-      alert('Network error')
-    }
-  }
-
-
-
   const footerLinks = {
     product: [
-      { name: 'Features', href: '#features' },
       { name: 'How it Works', href: '#how-it-works' },
+      { name: 'Features', href: '#what-tadex-does' },
       { name: 'Pricing', href: '#pricing' },
-      { name: 'FAQ', href: '#faq' }
+      { name: 'FAQ', href: '#faq' },
     ],
     company: [
       { name: 'About', href: '#' },
-      { name: 'Blog', href: '#' },
-      { name: 'Careers', href: '#' },
-      { name: 'Contact', href: '#' }
-    ],
-    legal: [
       { name: 'Privacy Policy', href: '/privacy' },
       { name: 'Terms of Service', href: '/terms' },
-      { name: 'Security & Transparency', href: '/security' }
-    ]
-  }
-
-  const socialLinks = [
-    { icon: Twitter, href: 'https://twitter.com/TadexTeam', label: 'Twitter' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/in/boluwatife-tade/', label: 'LinkedIn' },
-    { icon: Github, href: 'https://github.com/Boluwatifetade', label: 'GitHub' },
-    { icon: Mail, href: 'mailto:tadex.team@gmail.com', label: 'Email' }
-
-
-  ]
-
-
+      { name: 'Security', href: '/security' },
+    ],
+  };
 
   return (
-    <footer className="bg-slate-50 border-t border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* brand + newsletter */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-          <div>
-            <div className="mb-8">
-              <div className="text-3xl font-bold text-[#004859] mb-4">Tadex</div>
-              <p className="text-lg text-slate-600 max-w-md">
-                Automate routing and webhook delivery, eliminating manual steps with our advanced workflow automation system.
-              </p>
-            </div>
-
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-[#004859] mb-4">Join the Waitlist</h3>
-              <p className="text-slate-600 mb-4">Get early access and be the first to know when we launch.</p>
-
-              {!isSubmitted ? (
-                <form onSubmit={handleSubmit} className="flex gap-3 max-w-md">
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="flex-1 border-slate-300 focus:border-[#004859] rounded-lg"
-                    required
-                  />
-                  <Button
-                    type="submit"
-                    className="bg-[#004859] hover:bg-[#00323B] text-white px-6 py-2 rounded-lg font-medium group"
-                  >
-                    Join
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </form>
-              ) : (
-                <div className="flex items-center gap-2 text-[#00B894] font-medium">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  Thanks! You&apos;re on the waitlist.
-                </div>
-              )}
-            </div>
-
-            <div>
-              <h4 className="text-sm font-semibold text-slate-700 mb-4">Follow us</h4>
-              <div className="flex gap-4">
-                {socialLinks.map((social, index) => {
-                  const IconComponent = social.icon
-                  return (
-                    <a
-                      key={index}
-                      href={social.href}
-                      className="w-10 h-10 bg-slate-200 hover:bg-[#004859] text-slate-600 hover:text-white rounded-lg flex items-center justify-center transition-all duration-300 group"
-                      aria-label={social.label}
-                    >
-                      <IconComponent className="w-5 h-5" />
-                    </a>
-                  )
-                })}
+    <footer className="bg-slate-900 border-t border-slate-800 text-slate-400">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
+          {/* Left Column: Brand & One-Liner */}
+          <div className="md:col-span-6 space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-[#004859] rounded-lg flex items-center justify-center text-white font-bold">
+                T
               </div>
+              <span className="text-xl font-bold text-white tracking-tight">Tadex</span>
+            </div>
+            <p className="text-slate-400 text-sm max-w-sm leading-relaxed">
+              Automate trading signals and webhook workflows without manual work.
+            </p>
+            <div className="text-xs text-slate-500 pt-1">
+              Location: Lagos, Nigeria
             </div>
           </div>
 
-          {/* right links */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {/* product */}
-            <div>
-              <h3 className="text-sm font-semibold text-slate-700 mb-4 uppercase tracking-wider">Product</h3>
-              <ul className="space-y-3">
-                {footerLinks.product.map((link, index) => (
-                  <li key={index}>
-                    <a
-                      href={link.href}
-                      className="text-slate-600 hover:text-[#004859] transition-colors duration-200 flex items-center group"
-                    >
-                      {link.name}
-                      <ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {/* company */}
-            <div>
-              <h3 className="text-sm font-semibold text-slate-700 mb-4 uppercase tracking-wider">Company</h3>
-              <ul className="space-y-3">
-                {footerLinks.company.map((link, index) => (
-                  <li key={index}>
-                    <a
-                      href={link.href}
-                      className="text-slate-600 hover:text-[#004859] transition-colors duration-200 flex items-center group"
-                    >
-                      {link.name}
-                      <ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {/* legal */}
-            <div>
-              <h3 className="text-sm font-semibold text-slate-700 mb-4 uppercase tracking-wider">Legal</h3>
-              <ul className="space-y-3">
-                {footerLinks.legal.map((link, index) => (
-                  <li key={index}>
-                    <a
-                      href={link.href}
-                      className="text-slate-600 hover:text-[#004859] transition-colors duration-200 flex items-center group"
-                    >
-                      {link.name}
-                      <ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {/* Center Column: Product Links */}
+          <div className="md:col-span-3 space-y-3">
+            <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
+              Product
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              {footerLinks.product.map((link, idx) => (
+                <li key={idx}>
+                  <Link
+                    href={link.href}
+                    className="hover:text-[#00B894] transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Right Column: Company & Legal Links */}
+          <div className="md:col-span-3 space-y-3">
+            <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
+              Company & Legal
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              {footerLinks.company.map((link, idx) => (
+                <li key={idx}>
+                  <Link
+                    href={link.href}
+                    className="hover:text-[#00B894] transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-slate-200">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-            <div className="text-slate-600 text-sm">© 2026 Voreza Technologies. All rights reserved.</div>
-            <div className="flex flex-col sm:items-end gap-1 text-sm text-slate-500">
-              <span className="font-medium text-slate-600">Operating Address</span>
-              <span>17 Peaceland Estate, Igbe Kapo, Ikorodu, Lagos State, Nigeria</span>
-              <a href="mailto:tadex.team@gmail.com" className="text-[#004859] hover:underline">tadex.team@gmail.com</a>
-            </div>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <div>
+            © 2026 Voreza Technologies. All rights reserved.
           </div>
-          <div className="flex items-center justify-center gap-6 text-sm text-slate-600 mt-4">
-            <span className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#00B894] rounded-full animate-pulse"></div>
-              All systems operational
-            </span>
-            <span>Made with ❤️ for developers</span>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#00B894] animate-pulse"></span>
+            <span className="text-slate-400 font-medium">All systems operational</span>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }

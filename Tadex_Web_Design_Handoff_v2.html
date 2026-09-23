@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tadex Web Application — Master Design Handoff & UI/UX Specification (v2.0)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    :root {
+      --brand-primary: #0F6173;
+      --brand-accent: #FFC107;
+      --surface-dark: #10172A;
+      --text-main: #0F172A;
+      --text-muted: #475569;
+      --border-color: #CBD5E1;
+      --bg-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --destructive: #EF4444;
+    }
+
+    @page {
+      size: A4;
+      margin: 16mm 14mm 16mm 14mm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 8.5pt;
+        color: #94A3B8;
+      }
+      @bottom-left {
+        content: "Tadex Web Application — Master Design Specification v2.0";
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 8pt;
+        color: #94A3B8;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.55;
+      color: var(--text-main);
+      background-color: #FFFFFF;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Document Header Banner */
+    .doc-banner {
+      background: linear-gradient(135deg, #10172A 0%, #0F6173 100%);
+      color: #FFFFFF;
+      padding: 22px 26px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      border-left: 6px solid #FFC107;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .doc-banner h1 {
+      color: #FFFFFF !important;
+      font-size: 18pt !important;
+      margin: 0 0 6px 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .doc-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px 20px;
+      margin-top: 14px;
+      font-size: 8.5pt;
+      color: #E2E8F0;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 12px;
+    }
+
+    .doc-meta-item strong {
+      color: #FFC107;
+    }
+
+    /* Architecture Diagram Styling */
+    .arch-container {
+      background: #0F172A;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 16px 0;
+      border: 1px solid #1E293B;
+      color: #F8FAFC;
+      page-break-inside: avoid;
+    }
+
+    .arch-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .arch-section-title {
+      font-weight: 700;
+      font-size: 9pt;
+      margin-bottom: 8px;
+      color: #FFC107;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .arch-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .arch-badge {
+      background: #1E293B;
+      color: #E2E8F0;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5pt;
+      border: 1px solid #334155;
+    }
+
+    .arch-badge-highlight {
+      background: rgba(15, 97, 115, 0.4);
+      color: #38BDF8;
+      border-color: #0284C7;
+      font-weight: 600;
+    }
+
+    .arch-badge-danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: #FCA5A5;
+      border-color: #DC2626;
+      font-weight: 600;
+    }
+
+    .arch-arrow {
+      text-align: center;
+      color: #94A3B8;
+      font-size: 8pt;
+      font-weight: 600;
+      margin: 8px 0;
+      letter-spacing: 0.5px;
+    }
+
+    .arch-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Headings */
+    h1 {
+      font-size: 14pt;
+      font-weight: 800;
+      color: #0F172A;
+      margin-top: 24px;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #E2E8F0;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 12pt;
+      font-weight: 700;
+      color: #0F6173;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #E2E8F0;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #1E293B;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    h4 {
+      font-size: 9.5pt;
+      font-weight: 600;
+      color: #334155;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 8px;
+      color: #334155;
+    }
+
+    ul, ol {
+      margin-top: 0;
+      margin-bottom: 10px;
+      padding-left: 18px;
+      color: #334155;
+    }
+
+    li {
+      margin-bottom: 3px;
+    }
+
+    /* Code and Pre */
+    code {
+      font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+      font-size: 8pt;
+      background-color: #F1F5F9;
+      color: #0F6173;
+      padding: 1.5px 4.5px;
+      border-radius: 4px;
+      border: 1px solid #E2E8F0;
+      font-weight: 500;
+    }
+
+    pre {
+      background-color: #0F172A;
+      color: #F8FAFC;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 7.5pt;
+      line-height: 1.45;
+      margin: 10px 0;
+      border-left: 4px solid #FFC107;
+      page-break-inside: avoid;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+      border: none;
+      font-size: inherit;
+    }
+
+    /* Tables */
+    .table-container {
+      margin: 12px 0;
+      width: 100%;
+      page-break-inside: avoid;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8pt;
+      text-align: left;
+      background-color: #FFFFFF;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #CBD5E1;
+    }
+
+    th {
+      background: #0F172A;
+      color: #FFFFFF;
+      font-weight: 700;
+      padding: 7px 9px;
+      border: 1px solid #1E293B;
+      text-transform: uppercase;
+      font-size: 7pt;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 6px 9px;
+      border: 1px solid #E2E8F0;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) {
+      background-color: #F8FAFC;
+    }
+
+    /* Callout Alerts */
+    .callout {
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    .callout-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      font-size: 8.5pt;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .callout-note {
+      background-color: #F0F9FF;
+      border: 1px solid #BAE6FD;
+      border-left: 4px solid #0284C7;
+      color: #0369A1;
+    }
+
+    .callout-tip {
+      background-color: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-left: 4px solid #16A34A;
+      color: #15803D;
+    }
+
+    .callout-important {
+      background-color: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-left: 4px solid #DC2626;
+      color: #B91C1C;
+    }
+
+    .callout-warning {
+      background-color: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-left: 4px solid #D97706;
+      color: #B45309;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background-color: #E2E8F0;
+      margin: 18px 0;
+    }
+
+    a {
+      color: var(--brand-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    strong {
+      color: #0F172A;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="doc-banner">
+    <h1>Tadex Web Application</h1>
+    <div style="font-size: 11pt; font-weight: 600; color: #FFC107; margin-bottom: 4px;">Master Design Handoff & UI/UX Specification (v2.0)</div>
+    <div style="font-size: 8.5pt; color: #CBD5E1;">Comprehensive Functional, Operational & Semantic Design Token Specification</div>
+    <div class="doc-meta-grid">
+      <div class="doc-meta-item"><strong>Target Designer:</strong> Kemi (Figma Lead Designer)</div>
+      <div class="doc-meta-item"><strong>Application:</strong> Tadex Web Frontend (Next.js / App Router)</div>
+      <div class="doc-meta-item"><strong>Version:</strong> 2.0.0 (Production Live)</div>
+      <div class="doc-meta-item"><strong>Date:</strong> August 2026</div>
+    </div>
+  </div>
+
+  <h1 id="tadex-web-application-master-design-handoff-ui-ux-specification-v2-0">Tadex Web Application — Master Design Handoff & UI/UX Specification (v2.0)</h1>
+<p><strong>Document Version:</strong> 2.0.0</p>
+<p><strong>Target Designer:</strong> Kemi (Figma Lead Designer)</p>
+<p><strong>Engineering Context:</strong> Tadex Web Application (<code>tadex-landing2</code>)</p>
+<p><strong>Base Architecture:</strong> Next.js (App Router), TypeScript, Tailwind CSS, Lucide Icons, React Hook Form + Zod, in-memory JWT auth with httpOnly refresh cookies.</p>
+<p><strong>Date:</strong> August 2026</p>
+<hr />
+<h2 id="executive-summary-purpose">Executive Summary & Purpose</h2>
+<p>This document is the <strong>authoritative, screen-by-screen design handoff and design-system specification</strong> for the Tadex Web Application. It replaces the early conceptual draft (<em>"Tadex_Web_Implementation_Design_Specification.pdf"</em> from July 2026), reflecting the full production application as built, tested, and live today.</p>
+<h3 id="what-is-tadex">What is Tadex?</h3>
+<p>Tadex is a <strong>non-custodial cryptocurrency signal execution automation platform</strong> tailored for retail traders in Nigeria (NGN), Kenya (KES), and Ghana (GHS). Users connect exchange API keys with <strong>strict trade-only permissions</strong> (e.g. Bybit) and automatically execute signals published by verified Signal Providers.</p>
+<p><strong>Core Product Principles:</strong></p>
+<ol>
+<li><strong>100% Non-Custodial:</strong> Tadex <strong>never holds user funds, never requests withdrawal permissions, and never stores raw API secrets in plaintext</strong>.</li>
+<li><strong>Build-Ahead-of-Design Convention:</strong> The entire application is built using <strong>semantic design tokens</strong> (<code>bg-primary</code>, <code>bg-card</code>, <code>text-muted-foreground</code>, <code>border-border</code>, etc.) with neutral placeholder styling. Real colors, typography, elevations, and assets in Figma can be mapped 1:1 into the central theme without rewriting components.</li>
+<li><strong>Dual-Surface Priority:</strong></li>
+</ol>
+<ul>
+<li><strong>Primary Focus (User-Facing App):</strong> Public marketing pages, authentication, full trading dashboard, API key management, positions/orders monitoring, multi-currency billing, provider marketplace, provider portal, and account settings.</li>
+<li><strong>Internal Tooling (Admin Console):</strong> System health, 5-dimension user management, provider moderation, 5-section verification dossiers, billing reconciliation, and emergency circuit breakers.</li>
+</ul>
+<hr />
+<h2 id="part-1-step-1-audit-comparison-against-legacy-spec-pdf">Part 1: Step 1 Audit & Comparison Against Legacy Spec PDF</h2>
+<p>Before proceeding with the current specification, we audited the legacy document:</p>
+<p><code>Tadex_Web_Implementation_Design_Specification.pdf</code> (14 pages, July 2026).</p>
+<h3 id="audit-breakdown">Audit Breakdown:</h3>
+<div class="table-container"><table>
+<thead><tr>
+<th>Category</th>
+<th>Legacy Spec Description</th>
+<th>Current Reality in Codebase</th>
+<th>Verdict & Impact</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Route Architecture</strong></td>
+<td>Listed 12 theoretical routes (<code>/dashboard</code>, <code>/exchanges</code>, <code>/providers</code>, <code>/risk-settings</code>, <code>/positions</code>, <code>/provider-center</code>, etc.)</td>
+<td>Consolidated into structured App Router: <code>/dashboard</code>, <code>/dashboard/keys</code>, <code>/dashboard/trading</code>, <code>/dashboard/billing</code>, <code>/dashboard/providers</code>, <code>/dashboard/providers/[id]</code>, <code>/dashboard/provider</code>, <code>/dashboard/settings</code>. Removed standalone <code>/risk-settings</code> and <code>/positions</code> (now unified into <code>/dashboard/trading</code>).</td>
+<td><strong>Significantly Changed:</strong> Consolidated for streamlined UX.</td>
+</tr>
+<tr>
+<td><strong>Auth Flows</strong></td>
+<td>Only mentioned basic <code>/login</code> and <code>/register</code>.</td>
+<td>Full multi-screen auth system built: <code>/login</code>, <code>/register</code>, <code>/forgot-password</code>, <code>/reset-password</code>, <code>/verify-email</code>, and <code>/claim</code> (Telegram account linking).</td>
+<td><strong>Missing in Old Spec:</strong> 4 out of 6 auth screens were completely absent.</td>
+</tr>
+<tr>
+<td><strong>Public / Legal Pages</strong></td>
+<td>Mentioned landing page and pricing tiers vaguely.</td>
+<td>Fully articulated <code>/</code> (with 10 interactive sections), <code>/terms</code>, <code>/privacy</code> (NDPR + API key retention disclosures), <code>/security</code> (AES-256 + trade-only architecture).</td>
+<td><strong>Missing in Old Spec:</strong> Complete legal/compliance architecture was unwritten.</td>
+</tr>
+<tr>
+<td><strong>Exchange Key Setup</strong></td>
+<td>Screen 3.2 envisioned radio exchange selector and simulated API validation.</td>
+<td>Built in <code>/dashboard/keys</code> (<code>ApiKeyManager.tsx</code>) with strict trade-only Bybit enforcement, real-time backend API permission check, withdrawal-permission rejection banner, testnet toggle, masked key rendering (<code>key_<strong></strong>1234</code>), and permanent deletion on revocation.</td>
+<td><strong>Updated & Hardened:</strong> Real operational security rules applied.</td>
+</tr>
+<tr>
+<td><strong>Trading Center</strong></td>
+<td>Screen 3.1 & 3.4 envisioned split positions and risk settings.</td>
+<td>Built in <code>/dashboard/trading</code> (<code>PositionsTable.tsx</code> & <code>OrdersTable.tsx</code>) with real-time open positions, PnL formatting (<code>+$</code> green / <code>-$</code> red), leverage chips, TP/SL indicators, status filtering tabs, and emergency close triggers.</td>
+<td><strong>Consolidated:</strong> Unified into responsive desktop table + mobile card view.</td>
+</tr>
+<tr>
+<td><strong>Provider Portal</strong></td>
+<td>Screen 4.1 envisioned an "AI Signal Builder & Parser" only.</td>
+<td>Built a 4-state lifecycle portal in <code>/dashboard/provider</code>: (1) Unregistered 404 landing hero, (2) Applicant pending review card, (3) Applicant rejected card with re-apply, (4) Active Provider Dashboard with live metrics, 3-plan manager modal (<code>ProviderPlanManager.tsx</code>), and a 5-section verification evidence dossier modal (<code>ProviderVerificationForm.tsx</code>).</td>
+<td><strong>Vastly Expanded:</strong> The old spec had only a signal parser; the real portal has complete lifecycle governance.</td>
+</tr>
+<tr>
+<td><strong>Billing & Checkout</strong></td>
+<td>Screen 3.3 envisioned a checkout drawer with generic pricing.</td>
+<td>Built <code>/dashboard/billing</code> with live <code>SubscriptionCard</code> (lifecycle states, auto-activation polling), multi-currency <code>PricingGrid</code> (NGN, KES, GHS, USDT, USD subunit handling), and mobile-optimized <code>CheckoutQuoteModal</code> with duration discount quotes (1, 3, 6, 12 months) and Flutterwave/Paystack gateway routing.</td>
+<td><strong>Completely Re-engineered:</strong> Dynamic quote calculation and payment return state handling.</td>
+</tr>
+<tr>
+<td><strong>Admin Portal</strong></td>
+<td>Screens 5.1–5.4 outlined basic overview, user list, provider approvals, and crypto reviews.</td>
+<td>Complete 6-phase administrative suite built across 10 distinct routes: Admin Role Guard, Platform Overview KPIs, 5-Dimension User Search & 360° Profile Dossiers, Provider Moderation & 5-Section Verification Dossiers, Transaction Ledger & 360° Diagnostics, Subscription Governance, Global Platform Fee Configuration, and High-Gravity System Controls with 2-Step "HALT TRADING" Emergency Kill Switch and live Bybit connectivity pinging.</td>
+<td><strong>Massively Expanded (Phase Admin-1 to 4b):</strong> Over 75% of admin functionality was never in the old spec.</td>
+</tr>
+<tr>
+<td><strong>Mobile Responsiveness</strong></td>
+<td>No mobile layouts or responsive behaviors documented.</td>
+<td>Full responsive suite implemented: collapsible mobile drawers, responsive hamburger headers, mobile card-view fallbacks for tables, modal viewport scroll containers (<code>max-h-[90vh]</code>), and touch-friendly targets.</td>
+<td><strong>Missing in Old Spec:</strong> Zero responsive guidelines existed.</td>
+</tr>
+</tbody></table></div>
+<h3 id="decision">Decision:</h3>
+<p>Because the legacy PDF describes outdated route paths, lacks 4 auth flows, omits the entire 4-stage provider portal lifecycle, omits the comprehensive billing quote engine, and misses 6 phases of admin system controls and mobile responsive behaviors, <strong>this new document (<code>Tadex_Web_Design_Handoff_v2.md</code>) serves as the active master specification</strong>. The old PDF is retained solely as an archive.</p>
+<hr />
+<h2 id="part-2-master-information-architecture-route-inventory">Part 2: Master Information Architecture & Route Inventory</h2>
+
+  <div class="arch-container">
+    <div class="arch-section arch-public">
+      <div class="arch-section-title">🌐 Public & Guest Routes</div>
+      <div class="arch-badges">
+        <span class="arch-badge">/ (Landing Page)</span>
+        <span class="arch-badge">/terms (Terms of Service)</span>
+        <span class="arch-badge">/privacy (Privacy Policy)</span>
+        <span class="arch-badge">/security (Security & Architecture)</span>
+      </div>
+    </div>
+
+    <div class="arch-arrow">↓ Authenticate / Register / Claim Account</div>
+
+    <div class="arch-section arch-auth">
+      <div class="arch-section-title">🔐 Authentication & Onboarding</div>
+      <div class="arch-badges">
+        <span class="arch-badge">/login (Sign In)</span>
+        <span class="arch-badge">/register (Create Account)</span>
+        <span class="arch-badge">/forgot-password</span>
+        <span class="arch-badge">/reset-password</span>
+        <span class="arch-badge">/verify-email</span>
+        <span class="arch-badge arch-badge-highlight">/claim (Telegram Claim Flow)</span>
+      </div>
+    </div>
+
+    <div class="arch-arrow">↓ Protected Session (JWT In-Memory + HttpOnly Refresh Cookie)</div>
+
+    <div class="arch-grid-2col">
+      <div class="arch-section arch-dash">
+        <div class="arch-section-title">🚀 Authenticated Trader Dashboard (Priority 1)</div>
+        <div class="arch-badges">
+          <span class="arch-badge">/dashboard (Overview & Quick Keys)</span>
+          <span class="arch-badge">/dashboard/keys (Bybit Key Management)</span>
+          <span class="arch-badge">/dashboard/trading (Positions & Orders)</span>
+          <span class="arch-badge">/dashboard/billing (Plans & Subscriptions)</span>
+          <span class="arch-badge">/dashboard/providers (Provider Directory)</span>
+          <span class="arch-badge">/dashboard/providers/[id] (Provider Profile)</span>
+          <span class="arch-badge arch-badge-highlight">/dashboard/provider (4-State Portal)</span>
+          <span class="arch-badge">/dashboard/settings (Account Security)</span>
+        </div>
+      </div>
+
+      <div class="arch-section arch-admin">
+        <div class="arch-section-title">🛡️ Admin Governance Center (Internal Ops)</div>
+        <div class="arch-badges">
+          <span class="arch-badge">/admin (Platform KPIs)</span>
+          <span class="arch-badge">/admin/users & /users/[id] (360° Profile)</span>
+          <span class="arch-badge">/admin/providers & Applications</span>
+          <span class="arch-badge">/admin/providers/verification-queue</span>
+          <span class="arch-badge">/admin/billing/transactions & [id]</span>
+          <span class="arch-badge">/admin/billing/subscriptions & Fees</span>
+          <span class="arch-badge arch-badge-danger">/admin/execution (2-Step Kill Switch)</span>
+          <span class="arch-badge">/admin/execution/health & Recon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+<h2 id="part-3-screen-by-screen-inventory-ui-specification">Part 3: Screen-by-Screen Inventory & UI Specification</h2>
+<hr />
+<h3 id="section-3-1-public-marketing-pages">Section 3.1: Public & Marketing Pages</h3>
+<h4 id="1-landing-page">1. Landing Page (<code>/</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Public storefront educating retail traders on non-custodial crypto automation and capturing waitlist/registration interest.</li>
+<li><strong>Target Audience:</strong> Prospective retail crypto traders in Nigeria, Kenya, and Ghana.</li>
+<li><strong>Distinct UI Elements & Sections:</strong></li>
+</ul>
+<ol>
+<li><em>Hero Section (<code>Hero.tsx</code>):</em> Headline, sub-headline, primary CTA ("Start Automated Trading"), secondary CTA ("Connect Telegram Bot"), floating live performance stat badge, non-custodial trust pill.</li>
+<li><em>Feature Grid (<code>Features.tsx</code>):</em> 3-column cards detailing Non-Custodial Security, Millisecond Signal Execution, Multi-Currency Local Settlement (NGN/KES/GHS/USDT).</li>
+<li><em>How It Works (<code>HowItWorks.tsx</code>):</em> 3-step timeline (1. Connect Bybit API, 2. Choose Verified Signal Provider, 3. Trades Auto-Execute).</li>
+<li><em>Why Automated (<code>WhyAutomated.tsx</code>):</em> Problem/solution comparison (Manual trading emotion/delays vs Automated millisecond execution).</li>
+<li><em>Feature Comparison Table (<code>ComparisonTable.tsx</code>):</em> Matrix comparing Tadex vs Custodial Bots vs Manual Telegram Copy-Trading.</li>
+<li><em>Pricing Showcase (<code>Pricing.tsx</code>):</em> Tier cards showing platform access tiers + provider plan pricing previews with currency switcher.</li>
+<li><em>Product Roadmap (<code>Roadmap.tsx</code>):</em> Interactive phased milestones (Phase 1 Bybit Spot/Futures, Phase 2 Multi-Exchange, Phase 3 Social Copy).</li>
+<li><em>Security & Transparency Card (<code>SecurityTransparency.tsx</code>):</em> Trade-only API architecture, AES-256 encryption, zero withdrawal permission guarantee.</li>
+<li><em>FAQ Accordion (<code>FAQ.tsx</code>):</em> Expandable answers to common security, billing, and exchange questions.</li>
+<li><em>Final CTA Banner (<code>FinalCTA.tsx</code>):</em> High-contrast banner with quick registration trigger.</li>
+<li><em>Footer (<code>Footer.tsx</code>):</em> Product links, legal links (<code>/terms</code>, <code>/privacy</code>, <code>/security</code>), country currency indicators, copyright.</li>
+<li><em>Interactive Modals:</em> <code>WaitlistModal.tsx</code> and <code>PlanWaitlistModal.tsx</code> for capturing early user emails.</li>
+</ol>
+<ul>
+<li><strong>Data Sources:</strong> Static marketing copy + dynamic pricing tier previews from Supabase.</li>
+<li><strong>Key Actions:</strong> Open registration modal, switch currency preview, toggle FAQ accordions, navigate to <code>/register</code>, <code>/login</code>, or <code>/security</code>.</li>
+<li><strong>Current Styling State:</strong> Semantic design tokens with dark/light mode support.</li>
+<li><strong>Responsive Behavior:</strong> Full mobile stack; hamburger menu on mobile; tables collapse into swipeable cards; modal sheets slide up from bottom on mobile.</li>
+</ul>
+<h4 id="2-terms-of-service-terms">2. Terms of Service (<code>/terms</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Legally binding operational terms defining Tadex as a non-custodial software marketplace (not an investment adviser).</li>
+<li><strong>Distinct UI Elements:</strong> Legal header with effective date and "Operational Draft Pending Formal Legal Review" alert banner; 8 structured policy sections; itemized billing/cancellation policy; liability disclaimers.</li>
+<li><strong>Current Styling State:</strong> Typography-focused layout using semantic <code>text-foreground</code>, <code>text-muted-foreground</code>, and <code>border-border</code>.</li>
+</ul>
+<h4 id="3-privacy-policy-privacy">3. Privacy Policy (<code>/privacy</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Full statutory and NDPR-compliant privacy disclosure detailing exchange API key encryption, data retention, and instant key deletion.</li>
+<li><strong>Distinct UI Elements:</strong> Data Collection Matrix (encrypted API keys, email, Telegram IDs, billing metadata); Data Retention & Immediate Deletion Guarantee (keys permanently purged upon user revocation); Cookie Policy (<code>httpOnly</code> session tokens); Contact DPO email.</li>
+<li><strong>Current Styling State:</strong> Structured semantic documentation cards.</li>
+</ul>
+<h4 id="4-security-transparency-security">4. Security & Transparency (<code>/security</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Technical deep-dive for security-conscious traders explaining how Tadex protects API keys and enforces zero-custody.</li>
+<li><strong>Distinct UI Elements:</strong> 4 Security Architecture Cards: 1. AES-256 Envelope Encryption at Rest, 2. Trade-Only API Enforcement (Withdrawals Blocked), 3. IP Whitelist Guidance, 4. In-Memory Session Tokens.</li>
+</ul>
+<hr />
+<h3 id="section-3-2-authentication-onboarding-flows">Section 3.2: Authentication & Onboarding Flows</h3>
+<h4 id="1-user-login-login">1. User Login (<code>/login</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Secure authentication for returning retail traders and admins.</li>
+<li><strong>Distinct UI Elements:</strong> Centered card layout; Brand logo; Email input; Password input with show/hide toggle; "Remember Me" checkbox; "Forgot Password?" link; "Sign In" primary button with loading spinner; Direct link to <code>/register</code>.</li>
+<li><strong>Data & State:</strong> Zod-validated <code>loginSchema</code>; submits to <code>POST /api/v1/auth/login</code>; stores JWT in-memory and sets <code>httpOnly</code> refresh cookie; redirects to <code>/dashboard</code> or <code>/admin</code> based on user role.</li>
+<li><strong>Responsive Behavior:</strong> Full viewport centered on desktop; edge-to-edge padded card on mobile.</li>
+</ul>
+<h4 id="2-user-registration-register">2. User Registration (<code>/register</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> New trader account creation.</li>
+<li><strong>Distinct UI Elements:</strong> Email input; Password input (enforces min 8 characters); Confirm Password input; Terms & Privacy agreement notice with active links; "Create Account" primary button; Link to <code>/login</code>.</li>
+<li><strong>Data & State:</strong> Zod-validated <code>registerSchema</code>; submits to <code>POST /api/v1/auth/register</code>; triggers email verification flow.</li>
+</ul>
+<h4 id="3-forgot-password-forgot-password">3. Forgot Password (<code>/forgot-password</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Self-service password recovery initiation.</li>
+<li><strong>Distinct UI Elements:</strong> Instructional card; Email input; "Send Reset Link" button; Success state card with instructions to check email; Back to Login link.</li>
+<li><strong>Data & State:</strong> Submits to <code>POST /api/v1/auth/forgot-password</code>.</li>
+</ul>
+<h4 id="4-reset-password-reset-password">4. Reset Password (<code>/reset-password</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Complete password reset via single-use email token.</li>
+<li><strong>Distinct UI Elements:</strong> Reads <code>?token=</code> parameter; New Password input; Confirm New Password input; Password strength indicator; "Update Password" button; Auto-redirect countdown to <code>/login</code> upon success.</li>
+<li><strong>Data & State:</strong> Zod-validated <code>resetPasswordSchema</code>; submits to <code>POST /api/v1/auth/reset-password</code>.</li>
+</ul>
+<h4 id="5-email-verification-verify-email">5. Email Verification (<code>/verify-email</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Verify user email address from email link.</li>
+<li><strong>Distinct UI Elements:</strong> Reads <code>?token=</code>; Loading spinner during handshake; Verified success card with green badge; Error state card with "Resend Verification" trigger; "Continue to Dashboard" button.</li>
+<li><strong>Data & State:</strong> Validates <code>email_verified === true</code> against <code>POST /api/v1/auth/verify-email</code>.</li>
+</ul>
+<h4 id="6-telegram-account-claim-flow-claim">6. Telegram Account Claim Flow (<code>/claim</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Bridges users onboarded via the Tadex Telegram Bot to the web dashboard.</li>
+<li><strong>Distinct UI Elements:</strong> Reads single-use 15-minute token (<code>?token=</code>) generated by <code>/link_web</code> in Telegram; Web Email input; New Password input; Confirm Password input; "Complete Account Claim" CTA; "Invalid / Expired Token" fallback screen directing user back to Telegram bot.</li>
+<li><strong>Data & State:</strong> Submits to <code>POST /api/v1/auth/claim-account</code>; immediately logs in user and routes to <code>/dashboard</code>.</li>
+</ul>
+<hr />
+<h3 id="section-3-3-main-dashboard-shell-navigation">Section 3.3: Main Dashboard Shell & Navigation</h3>
+<h4 id="global-dashboard-shell-dashboardheader-tsx">Global Dashboard Shell (<code>DashboardHeader.tsx</code>)</h4>
+<ul>
+<li><strong>Structure:</strong> Sticky 64px top bar anchored across the viewport (<code>bg-card/90 backdrop-blur-md</code>).</li>
+<li><strong>Desktop Elements:</strong></li>
+</ul>
+<ol>
+<li><em>Brand Logo:</em> "T" badge + "Tadex App" text (routes to <code>/dashboard</code>).</li>
+<li><em>Navigation Links:</em></li>
+</ol>
+<ul>
+<li><strong>Overview</strong> (<code>/dashboard</code>)</li>
+<li><strong>API Keys</strong> (<code>/dashboard/keys</code>)</li>
+<li><strong>Trading</strong> (<code>/dashboard/trading</code>)</li>
+<li><strong>Browse Providers</strong> (<code>/dashboard/providers</code>)</li>
+<li><strong>Provider Portal</strong> (<code>/dashboard/provider</code>)</li>
+<li><strong>All Plans</strong> (<code>/dashboard/billing</code>)</li>
+<li><strong>Settings</strong> (<code>/dashboard/settings</code>)</li>
+</ul>
+<ol>
+<li><em>User Identifier Pill:</em> Displays <code>User: <email_prefix></code> and Status pill (<code>active</code>).</li>
+<li><em>Log Out Button:</em> Initiates <code>POST /api/v1/auth/logout</code>, wipes in-memory auth store, routes to <code>/login</code>.</li>
+</ol>
+<ul>
+<li><strong>Mobile Behavior (< 768px):</strong></li>
+<li>Desktop nav links hide behind a hamburger menu button.</li>
+<li>Tapping hamburger slides down a full-width mobile navigation drawer.</li>
+<li>Mobile drawer contains user email chip, all 7 navigation destinations, and a full-width destructive "Log Out" button.</li>
+</ul>
+<hr />
+<h3 id="section-3-4-authenticated-trader-dashboard-routes">Section 3.4: Authenticated Trader Dashboard Routes</h3>
+<h4 id="1-dashboard-overview-dashboard">1. Dashboard Overview (<code>/dashboard</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> High-level operational command center for the retail trader.</li>
+<li><strong>Distinct UI Elements:</strong></li>
+</ul>
+<ol>
+<li><em>Welcome Header:</em> Title and subtext confirming non-custodial status.</li>
+<li><em>3 Metric Stat Cards:</em></li>
+</ol>
+<ul>
+<li><strong>Signal Execution Status:</strong> "Active" badge with pulsing green status indicator.</li>
+<li><strong>Connected Exchange API Keys:</strong> Displays count (e.g. "1 Connected" vs "Not Connected") and "Read/Trade Only" security badge.</li>
+<li><strong>Account Security:</strong> "Verified" badge + "HttpOnly Cookie" token indicator.</li>
+</ul>
+<ol>
+<li><em>Embedded Key Manager:</em> Direct access to connect or view Bybit keys.</li>
+<li><em>Recent Signal Executions Feed:</em> Activity feed showing recent automated trade dispatches or empty state.</li>
+</ol>
+<ul>
+<li><strong>Data Sources:</strong> <code>GET /me</code>, <code>GET /keys</code>, <code>GET /trading/orders</code>.</li>
+<li><strong>Responsive Behavior:</strong> 3 metric cards stack to 1 column on mobile, 2 on tablet, 3 on desktop.</li>
+</ul>
+<h4 id="2-exchange-api-key-management-dashboard-keys">2. Exchange API Key Management (<code>/dashboard/keys</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Securely link Bybit API credentials to enable trade execution.</li>
+<li><strong>Distinct UI Elements (<code>ApiKeyManager.tsx</code>):</strong></li>
+</ul>
+<ol>
+<li><em>Mandatory Security Instruction Banner:</em> Prominent alert box with direct link to Bybit Mainnet/Testnet API settings. Highlights 3 rules: System-Generated API key, Read-Write trade permissions, <strong>Withdrawal MUST BE DISABLED</strong>.</li>
+<li><em>Connected Keys Card (Left Column):</em></li>
+</ol>
+<ul>
+<li>List of connected keys with Exchange name (Bybit), Environment badge (Mainnet in primary / Testnet in secondary), Status pill (<code>active</code> with pulse dot), Masked API Key (<code>key_<strong></strong>1234</code>), Connected Date.</li>
+<li>Refresh button.</li>
+<li>"Disconnect" button triggering an <strong>inline red confirmation banner</strong> ("Revoking this key will pause automated trading execution. Are you sure?").</li>
+</ul>
+<ol>
+<li><em>Connect Key Form (Right Column):</em></li>
+</ol>
+<ul>
+<li>Exchange selector (Bybit default).</li>
+<li>Environment switch: "Live Mainnet" vs "Testnet / Demo".</li>
+<li>API Key input field (masked).</li>
+<li>API Secret input field (password masked with eye reveal toggle).</li>
+<li>"Connect & Validate Key" primary action button with loading spinner.</li>
+<li><em>Security Error Alert:</em> Specialized red warning box triggered if Bybit detects withdrawal permissions: <em>"Security Violation: Withdrawal permission detected. Tadex requires trade-only keys."</em></li>
+<li><strong>Data Sources:</strong> <code>GET /keys</code>, <code>POST /keys</code>, <code>DELETE /keys/{id}</code>.</li>
+<li><strong>Key Actions:</strong> Real-time permission handshake with Bybit; immediate revocation and permanent database deletion.</li>
+<li><strong>Responsive Behavior:</strong> 2-column desktop grid collapses into stacked single column on mobile.</li>
+</ul>
+<h4 id="3-trading-center-positions-orders-dashboard-trading">3. Trading Center: Positions & Orders (<code>/dashboard/trading</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Live monitoring of open crypto positions and past signal execution orders.</li>
+<li><strong>Distinct UI Elements:</strong></li>
+</ul>
+<ol>
+<li><em>Active Positions Card (<code>PositionsTable.tsx</code>):</em></li>
+</ol>
+<ul>
+<li>Header with live refresh button.</li>
+<li><strong>Desktop Table View:</strong> Columns for Symbol (e.g. <code>BTCUSDT</code>), Side badge (<code>LONG</code> in emerald / <code>SHORT</code> in crimson), Sizing, Entry Price, Mark/Current Price, Leverage chip (e.g. <code>10x</code>), TP/SL targets, Unrealized PnL (<code>+$45.20</code> in green / <code>-$12.10</code> in red), Emergency Close action button.</li>
+<li><strong>Mobile Card View (< 640px):</strong> Replaces wide table with stacked key-value cards showing Symbol, Side badge, Entry vs Mark price, PnL chip, and full-width Emergency Close button.</li>
+<li><em>Empty State:</em> "No active positions. Automated signal triggers will open and monitor trades here."</li>
+</ul>
+<ol>
+<li><em>Execution Order History Card (<code>OrdersTable.tsx</code>):</em></li>
+</ol>
+<ul>
+<li>Status Filter Tabs / Mobile Select Dropdown: <code>All</code>, <code>Filled</code>, <code>Pending</code>, <code>Cancelled</code>, <code>Failed</code>.</li>
+<li>Header with refresh button.</li>
+<li><strong>Desktop Table View:</strong> Order ID (mono), Timestamp, Symbol, Side, Type (<code>Market</code>/<code>Limit</code>), Size, Fill Price, TP/SL, Status badge (<code>Filled</code> emerald, <code>Pending</code> amber, <code>Cancelled</code> neutral, <code>Failed</code> destructive).</li>
+<li><strong>Mobile Card View (< 640px):</strong> Compact card view per order with status chip and formatted time.</li>
+<li><strong>Data Sources:</strong> <code>GET /trading/positions</code>, <code>GET /trading/orders?status=...</code>.</li>
+<li><strong>Responsive Behavior:</strong> Seamless desktop-table to mobile-card transformation.</li>
+</ul>
+<h4 id="4-billing-subscriptions-dashboard-billing">4. Billing & Subscriptions (<code>/dashboard/billing</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Manage active subscriptions, browse pricing catalog, and execute multi-currency checkout.</li>
+<li><strong>Distinct UI Elements:</strong></li>
+</ul>
+<ol>
+<li><em>Payment Return State Alert:</em> Detects <code>?status=success</code> or transaction reference on return from gateway; displays an automated verification polling card (polls up to 8 times / 16s) and auto-activates subscription.</li>
+<li><em>Active Subscription Card (<code>SubscriptionCard.tsx</code>):</em></li>
+</ol>
+<ul>
+<li>Active status shield (Emerald checkmark if active, Amber alert if inactive/expired).</li>
+<li>Plan Name, Provider Name, Tier badge, Status pill (<code>active</code>, <code>trialing</code>, <code>past_due</code>, <code>paused</code>, <code>canceled</code>).</li>
+<li>Billing cycle dates (Current Period Start, Expiration / Next Billing Date).</li>
+<li><em>Suspended Provider Alert:</em> Honest warning banner if provider is suspended: <em>"Signal Execution Paused: Provider operations temporarily suspended."</em></li>
+<li>Notifications list.</li>
+</ul>
+<ol>
+<li><em>Pricing Plans Catalog (<code>PricingGrid.tsx</code>):</em></li>
+</ol>
+<ul>
+<li>Global Currency Selector: Switch catalog between <code>NGN</code>, <code>KES</code>, <code>GHS</code>, <code>USDT</code>, <code>USD</code>.</li>
+<li>3-Column Plan Cards Grid: Plan Name, Provider Brand Name, Monthly Price formatted in selected currency with subunit accuracy (e.g. <code>₦15,000.00/mo</code> or <code>$25.00/mo</code>), Unsupported Currency fallback pill (<code>Only available in NGN</code>), Feature checklist, "Subscribe Now" CTA button.</li>
+</ul>
+<ol>
+<li><em>Multi-Currency Checkout Modal (<code>CheckoutQuoteModal.tsx</code>):</em></li>
+</ol>
+<ul>
+<li>Scrollable modal card (<code>max-h-[90vh] overflow-y-auto</code>) ensuring all CTA buttons remain visible on short mobile screens.</li>
+<li>Plan summary and provider brand name.</li>
+<li>Duration Selector Buttons: <code>1 Month</code>, <code>3 Months (5% off)</code>, <code>6 Months (10% off)</code>, <code>12 Months (20% off)</code>.</li>
+<li>Currency Selector: Toggle settlement currency (<code>NGN</code>, <code>KES</code>, <code>GHS</code>, <code>USDT</code>, <code>USD</code>).</li>
+<li>Dynamic Price Breakdown Quote: Provider Monthly Fee + Tadex Platform Fee (₦1,500 / $10.00) = Total Amount.</li>
+<li><em>Email Verification Gate:</em> Warning alert blocking unverified users with a direct CTA to verify email before paying.</li>
+<li>"Proceed to Payment" primary button: Redirects to Flutterwave, Paystack, or crypto gateway.</li>
+<li><strong>Data Sources:</strong> <code>GET /billing/subscription</code>, <code>GET /billing/plans</code>, <code>POST /billing/checkout-quote</code>, <code>POST /billing/checkout</code>.</li>
+<li><strong>Responsive Behavior:</strong> Modal handles viewport heights down to 667px without cutting off buttons; pricing cards stack 1-col on mobile.</li>
+</ul>
+<h4 id="5-provider-directory-provider-detail-subscriber-facing">5. Provider Directory & Provider Detail (Subscriber-Facing)</h4>
+<ul>
+<li><strong>Route 1: <code>/dashboard/providers</code> (<code>ProviderDirectory.tsx</code>):</strong></li>
+<li>Header with search input and refresh button.</li>
+<li>3-Column Grid of Verified Signal Providers.</li>
+<li>Provider Card: Provider avatar initial, Brand Name, "Verified Provider ✅" badge, Win Rate % tag, 30-Day Total Signals count, Active Subscribers count, Last active date, "View Profile & Plans →" button.</li>
+<li><strong>Route 2: <code>/dashboard/providers/[id]</code> (<code>ProviderDetailView.tsx</code>):</strong></li>
+<li>"← Back to All Providers" navigation link.</li>
+<li>Provider Hero Profile Card: Large avatar, Brand name, Verified Tier badge (<code>basic</code>, <code>intermediate</code>, <code>advanced</code>, <code>premium</code>, <code>verified</code>), Bio/trading methodology, Contact email, Member since date.</li>
+<li>Performance Metrics Grid: Win Rate %, Signals Sent, Subscribers, Verification Tier.</li>
+<li>Scoped Plan Grid: Displays only the plans offered by this specific provider.</li>
+<li>Clicking "Subscribe" opens <code>CheckoutQuoteModal</code> pre-scoped to that plan.</li>
+<li><strong>Data Sources:</strong> <code>GET /providers</code>, <code>GET /providers/{id}</code>, <code>GET /providers/{id}/plans</code>.</li>
+</ul>
+<h4 id="6-provider-self-service-portal-dashboard-provider">6. Provider Self-Service Portal (<code>/dashboard/provider</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> End-to-end portal allowing traders to apply, get verified, manage subscription plans, and monitor their signal subscriber base.</li>
+<li><strong>4-Stage Lifecycle Architecture (<code>ProviderPortalRouter</code>):</strong></li>
+</ul>
+<ol>
+<li><em>State 1: Unregistered (404 state)</em></li>
+</ol>
+<ul>
+<li>"Become a Tadex Signal Provider" value proposition hero banner.</li>
+<li>3 Feature Highlight Cards: 100% Non-Custodial, Multi-Currency Billing (NGN/USDT), Verified Trader Badge.</li>
+<li>"Apply to Become a Signal Provider" CTA button opening <code>ProviderApplyForm.tsx</code>.</li>
+<li><em>Application Form (<code>ProviderApplyForm.tsx</code>):</em> Brand Display Name, Contact Email, Experience Level dropdown, Trading Focus multi-select chips (Scalping, Day Trading, Swing, Futures, Spot), Bio/strategy textarea, Referral source, Mandatory Terms Checkbox, 409 duplicate conflict handling.</li>
+</ul>
+<ol>
+<li><em>State 2: Applicant Pending Review</em></li>
+</ol>
+<ul>
+<li>Status Card: "Provider Application Under Review" with amber clock icon.</li>
+<li>Metadata table: Application ID, Brand Name, Contact Email, Experience Level, Submitted Date, "Pending Review" status pill.</li>
+<li>Informative callout: 24–48h turnaround time expectation.</li>
+</ul>
+<ol>
+<li><em>State 3: Applicant Rejected / Needs Update</em></li>
+</ol>
+<ul>
+<li>Status Card: "Application Status: Not Approved" with red X icon.</li>
+<li>Explicit Rejection Reason alert box with compliance feedback.</li>
+<li>"Update & Re-apply" CTA button opening pre-filled application form.</li>
+</ul>
+<ol>
+<li><em>State 4: Active Provider Dashboard (<code>ProviderDashboard.tsx</code>)</em></li>
+</ol>
+<ul>
+<li><em>Suspended Warning Banner:</em> Displayed if provider status is <code>suspended</code> (disables mutations).</li>
+<li><em>Provider Header Card:</em> Brand avatar, Verification tier badge, Status pill, Bio, Contact email, Member since date.</li>
+<li><em>4 KPI Metrics Grid:</em> Active Subscribers count, Total Signals Sent, Win Rate %, Verification Level.</li>
+<li><em>Verification Status Card (<code>ProviderVerificationCard.tsx</code>):</em> Displays current verification badge; "Submit Verification Request" CTA button opening 5-section evidence dossier.</li>
+<li><em>Verification Request Modal (<code>ProviderVerificationForm.tsx</code> - 5 Structured Sections):</em></li>
+<li>Section 1: Operator Identity (Legal name, Telegram username, channel link, email, region).</li>
+<li>Section 2: Signal Operation (Subscriber count, experience duration, execution mode, frequency).</li>
+<li>Section 3: Trading Evidence (Exchange UID, leaderboard links, statement URLs).</li>
+<li>Section 4: Historical Signals Table (Dynamic add/remove rows, enforcing min 3 / max 10 past signals with Symbol, Entry, SL, TP, Date, Outcome, Message Link).</li>
+<li>Section 5: Affirmations & Declarations (5 mandatory checkboxes with full disclosure text).</li>
+<li><em>Plan Management Module (<code>ProviderPlanManager.tsx</code> & <code>ProviderPlanModal.tsx</code>):</em></li>
+<li>List of owned plans with status pills (<code>active</code>, <code>paused</code>, <code>draft</code>, <code>archived</code>).</li>
+<li><strong>3-Active-Plan Cap Enforcement:</strong> Proactively disables "Create Plan" button with tooltip when 3 active plans exist.</li>
+<li>Plan Creation/Edit Modal: Plan Name, Currency (NGN/USDT), Monthly Price, Description, Features list, Max duration.</li>
+<li>Plan Deactivation confirmation dialog.</li>
+<li><strong>Data Sources:</strong> <code>GET /provider/me</code>, <code>POST /provider/apply</code>, <code>GET /provider/plans</code>, <code>POST /provider/plans</code>, <code>DELETE /provider/plans/{id}</code>, <code>POST /provider/request-verification</code>.</li>
+</ul>
+<h4 id="7-account-settings-dashboard-settings">7. Account Settings (<code>/dashboard/settings</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> User account security, password updates, and global session revocation.</li>
+<li><strong>Distinct UI Elements (<code>AccountSettings.tsx</code>):</strong></li>
+</ul>
+<ol>
+<li><em>Account Overview Card:</em> Masked user UUID, Email address, Account status.</li>
+<li><em>Change Password Card:</em></li>
+</ol>
+<ul>
+<li>Current Password input.</li>
+<li>New Password input (min 8 characters).</li>
+<li>Confirm New Password input.</li>
+<li>"Update Password" button with loading spinner.</li>
+<li>Success banner: <em>"Your password has been changed successfully. You've been logged out of all other devices."</em></li>
+</ul>
+<ol>
+<li><em>Log Out Everywhere Security Action Card:</em></li>
+</ol>
+<ul>
+<li>Security explanation (revokes all active refresh tokens and terminates sessions on other devices).</li>
+<li>"Log Out of All Devices" destructive button.</li>
+<li>Inline confirmation alert dialog with "Confirm Revoke All" action.</li>
+<li><strong>Data Sources:</strong> <code>POST /api/v1/auth/change-password</code>, <code>POST /api/v1/auth/logout-all</code>.</li>
+</ul>
+<hr />
+<h3 id="section-3-5-platform-administration-console-admin">Section 3.5: Platform Administration Console (<code>/admin/*</code>)</h3>
+<div class="callout callout-important">
+          <div class="callout-header">
+            <span class="callout-icon">⚠️</span>
+            <span class="callout-title">IMPORTANT</span>
+          </div>
+          <div class="callout-body"><strong>Designer Note for Kemi:</strong> The <code>/admin</code> routes represent an <strong>internal operations and risk-governance tool</strong> used by the Tadex internal team, not retail traders. It is lower priority than the user-facing application and should use a clean, data-dense, functional administrative aesthetic.</div>
+        </div>
+<h4 id="global-admin-shell-adminheader-tsx-adminroute-tsx">Global Admin Shell (<code>AdminHeader.tsx</code>, <code>AdminRoute.tsx</code>)</h4>
+<ul>
+<li><strong>Admin Role Guard:</strong> Restricts access to users where <code>role === 'admin'</code>. Redirects normal users to <code>/dashboard</code> and unauthenticated sessions to <code>/login</code>.</li>
+<li><strong>Admin Navigation Tabs:</strong></li>
+<li><code>Overview</code> (<code>/admin</code>)</li>
+<li><code>Users</code> (<code>/admin/users</code>)</li>
+<li><code>Billing & Revenue</code> (<code>/admin/billing/transactions</code>)</li>
+<li><code>System Controls</code> (<code>/admin/execution</code>)</li>
+<li><code>Providers</code> (<code>/admin/providers</code>)</li>
+<li><code>Applications</code> (<code>/admin/providers/applications</code>)</li>
+<li><code>Verification Queue</code> (<code>/admin/providers/verification-queue</code>)</li>
+<li><em>Stub:</em> <code>Audit Logs</code> (labeled "Coming Soon").</li>
+<li><strong>Top Right Actions:</strong> "Exit to Trading App" deep link, admin email badge, Log out button. Full mobile drawer navigation included.</li>
+</ul>
+<h4 id="1-admin-platform-overview-admin">1. Admin Platform Overview (<code>/admin</code>)</h4>
+<ul>
+<li><strong>Purpose:</strong> Real-time platform KPI telemetry and operational needs-attention queues.</li>
+<li><strong>Distinct UI Elements (<code>AdminOverview.tsx</code>):</strong></li>
+</ul>
+<ol>
+<li><em>Global Kill Switch Alert Banner:</em> Visible if global execution stop is active.</li>
+<li><em>6 KPI Metric Cards:</em> Registered Users (Active/Suspended/Banned), Signal Providers (Active/Verified/Suspended), Connected Exchange Accounts (Active/Revoked), Active Subscriptions (Total/Trialing/Cancelled), 24h Payment Volume & Tx Count, Execution Engine Health (24h trade dispatch volume, success rate %, task queue depth).</li>
+<li><em>"Needs Attention" Action Cards:</em> Direct shortcuts to Pending Applications, Verification Queue dossiers, and Suspended Providers.</li>
+</ol>
+<ul>
+<li><strong>Data Sources:</strong> <code>GET /admin/overview</code>.</li>
+</ul>
+<h4 id="2-user-management-console-admin-users-admin-users-id">2. User Management Console (<code>/admin/users</code> & <code>/admin/users/[id]</code>)</h4>
+<ul>
+<li><strong>Route 1: User Directory (<code>/admin/users</code> - <code>AdminUserTable.tsx</code>):</strong></li>
+<li><strong>5-Dimension Search Box (<code>q</code>):</strong> Debounced backend search across Email, Telegram Username, Telegram User ID, User UUID, and Exchange UID.</li>
+<li><strong>Filter Toolbars:</strong> Status (<code>All</code>, <code>Active</code>, <code>Suspended</code>, <code>Banned</code>, <code>Deleted</code>), Email Verification (<code>All</code>, <code>Verified</code>, <code>Unverified</code>), Role (<code>All</code>, <code>User</code>, <code>Admin</code>), Auth Origin (<code>All</code>, <code>Web</code>, <code>Telegram</code>, <code>Bot</code>).</li>
+<li>Desktop table / Mobile card view with server-side pagination.</li>
+<li>Action link: "View 360° Profile →".</li>
+<li><strong>Route 2: User 360° Profile Dossier (<code>/admin/users/[id]</code> - <code>AdminUserDetailView.tsx</code>):</strong></li>
+<li><em>Header Toolbar:</em> User avatar, Email, UUID, Status badge, Role badge, Beta Tester chip, and contextual action buttons.</li>
+<li><em>Module 1: Identity & Authentication:</em> Email, verification state, Telegram handle (@username), Telegram User ID, phone number, terms acceptance date, last seen timestamp.</li>
+<li><em>Module 2: Connected Exchange Accounts:</em> Table of connected exchanges with account name, trading mode, leverage, and <strong>strictly masked keys only</strong> (<code>api_key_masked</code>). Zero private keys/secrets rendered.</li>
+<li><em>Module 3: Signal Subscriptions:</em> Plan name, provider name, tier, active dates, status.</li>
+<li><em>Module 4: Signal Provider Profile (if provider):</em> Brand name, verification tier badge, subscribers, signals sent.</li>
+<li><em>Module 5: Billing & Transactions History:</em> Transaction ID, amounts, gateway, status.</li>
+<li><em>Module 6: Administrative Audit Timeline:</em> Historical audit logs of administrative actions on this account.</li>
+<li><em>Administrative Action Modals:</em></li>
+<li><strong>Ban User Modal (<code>AdminBanUserModal.tsx</code>):</strong> Destructive modal requiring mandatory justification reason ($\ge 3$ characters).</li>
+<li><strong>Unban User Modal (<code>AdminUnbanUserModal.tsx</code>):</strong> Confirmation dialog.</li>
+<li><strong>Admin Force Logout-All Modal (<code>AdminForceLogoutModal.tsx</code>):</strong> Revocation dialog with mandatory reason.</li>
+<li><strong>Force Verify Email Modal (<code>AdminForceVerifyModal.tsx</code>):</strong> Compliance override with mandatory reason.</li>
+<li><strong>Resend Verification Email Button:</strong> One-click trigger.</li>
+<li><strong>Data Sources:</strong> <code>GET /admin/users</code>, <code>GET /admin/users/{id}</code>, <code>POST /admin/users/{id}/ban</code>, <code>POST /admin/users/{id}/unban</code>, <code>POST /admin/users/{id}/logout-all</code>, <code>POST /admin/users/{id}/force-verify-email</code>.</li>
+</ul>
+<h4 id="3-provider-moderation-governance-admin-providers">3. Provider Moderation & Governance (<code>/admin/providers/*</code>)</h4>
+<ul>
+<li><strong>Route 1: Provider Directory (<code>/admin/providers</code> - <code>AdminProviderTable.tsx</code>):</strong></li>
+<li>Search bar and status tabs (<code>All</code>, <code>Active</code>, <code>Suspended</code>, <code>Verified</code>, <code>Deleted</code>).</li>
+<li>Columns: Provider Name, Owner Email, Status badge, Verification Tier badge, Subscriber count, Signals sent, Win Rate %, View Details modal trigger.</li>
+<li><strong>Suspend Provider Modal (<code>AdminSuspendModal.tsx</code>):</strong> Mandatory reason ($\ge 3$ chars) before suspending.</li>
+<li><strong>Unsuspend Action:</strong> Confirm dialog restoring provider status.</li>
+<li><strong>Route 2: Applications Queue (<code>/admin/providers/applications</code> - <code>AdminApplicationsQueue.tsx</code>):</strong></li>
+<li>Incoming applicant registration cards with trading focus chips, experience, bio, referral source.</li>
+<li>Status tabs: <code>Pending Review</code>, <code>Approved</code>, <code>Rejected</code>, <code>All</code>.</li>
+<li><strong>Approve Modal:</strong> Allows overriding display name and adding internal approval notes.</li>
+<li><strong>Reject Modal:</strong> Enforces mandatory rejection reason visible to the applicant for re-application.</li>
+<li><strong>Route 3: Verification Evidence Queue (<code>/admin/providers/verification-queue</code> - <code>AdminVerificationQueue.tsx</code>):</strong></li>
+<li>Interactive evidence review queue with collapsible panels for the 5 submitted sections (Operator Identity, Signal Operation, Trading Evidence/Links, Historical Signals Table, Affirmations).</li>
+<li><strong>Verify Modal:</strong> Tier selection (<code>basic</code>, <code>intermediate</code>, <code>advanced</code>, <code>premium</code>, <code>verified</code>), reviewer notes, and risk flags.</li>
+<li><strong>Reject Verification Modal:</strong> Mandatory justification reason.</li>
+<li><strong>Data Sources:</strong> <code>GET /admin/providers</code>, <code>POST /admin/providers/{id}/suspend</code>, <code>POST /admin/providers/{id}/unsuspend</code>, <code>GET /admin/providers/applications</code>, <code>POST /admin/providers/applications/{id}/approve</code>, <code>POST /admin/providers/applications/{id}/reject</code>, <code>POST /admin/providers/{id}/verify</code>, <code>POST /admin/providers/{id}/reject-verification</code>.</li>
+</ul>
+<h4 id="4-billing-revenue-governance-admin-billing">4. Billing & Revenue Governance (<code>/admin/billing/*</code>)</h4>
+<ul>
+<li><strong>Sub-Navigation (<code>AdminBillingNav.tsx</code>):</strong> Tabs for <code>Transaction Ledger</code>, <code>Subscription Ledger</code>, <code>Platform Fees & Splits</code>.</li>
+<li><strong>Route 1: Transaction Ledger (<code>/admin/billing/transactions</code> - <code>AdminTransactionsTable.tsx</code>):</strong></li>
+<li>Search query (<code>q</code>), Status filter (<code>Success</code>, <code>Pending</code>, <code>Failed</code>), Gateway filter (<code>Flutterwave</code>, <code>Paystack</code>, <code>Crypto</code>), Currency filter (<code>NGN</code>, <code>USDT</code>, <code>USD</code>).</li>
+<li>Desktop table & Mobile card view showing Gross Paid, Platform Retained Fee chip, Provider Net Payout, and "Diagnostics →" link.</li>
+<li><strong>Route 2: Transaction 360° Diagnostics (<code>/admin/billing/transactions/[id]</code> - <code>AdminTransactionDetailView.tsx</code>):</strong></li>
+<li>360° Financial Breakdown: Gross, Platform Fee, Provider Payout, Failure callout with <code>error_message</code>.</li>
+<li>Linked Context Cards: Customer Account link, Provider link, Subscription link.</li>
+<li>Raw Webhook Payload Viewer: Collapsible syntax-highlighted JSON viewer with "Copy JSON".</li>
+<li><strong>Manual Reconcile Modal (<code>AdminReconcileModal.tsx</code>):</strong> Manual payment verification override with mandatory audit reason ($\ge 3$ chars).</li>
+<li><strong>Route 3: Subscription Ledger (<code>/admin/billing/subscriptions</code> - <code>AdminSubscriptionLedgerTable.tsx</code>):</strong></li>
+<li>Filter across all platform users by status and tier.</li>
+<li><strong>Cancel Subscription Modal (<code>AdminCancelSubscriptionModal.tsx</code>):</strong> Immediate vs Period-End cancellation mode with mandatory audit reason.</li>
+<li><strong>Set Status Modal (<code>AdminSetSubscriptionStatusModal.tsx</code>):</strong> Status override dropdown (<code>trialing</code>, <code>active</code>, <code>past_due</code>, <code>paused</code>, <code>canceled</code>, <code>expired</code>) with mandatory audit reason.</li>
+<li><strong>Route 4: Platform Fee Configuration (<code>/admin/billing/fees</code> - <code>AdminPlatformFeesView.tsx</code>):</strong></li>
+<li>Active Global Fee Cards: <strong>NGN (₦1,500)</strong> and <strong>USDT ($10.00)</strong>.</li>
+<li>Revenue split formula explanation card.</li>
+<li>Historical Fee Revision Table: Audit trail of past fee changes.</li>
+<li><strong>Update Global Fee Modal (<code>AdminUpdateFeeModal.tsx</code>):</strong> High-consequence dialog with red/amber danger ring, critical consequence warning, and double-confirmation acknowledgment checkmark.</li>
+<li><strong>Data Sources:</strong> <code>GET /admin/billing/transactions</code>, <code>GET /admin/billing/transactions/{id}</code>, <code>POST /admin/billing/transactions/{id}/reconcile</code>, <code>GET /admin/billing/subscriptions</code>, <code>POST /admin/billing/subscriptions/{id}/cancel</code>, <code>POST /admin/billing/subscriptions/{id}/set-status</code>, <code>GET /admin/billing/fees</code>, <code>POST /admin/billing/fees</code>.</li>
+</ul>
+<h4 id="5-system-controls-execution-engine-admin-execution">5. System Controls & Execution Engine (<code>/admin/execution/*</code>)</h4>
+<ul>
+<li><strong>Sub-Navigation (<code>AdminExecutionNav.tsx</code>):</strong> Tabs for <code>System Controls & Kill Switch</code>, <code>Pipeline Health & Telemetry</code>, <code>Position Reconciliation</code>.</li>
+<li><strong>Route 1: System Controls & Master Kill Switch (<code>/admin/execution</code>):</strong></li>
+</ul>
+<ol>
+<li><em>High-Gravity Global Kill Switch Card (<code>AdminKillSwitchCard.tsx</code>):</em></li>
+</ol>
+<ul>
+<li>Permanent visual centerpiece with heavy-duty borders and pulsing status indicators (<code>ACTIVE / NORMAL</code> vs <code>EMERGENCY STOP ACTIVE</code>).</li>
+<li><strong>Emergency Halt Modal (2-Step Safety Gate):</strong></li>
+<li>Step 1: Consequence impact breakdown (instant halt of all Bybit order dispatches, signal ingestion pause).</li>
+<li>Step 2: Exact typed phrase <code>"HALT TRADING"</code> strictly enforced + mandatory audit reason ($\ge 3$ characters). Submit button disabled until exact match.</li>
+<li><strong>Resume Trading Modal (Live Pre-Flight Ping):</strong></li>
+<li>Consumes live Bybit exchange connectivity ping (<code>GET /admin/execution/connectivity</code>), displaying real-time exchange status (<code>online</code>/<code>degraded</code>), latency in ms, and server time.</li>
+<li>Re-activation consequences disclosure + mandatory audit reason.</li>
+<li><strong>Optimistic Locking & 409 Conflict Handling:</strong> Displays <em>"State changed since you loaded this page"</em> banner with forced refresh.</li>
+</ul>
+<ol>
+<li><em>Spatially Isolated Monitoring Controls Card (<code>AdminMonitoringControlsCard.tsx</code>):</em></li>
+</ol>
+<ul>
+<li>Independent switches for <code>monitoring_enabled</code> (WebSocket telemetry) and <code>monitoring_actions_kill_switch</code> (Automated SL/TP closes) with reason validation modal.</li>
+</ul>
+<ol>
+<li><em>Rollout Cohort Distribution Card (<code>AdminCohortControlCard.tsx</code>):</em></li>
+</ol>
+<ul>
+<li>User rollout percentage control (0–100%) with slider and numeric presets, live user telemetry gauge (Total Platform Users, In-Cohort Accounts, Excluded Accounts), and update modal.</li>
+</ul>
+<ol>
+<li><em>Read-Only System Controls Matrix (<code>AdminReadOnlyControlsGrid.tsx</code>):</em></li>
+</ol>
+<ul>
+<li>Dynamically rendered non-operational limits (<code>beta_mode</code>, <code>allow_new_providers</code>, <code>allow_new_subscribers</code>, <code>max_beta_providers</code>, <code>max_beta_subscribers</code>, <code>beta_whitelist_enabled</code>).</li>
+</ul>
+<ol>
+<li><em>Execution Audit Feed (<code>AdminExecutionAuditFeed.tsx</code>):</em></li>
+</ol>
+<ul>
+<li>Real-time audit log of system control and emergency actions.</li>
+<li><strong>Route 2: Pipeline Health & Telemetry (<code>/admin/execution/health</code>):</strong></li>
+<li>Time window selector (6h, 24h, 72h, 7d), signal ingestion rates, dispatch queue rates, Bybit order success %.</li>
+<li><strong>Route 3: Position Reconciliation (<code>/admin/execution/reconciliation</code>):</strong></li>
+<li>Open positions vs active monitors alignment, drift status (<code>CLEAN</code>), corrective history.</li>
+<li><strong>Data Sources:</strong> <code>GET /admin/execution/overview</code>, <code>POST /admin/execution/kill-switch</code>, <code>POST /admin/execution/monitoring</code>, <code>POST /admin/execution/cohort</code>, <code>GET /admin/execution/connectivity</code>, <code>GET /admin/execution/health</code>, <code>GET /admin/execution/reconciliation</code>.</li>
+</ul>
+<hr />
+<h2 id="part-4-design-system-foundations-semantic-token-specifications">Part 4: Design System Foundations & Semantic Token Specifications</h2>
+<p>To ensure Figma components map directly to our Tailwind configuration without hardcoded magic numbers, use the following token architecture:</p>
+<pre><code class="language-">Primitive Token (e.g. #FFC107, 16px, 8px)
+      ↓
+Semantic Token (e.g. brand.primary, space-4, radius-md)
+      ↓
+Component Token (e.g. button.primary.background, card.padding)
+      ↓
+UI Component (e.g. PrimaryButton, MetricCard)</code></pre>
+<h3 id="1-color-tokens">1. Color Tokens</h3>
+<h4 id="background-tokens">Background Tokens</h4>
+<ul>
+<li><code>bg-background</code> — Master page canvas background.</li>
+<li><code>bg-card</code> — Primary container, card, modal, and drawer surface.</li>
+<li><code>bg-popover</code> — Floating dropdowns, tooltips, and context menus.</li>
+<li><code>bg-muted</code> — Subtle secondary background for table headers and inactive tabs.</li>
+<li><code>bg-accent</code> — Interactive hover states and highlighted selection surfaces.</li>
+<li><code>bg-secondary</code> — Secondary badge backgrounds and neutral pill containers.</li>
+</ul>
+<h4 id="foreground-tokens">Foreground Tokens</h4>
+<ul>
+<li><code>text-foreground</code> — Master body text, high-contrast labels, and active elements.</li>
+<li><code>text-card-foreground</code> — Card titles, primary metric figures, and card headers.</li>
+<li><code>text-popover-foreground</code> — Text inside dropdowns, tooltips, and popovers.</li>
+<li><code>text-muted-foreground</code> — Subtitles, helper text, timestamps, and column headers.</li>
+<li><code>text-accent-foreground</code> — Text on active/hovered accent surfaces.</li>
+<li><code>text-secondary-foreground</code> — Text inside secondary pills and badges.</li>
+</ul>
+<h4 id="brand-action-tokens">Brand / Action Tokens</h4>
+<ul>
+<li><code>bg-primary</code> / <code>text-primary</code> / <code>text-primary-foreground</code> — Primary interactive CTA buttons, active tab indicators, and brand highlights.</li>
+<li><code>bg-secondary</code> / <code>text-secondary</code> / <code>text-secondary-foreground</code> — Secondary buttons and auxiliary interactive elements.</li>
+<li><code>bg-destructive</code> / <code>text-destructive</code> / <code>text-destructive-foreground</code> — Destructive actions (Disconnect Key, Emergency Halt, Ban User, Revoke All).</li>
+</ul>
+<h4 id="border-input-tokens">Border & Input Tokens</h4>
+<ul>
+<li><code>border</code> (<code>border-border</code>) — Standard structural divider and card border.</li>
+<li><code>border-input</code> — Form input, select, and textarea borders.</li>
+<li><code>ring</code> (<code>ring-ring</code>) — Focus ring indicator for keyboard navigation and accessibility.</li>
+</ul>
+<hr />
+<h3 id="2-brand-color-palette-primitive-mappings">2. Brand Color Palette & Primitive Mappings</h3>
+<div class="table-container"><table>
+<thead><tr>
+<th>Brand Token</th>
+<th>Hex Code</th>
+<th>Semantic Role & Usage in UI</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Tadex Yellow</strong></td>
+<td><code>#FFC107</code></td>
+<td><strong>Primary Brand & Action Accent:</strong> Primary buttons, active highlights, key brand insignias. <em>(Note: Must not be used as a generic warning color).</em></td>
+</tr>
+<tr>
+<td><strong>Tadex Teal</strong></td>
+<td><code>#0F6173</code></td>
+<td><strong>Secondary Brand / Tech Anchor:</strong> Auxiliary branding, verified badges, subtle gradients, technical callouts.</td>
+</tr>
+<tr>
+<td><strong>Deep Charcoal</strong></td>
+<td><code>#10172A</code></td>
+<td><strong>Primary Dark Surface / Background:</strong> Dark mode page canvas, deep card containers, high-contrast modal backdrops.</td>
+</tr>
+<tr>
+<td><strong>White</strong></td>
+<td><code>#FFFFFF</code></td>
+<td><strong>Primary Light Canvas / High Contrast Text:</strong> Light mode page canvas, dark mode foreground text.</td>
+</tr>
+<tr>
+<td><strong>Soft Gray</strong></td>
+<td><code>#F5F7FA</code></td>
+<td><strong>Light Surfaces & Dividers:</strong> Light mode muted card containers, table row zebra striping, subtle borders.</td>
+</tr>
+</tbody></table></div>
+<hr />
+<h3 id="3-semantic-status-trading-specific-tokens">3. Semantic Status & Trading-Specific Tokens</h3>
+<h4 id="system-platform-status">System & Platform Status</h4>
+<ul>
+<li><code>status.success</code> / <code>system.online</code> — <strong>Emerald</strong> (e.g. <code>text-emerald-500</code>, <code>bg-emerald-500/10</code>): Exchange connected, heartbeat active, payment confirmed, trade filled.</li>
+<li><code>status.warning</code> / <code>system.degraded</code> — <strong>Amber</strong> (e.g. <code>text-amber-500</code>, <code>bg-amber-500/10</code>): Pending admin verification, testnet environment active, retry in progress.</li>
+<li><code>status.error</code> / <code>system.offline</code> / <code>destructive</code> — <strong>Crimson/Red</strong> (e.g. <code>text-destructive</code>, <code>bg-destructive/10</code>): Emergency kill switch active, withdrawal permission detected, failed transaction.</li>
+<li><code>status.info</code> — <strong>Blue/Teal</strong> (e.g. <code>text-blue-500</code>, <code>bg-blue-500/10</code>): Educational notices, Bybit API guidelines.</li>
+<li><code>status.neutral</code> / <code>system.paused</code> — <strong>Slate/Gray</strong> (e.g. <code>text-muted-foreground</code>, <code>bg-muted</code>): Paused signal distribution, cancelled order.</li>
+</ul>
+<h4 id="trading-data-tokens">Trading Data Tokens</h4>
+<ul>
+<li><code>trade.profit</code> / <code>chart.profit</code> — Positive PnL indicators (e.g. <code>+$45.20</code>, <code>+12.4%</code>).</li>
+<li><code>trade.loss</code> / <code>chart.loss</code> — Negative PnL indicators (e.g. <code>-$18.50</code>, <code>-4.2%</code>).</li>
+<li><code>trade.long</code> — Emerald Long position side badge.</li>
+<li><code>trade.short</code> — Crimson Short position side badge.</li>
+<li><code>trade.entry</code> / <code>trade.stop-loss</code> / <code>trade.take-profit</code> — Distinct semantic chart levels.</li>
+</ul>
+<hr />
+<h3 id="4-typography-tokens">4. Typography Tokens</h3>
+<ul>
+<li><strong>Primary Display & Body Font:</strong> <code>Geist</code> (Fallback: <code>Inter</code>, <code>system-ui</code>, <code>sans-serif</code>)</li>
+<li><strong>Data & Monospace Font:</strong> <code>Geist Mono</code> (Fallback: <code>ui-monospace</code>, <code>monospace</code>)</li>
+<li><em>Strictly required for:</em> Symbol pairs (<code>BTCUSDT</code>), currency values (<code>$1,284.42</code>, <code>₦15,000.00</code>), leverage (<code>10x</code>), percentages (<code>78.4%</code>), Order IDs, Transaction hashes, Masked API keys (<code>key_<strong></strong>7890</code>), Latency numbers (<code>24 ms</code>).</li>
+</ul>
+<h4 id="scale">Scale:</h4>
+<ul>
+<li><code>text.display</code> — 36px / Line Height 44px (Bold/Black) — Marketing Hero</li>
+<li><code>text.h1</code> — 30px / Line Height 38px (Bold) — Primary Page Titles</li>
+<li><code>text.h2</code> — 24px / Line Height 32px (Bold) — Section Headers, Dashboard Cards</li>
+<li><code>text.h3</code> — 20px / Line Height 28px (SemiBold) — Card Titles, Modal Headers</li>
+<li><code>text.h4</code> — 16px / Line Height 24px (SemiBold) — Sub-section Headers</li>
+<li><code>text.body-lg</code> — 16px / Line Height 24px (Regular) — Hero descriptions, intro text</li>
+<li><code>text.body</code> — 14px / Line Height 20px (Regular) — Standard body copy, form inputs</li>
+<li><code>text.body-sm</code> — 12px / Line Height 16px (Regular/Medium) — Helper text, table cells, timestamps</li>
+<li><code>text.caption</code> — 11px / Line Height 14px (Medium) — Micro metadata, badge labels</li>
+<li><code>text.overline</code> — 10px / Line Height 12px (Bold, Uppercase, Tracking-Wider) — Section category headers</li>
+</ul>
+<hr />
+<h3 id="5-spacing-scale-4px-base-grid">5. Spacing Scale (4px Base Grid)</h3>
+<div class="table-container"><table>
+<thead><tr>
+<th>Spacing Token</th>
+<th>Pixel Value</th>
+<th>Standard Usage</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>space-1</code></td>
+<td>4px</td>
+<td>Micro gaps, badge internal padding, icon-text gap</td>
+</tr>
+<tr>
+<td><code>space-2</code></td>
+<td>8px</td>
+<td>Button small padding, form field gap, card header gap</td>
+</tr>
+<tr>
+<td><code>space-3</code></td>
+<td>12px</td>
+<td>Standard badge padding, input field horizontal padding</td>
+</tr>
+<tr>
+<td><code>space-4</code></td>
+<td>16px</td>
+<td>Card standard internal padding, modal gutter, list item padding</td>
+</tr>
+<tr>
+<td><code>space-5</code></td>
+<td>20px</td>
+<td>Large button padding, compact section gap</td>
+</tr>
+<tr>
+<td><code>space-6</code></td>
+<td>24px</td>
+<td>Standard card padding, modal content padding, grid gap</td>
+</tr>
+<tr>
+<td><code>space-8</code></td>
+<td>32px</td>
+<td>Page section spacing, dashboard row gap</td>
+</tr>
+<tr>
+<td><code>space-10</code></td>
+<td>40px</td>
+<td>Major container spacing</td>
+</tr>
+<tr>
+<td><code>space-12</code></td>
+<td>48px</td>
+<td>Page-level vertical padding</td>
+</tr>
+<tr>
+<td><code>space-16</code></td>
+<td>64px</td>
+<td>Top header height, hero spacing</td>
+</tr>
+<tr>
+<td><code>space-20</code></td>
+<td>80px</td>
+<td>Marketing section vertical padding</td>
+</tr>
+</tbody></table></div>
+<hr />
+<h3 id="6-corner-radius-tokens">6. Corner Radius Tokens</h3>
+<ul>
+<li><code>radius-none</code> — <code>0px</code> — Square containers, raw tables</li>
+<li><code>radius-sm</code> — <code>6px</code> — Badges, tooltips, tags, small inputs</li>
+<li><code>radius-md</code> — <code>8px</code> — Buttons, standard input fields, dropdown menus</li>
+<li><code>radius-lg</code> — <code>12px</code> — Cards, table containers, alerts, modal dialogs</li>
+<li><code>radius-xl</code> — <code>16px</code> — Large hero banners, marketing cards</li>
+<li><code>radius-2xl</code> — <code>24px</code> — Floating navigation containers, feature showcases</li>
+<li><code>radius-full</code> — <code>9999px</code> — Avatars, status pills, circular icon buttons</li>
+</ul>
+<hr />
+<h3 id="7-shadow-elevation-tokens">7. Shadow & Elevation Tokens</h3>
+<p><em>Tadex uses a calm, functional financial interface aesthetic. Avoid heavy, muddy drop-shadows.</em></p>
+<ul>
+<li><code>shadow-none</code> — Flat surface</li>
+<li><code>shadow-xs</code> — <code>0 1px 2px 0 rgba(0,0,0,0.05)</code> — Interactive cards, subtle buttons</li>
+<li><code>shadow-sm</code> — <code>0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1)</code> — Standard cards</li>
+<li><code>shadow-md</code> — <code>0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)</code> — Dropdowns, popovers</li>
+<li><code>shadow-lg</code> — <code>0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)</code> — Modal dialogs, floating drawers</li>
+<li><code>shadow-xl</code> — <code>0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)</code> — High-priority emergency modals</li>
+</ul>
+<hr />
+<h3 id="8-focus-interaction-tokens">8. Focus & Interaction Tokens</h3>
+<ul>
+<li><strong>Focus Ring Width:</strong> <code>2px</code></li>
+<li><strong>Focus Ring Color:</strong> <code>hsl(var(--ring))</code></li>
+<li><strong>Focus Ring Offset:</strong> <code>2px</code> (<code>offset-background</code>)</li>
+<li><strong>Hover Overlay:</strong> <code>bg-muted/50</code> or <code>hover:opacity-90</code></li>
+<li><strong>Active Overlay:</strong> <code>active:scale-[0.98]</code></li>
+<li><strong>Disabled State:</strong> <code>opacity-50 cursor-not-allowed</code></li>
+</ul>
+<hr />
+<h3 id="9-component-variant-tokens">9. Component Variant Tokens</h3>
+<h4 id="buttons">Buttons</h4>
+<ul>
+<li><code>button.primary</code> — <code>bg-primary text-primary-foreground hover:opacity-90</code></li>
+<li><code>button.secondary</code> — <code>bg-secondary text-secondary-foreground hover:bg-secondary/80</code></li>
+<li><code>button.outline</code> — <code>border border-border bg-background text-foreground hover:bg-muted</code></li>
+<li><code>button.ghost</code> — <code>bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground</code></li>
+<li><code>button.destructive</code> — <code>bg-destructive text-destructive-foreground hover:bg-destructive/90</code></li>
+</ul>
+<h4 id="inputs-form-controls">Inputs & Form Controls</h4>
+<ul>
+<li><code>input.default</code> — <code>border border-input bg-background text-foreground rounded-lg px-3 py-2 text-sm</code></li>
+<li><code>input.focus</code> — <code>focus:ring-2 focus:ring-ring focus:border-ring focus:outline-none</code></li>
+<li><code>input.error</code> — <code>border-destructive text-destructive focus:ring-destructive</code></li>
+<li><code>input.disabled</code> — <code>bg-muted/50 text-muted-foreground cursor-not-allowed</code></li>
+</ul>
+<hr />
+<h3 id="10-layout-breakpoint-tokens">10. Layout & Breakpoint Tokens</h3>
+<h4 id="responsive-breakpoints">Responsive Breakpoints</h4>
+<ul>
+<li><code>sm</code> — <code>640px</code> — Mobile landscape / Small tablets (Table card-views trigger below this)</li>
+<li><code>md</code> — <code>768px</code> — Tablets / Small laptops (Desktop navigation vs Mobile drawer breakpoint)</li>
+<li><code>lg</code> — <code>1024px</code> — Desktop / Standard displays (Multi-column dashboard grids activate)</li>
+<li><code>xl</code> — <code>1280px</code> — High-resolution desktop (Max container width: <code>max-w-7xl</code> / 1280px)</li>
+<li><code>2xl</code> — <code>1536px</code> — Ultra-wide displays</li>
+</ul>
+<h4 id="standard-layout-dimensions">Standard Layout Dimensions</h4>
+<ul>
+<li><strong>Header Height:</strong> <code>64px</code> (<code>h-16</code>)</li>
+<li><strong>Content Max Width:</strong> <code>1280px</code> (<code>max-w-7xl</code>)</li>
+<li><strong>Page Horizontal Padding:</strong></li>
+<li>Mobile (<code>< 640px</code>): <code>16px</code> (<code>px-4</code>)</li>
+<li>Tablet (<code>640px - 1024px</code>): <code>24px</code> (<code>px-6</code>)</li>
+<li>Desktop (<code>> 1024px</code>): <code>32px</code> (<code>px-8</code>)</li>
+</ul>
+<hr />
+<h3 id="11-iconography-standards">11. Iconography Standards</h3>
+<ul>
+<li><strong>Icon Family:</strong> <code>lucide-react</code> (Single consistent stroke family across all screens).</li>
+<li><strong>Sizes:</strong></li>
+<li><code>icon-xs</code> — 12px (<code>h-3 w-3</code>) — Micro chips, status dots</li>
+<li><code>icon-sm</code> — 16px (<code>h-4 w-4</code>) — Button icons, table actions, navigation items</li>
+<li><code>icon-md</code> — 20px (<code>h-5 w-5</code>) — Card headers, input leading icons</li>
+<li><code>icon-lg</code> — 24px (<code>h-6 w-6</code>) — Modal alerts, empty state icons</li>
+<li><code>icon-xl</code> — 32px–48px (<code>h-8 w-8</code> to <code>h-12 w-12</code>) — Large hero icons, security shields</li>
+<li><strong>Stroke Width:</strong> Standard <code>2px</code> (or <code>1.5px</code> for large feature icons).</li>
+</ul>
+<hr />
+<h3 id="12-motion-micro-animation-tokens">12. Motion & Micro-Animation Tokens</h3>
+<ul>
+<li><code>duration-instant</code> — <code>100ms</code> — Tooltip reveals, toggle switches</li>
+<li><code>duration-fast</code> — <code>150ms</code> — Button press scale, dropdown menus</li>
+<li><code>duration-normal</code> — <code>200ms</code> — Modal fade-in, mobile drawer slide-down</li>
+<li><code>duration-slow</code> — <code>350ms</code> — Tab page cross-fades, notification banners</li>
+<li><code>ease-standard</code> — <code>cubic-bezier(0.4, 0, 0.2, 1)</code></li>
+<li><code>ease-enter</code> — <code>cubic-bezier(0, 0, 0.2, 1)</code></li>
+<li><code>ease-exit</code> — <code>cubic-bezier(0.4, 0, 1, 1)</code></li>
+</ul>
+<hr />
+<h2 id="part-5-design-scope-screen-state-estimation-checklist-for-kemi">Part 5: Design Scope & Screen State Estimation Checklist for Kemi</h2>
+<p>To help Kemi structure the Figma file and estimate design sprints, here is the exact inventory of distinct screens, modals, and dynamic states required:</p>
+<pre><code class="language-">FIGMA SPRINT BREAKDOWN:
+├── 0. Design System &amp; Component Library (Tokens, Inputs, Buttons, Tables, Cards, Modals)
+├── 1. Public &amp; Marketing Pages (4 screens: Landing, Terms, Privacy, Security + 2 Modals)
+├── 2. Authentication &amp; Onboarding (6 screens: Login, Register, Forgot, Reset, Verify, Claim)
+├── 3. Main User Dashboard (8 screens: Overview, Keys, Trading, Billing, Providers, Provider Detail, Provider Portal, Settings)
+├── 4. Interactive Modals &amp; Drawers (7 modals: Bybit Disconnect, Checkout Quote, Plan Builder, 5-Section Verification, Change Password, Logout All, Emergency Close)
+└── 5. Admin Governance Console (6 screens: Overview, User Directory, User 360°, Provider Moderation, Billing Diagnostics, System Controls &amp; 2-Step Kill Switch)</code></pre>
+<div class="table-container"><table>
+<thead><tr>
+<th>Area / Module</th>
+<th>Screen / State Name</th>
+<th>Route Path</th>
+<th>Key Sub-States & Modals to Design</th>
+<th>Priority</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Public</strong></td>
+<td>Marketing Landing</td>
+<td><code>/</code></td>
+<td>Desktop & Mobile, FAQ accordions, Waitlist modal</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>Public</strong></td>
+<td>Terms of Service</td>
+<td><code>/terms</code></td>
+<td>Typography layout, legal alert banner</td>
+<td>P2</td>
+</tr>
+<tr>
+<td><strong>Public</strong></td>
+<td>Privacy Policy</td>
+<td><code>/privacy</code></td>
+<td>Data retention matrix, NDPR section</td>
+<td>P2</td>
+</tr>
+<tr>
+<td><strong>Public</strong></td>
+<td>Security & Architecture</td>
+<td><code>/security</code></td>
+<td>4 Architecture cards, non-custodial diagrams</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Login</td>
+<td><code>/login</code></td>
+<td>Default, Error alert, Loading spinner</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Register</td>
+<td><code>/register</code></td>
+<td>Default, Validation error, Terms agree</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Forgot Password</td>
+<td><code>/forgot-password</code></td>
+<td>Request form, Email sent success card</td>
+<td>P2</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Reset Password</td>
+<td><code>/reset-password</code></td>
+<td>Form, Password strength, Success countdown</td>
+<td>P2</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Verify Email</td>
+<td><code>/verify-email</code></td>
+<td>Loading handshake, Verified success, Error retry</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>Telegram Account Claim</td>
+<td><code>/claim</code></td>
+<td>Valid token form, Invalid/expired token alert</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>Shell</strong></td>
+<td>Dashboard Header & Drawer</td>
+<td>(Shared)</td>
+<td>Desktop 64px bar, Mobile slide-down drawer</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>User Dash</strong></td>
+<td>Trading Overview</td>
+<td><code>/dashboard</code></td>
+<td>3 Metric cards, Key summary, Recent trades</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>User Dash</strong></td>
+<td>Exchange API Keys</td>
+<td><code>/dashboard/keys</code></td>
+<td>Connected keys card, Disconnect alert, Add key form, Withdrawal-error alert</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>User Dash</strong></td>
+<td>Trading (Positions & Orders)</td>
+<td><code>/dashboard/trading</code></td>
+<td>Positions table (desktop & mobile card), Orders table with status filters, Emergency close</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>User Dash</strong></td>
+<td>Billing & Subscriptions</td>
+<td><code>/dashboard/billing</code></td>
+<td>Active subscription card, Payment return polling card, Pricing grid (NGN/KES/GHS/USDT/USD), Checkout Quote Modal</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>User Dash</strong></td>
+<td>Provider Directory</td>
+<td><code>/dashboard/providers</code></td>
+<td>3-Column provider cards, Win rate tags, Search bar</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>User Dash</strong></td>
+<td>Provider Detail View</td>
+<td><code>/dashboard/providers/[id]</code></td>
+<td>Provider hero banner, Performance stats, Scoped plan cards</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>User Dash</strong></td>
+<td>Provider Portal (4 States)</td>
+<td><code>/dashboard/provider</code></td>
+<td>State 1 (404 Hero + Apply Form), State 2 (Pending review), State 3 (Rejected card), State 4 (Active dashboard + 3-plan manager + 5-section verification modal)</td>
+<td>P1</td>
+</tr>
+<tr>
+<td><strong>User Dash</strong></td>
+<td>Account Settings</td>
+<td><code>/dashboard/settings</code></td>
+<td>Profile overview, Password change form, Logout-all confirmation modal</td>
+<td>P2</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>Admin Shell & Role Guard</td>
+<td><code>/admin/*</code></td>
+<td>Desktop bar, Admin mobile drawer, Access denied</td>
+<td>P3 (Internal)</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>Admin Overview</td>
+<td><code>/admin</code></td>
+<td>6 KPI metric cards, Global alert banner, Needs-attention queue</td>
+<td>P3 (Internal)</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>User Directory & 360°</td>
+<td><code>/admin/users</code> & <code>[id]</code></td>
+<td>5-Dimension search, User table/card, 360° Profile (6 modules), Ban/Unban/Force-logout modals</td>
+<td>P3 (Internal)</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>Provider Governance</td>
+<td><code>/admin/providers/*</code></td>
+<td>Provider table, Applications queue, 5-Section verification review dossiers</td>
+<td>P3 (Internal)</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>Billing Governance</td>
+<td><code>/admin/billing/*</code></td>
+<td>Transaction ledger, 360° Financial Diagnostics & Webhook JSON viewer, Reconcile modal, Subscription ledger, Global Fee configuration</td>
+<td>P3 (Internal)</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>System Controls & Kill Switch</td>
+<td><code>/admin/execution/*</code></td>
+<td>Centerpiece Kill Switch, 2-Step "HALT TRADING" modal, Resume Trading Bybit ping modal, Monitoring toggles, Rollout cohort slider, Audit feed, Telemetry & Reconciliation</td>
+<td>P3 (Internal)</td>
+</tr>
+</tbody></table></div>
+<hr />
+<h2 id="part-6-next-steps-for-figma-implementation">Part 6: Next Steps for Figma Implementation</h2>
+<ol>
+<li><strong>Figma File Setup:</strong> Create foundational Color, Typography, Radius, and Elevation Styles matching the semantic tokens defined in Part 4.</li>
+<li><strong>Component Library:</strong> Build core atomic components (Buttons, Inputs, Badges, Tabs, Card Containers, Stat Cards, Table Rows, Modal Shells).</li>
+<li><strong>Phase 1 UI Design (User-Facing Priority):</strong></li>
+</ol>
+<ul>
+<li>Design <code>/login</code>, <code>/register</code>, <code>/claim</code>.</li>
+<li>Design <code>/dashboard</code>, <code>/dashboard/keys</code>, <code>/dashboard/trading</code>.</li>
+<li>Design <code>/dashboard/billing</code> and <code>CheckoutQuoteModal</code>.</li>
+<li>Design <code>/dashboard/providers</code> and <code>/dashboard/provider</code> (4 lifecycle states).</li>
+</ul>
+<ol>
+<li><strong>Phase 2 UI Design (Public & Marketing):</strong></li>
+</ol>
+<ul>
+<li>Polish <code>/</code> marketing sections, <code>/security</code>, <code>/terms</code>, <code>/privacy</code>.</li>
+</ul>
+<ol>
+<li><strong>Phase 3 UI Design (Internal Admin Tooling):</strong></li>
+</ol>
+<ul>
+<li>Clean, data-dense administrative layout for <code>/admin/*</code> using standard token hierarchy.</li>
+</ul>
+
+
+</body>
+</html>

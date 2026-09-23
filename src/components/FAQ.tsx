@@ -1,190 +1,111 @@
 'use client';
+
 import { useState } from 'react';
-import { ChevronDown, Shield, HelpCircle, Smartphone, Clock, DollarSign, Settings, Mail, Calendar } from 'lucide-react';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 
 export default function FAQ() {
-  const [openItems, setOpenItems] = useState<number[]>([0]); // First item open by default
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [openItems, setOpenItems] = useState<number[]>([0]);
 
   const toggleItem = (index: number) => {
-    setOpenItems(prev => 
-      prev.includes(index) 
+    setOpenItems(prev =>
+      prev.includes(index)
         ? prev.filter(i => i !== index)
         : [...prev, index]
     );
   };
 
-  const categories = ['All', 'General', 'Technical', 'Security', 'Billing'];
-  
   const faqs = [
     {
-      icon: Smartphone,
-      q: 'Do I need to download an app?',
-      a: 'No! Tadex is a web-based SaaS workflow automation platform. You can access it directly from your web browser, configure your event feeds, and start routing payloads in minutes.',
-      category: 'General'
+      q: 'Do I need to install anything?',
+      a: 'No. Tadex runs in your browser. You log in, connect your accounts, set your rules, and it works 24/7 in the cloud.',
     },
     {
-      icon: DollarSign,
-      q: 'Is it free to use?',
-      a: 'Yes, Tadex is completely free during our Public Beta period. You can automate workflow routing to destination endpoints without any subscription fees.',
-      category: 'Billing'
+      q: 'Is it really free to start?',
+      a: 'Yes. The Free plan gives you all core features and up to 12 automated trades per month across free communities. No credit card required.',
     },
     {
-      icon: Shield,
-      q: 'How secure are my API keys?',
-      a: 'Extremely secure. We secure credentials using standard encryption protocols and store them in isolated databases. We only request permissions necessary to route data payloads.',
-      category: 'Security'
+      q: 'Which exchanges work with Tadex?',
+      a: 'We support major exchanges like Bybit, Binance, and OKX. If your exchange isn’t listed, you can often integrate it via webhooks.',
     },
     {
-      icon: Settings,
-      q: 'Does it work with Binance or OKX?',
-      a: 'Currently, we support Bybit accounts for the best speed and reliability. Binance, OKX, and others are on our roadmap for Q2 2026.',
-      category: 'Technical'
+      q: 'Is my money safe? What about my API keys?',
+      a: 'Your API keys are encrypted and stored securely. We only allow trading actions you configure; withdrawals are not possible via our integration.',
     },
     {
-      icon: Clock,
-      q: 'What happens if I lose internet connection?',
-      a: 'Tadex runs on the cloud. Once you establish a workflow and configure your payload routing rules, the platform routes events 24/7 automatically.',
-      category: 'Technical'
+      q: 'I’m new to trading. Is this suitable for beginners?',
+      a: 'Yes. If you can follow a signal group and understand basic risk (size, stop loss), you can use Tadex. We handle the automation; you focus on learning and managing risk.',
     },
     {
-      icon: HelpCircle,
-      q: 'What is Tadex?',
-      a: 'Tadex is an automated event-driven workflow routing platform that connects directly to your target endpoints and routes payloads instantly based on rules from your data feeds. It eliminates manual overhead and ensures you never miss a payload.',
-      category: 'General'
-    },
-    {
-      icon: Settings,
-      q: 'How fast are event dispatches?',
-      a: 'Tadex dispatches payloads in milliseconds. Our infrastructure is optimized for high-throughput routing with 99.9% uptime and direct API connections.',
-      category: 'Technical'
-    },
-    {
-      icon: Shield,
-      q: 'Does Tadex make automated decisions or evaluations?',
-      a: 'No. Tadex operates strictly as a passive data routing layer. The platform does not evaluate, rank, optimize, or interpret the quality of incoming data streams. All routing actions are executed purely based on user-configured rules, without any decision-making authority or optimization by Tadex.',
-      category: 'General'
-    },
-    {
-      icon: DollarSign,
       q: 'Can I cancel anytime?',
-      a: 'Yes, you can cancel your subscription at any time directly from your dashboard. There are no cancellation fees, and you\'ll retain access to your account until the end of your billing period.',
-      category: 'Billing'
-    }
+      a: 'Yes. You can cancel or change your plan anytime from your dashboard. Your automations run until the end of your current billing period.',
+    },
+    {
+      q: 'Does Tadex give trading advice or signals?',
+      a: 'No. Tadex does not tell you what to trade. We automate the execution of signals and rules you choose.',
+    },
   ];
 
-  const filteredFaqs = activeCategory === 'All' 
-    ? faqs 
-    : faqs.filter(faq => faq.category === activeCategory);
-
   return (
-    <section className="py-20 lg:py-32 bg-gradient-to-br from-slate-50 to-white relative" id="faq">
+    <section className="py-20 lg:py-28 bg-white border-t border-slate-200" id="faq">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center bg-[#004859]/10 text-[#004859] px-4 py-2 rounded-full text-sm font-medium mb-4">
-            Got Questions?
+          <div className="inline-flex items-center gap-2 bg-[#004859]/10 text-[#004859] px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase mb-4">
+            Answers & Clarity
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#004859]">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#004859]">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Everything you need to know about Tadex workflow automation
+          <p className="mt-4 text-lg text-slate-600">
+            Everything you need to know about automated execution with Tadex.
           </p>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-                activeCategory === category
-                  ? 'bg-[#004859] text-white shadow-lg'
-                  : 'bg-white text-slate-600 hover:bg-[#004859]/10 hover:text-[#004859] border border-slate-200'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-
-        {/* FAQ Items */}
+        {/* FAQ Accordion */}
         <div className="space-y-4">
-          {filteredFaqs.map((item, index) => {
-            const IconComponent = item.icon;
+          {faqs.map((item, index) => {
             const isOpen = openItems.includes(index);
-            
+
             return (
               <div
                 key={index}
-                className="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group"
+                className="bg-slate-50 border border-slate-200 rounded-2xl shadow-sm hover:border-[#004859]/30 transition-all duration-200 overflow-hidden"
               >
                 <button
                   onClick={() => toggleItem(index)}
-                  className="w-full p-6 text-left flex items-center gap-4 hover:bg-slate-50 transition-colors duration-200 group-hover:border-[#004859]/30"
+                  className="w-full p-6 text-left flex items-center justify-between gap-4 transition-colors duration-200 focus:outline-none"
+                  aria-expanded={isOpen}
                 >
-                  {/* Icon */}
-                  <div className="flex-shrink-0 w-10 h-10 bg-[#004859]/10 rounded-xl flex items-center justify-center group-hover:bg-[#00B894]/20 transition-colors duration-300">
-                    <IconComponent className="w-5 h-5 text-[#004859] group-hover:text-[#00B894] transition-colors duration-300" />
-                  </div>
-
-                  {/* Question */}
-                  <div className="flex-1 text-left">
-                    <h3 className="font-semibold text-lg text-[#004859] mb-1 group-hover:text-[#006B7C] transition-colors duration-300">
-                      {item.q}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-full">
-                        {item.category}
-                      </span>
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-8 h-8 rounded-lg bg-[#004859]/10 text-[#004859] flex items-center justify-center flex-shrink-0">
+                      <HelpCircle className="w-4 h-4" />
                     </div>
+                    <span className="font-semibold text-base sm:text-lg text-slate-900">
+                      {item.q}
+                    </span>
                   </div>
 
-                  {/* Toggle Icon */}
-                  <ChevronDown 
-                    className={`w-5 h-5 text-slate-400 transition-all duration-300 ${
-                      isOpen ? 'transform rotate-180 text-[#00B894]' : 'group-hover:text-[#004859]'
-                    }`} 
+                  <ChevronDown
+                    className={`w-5 h-5 text-slate-400 transition-transform duration-300 flex-shrink-0 ${
+                      isOpen ? 'transform rotate-180 text-[#00B894]' : ''
+                    }`}
                   />
                 </button>
 
-                {/* Answer */}
-                <div className={`transition-all duration-300 ease-in-out ${
-                  isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                } overflow-hidden`}>
-                  <div className="px-6 pb-6 pt-0">
-                    <div className="pl-14">
-                      <p className="text-slate-600 leading-relaxed">
-                        {item.a}
-                      </p>
-                    </div>
+                <div
+                  className={`transition-all duration-300 ease-in-out ${
+                    isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                  } overflow-hidden`}
+                >
+                  <div className="px-6 pb-6 pt-0 pl-16">
+                    <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
+                      {item.a}
+                    </p>
                   </div>
                 </div>
               </div>
             );
           })}
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center bg-gradient-to-r from-[#004859] to-[#006B7C] rounded-2xl p-8 lg:p-12 text-white shadow-xl">
-          <h3 className="text-2xl md:text-3xl font-bold mb-4">
-            Still Have Questions?
-          </h3>
-          <p className="text-blue-100 mb-8 max-w-2xl mx-auto text-lg">
-            Our support team is here to help you get started with workflow automation
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="bg-[#00B894] hover:bg-[#00A085] text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2">
-              <Mail className="w-5 h-5" />
-              Contact Support
-            </button>
-            <button className="border-2 border-white/30 text-white hover:bg-white/10 px-8 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2">
-              <Calendar className="w-5 h-5" />
-              Schedule a Demo
-            </button>
-          </div>
         </div>
       </div>
     </section>

@@ -27,6 +27,19 @@ describe("AccountSettings", () => {
       setUser: vi.fn(),
       clear: mockClear,
     });
+
+    vi.spyOn(apiClientModule, "apiClient").mockImplementation(async (endpoint: string) => {
+      if (endpoint === "/me") {
+        return {
+          id: "u1",
+          email: "user@tadex.app",
+          status: "active",
+          email_verified: true,
+          telegram_linked: false,
+        };
+      }
+      return null;
+    });
   });
 
   it("renders change password form and log out everywhere security card", () => {
@@ -57,7 +70,12 @@ describe("AccountSettings", () => {
   });
 
   it("calls POST /auth/change-password and displays success banner on valid password change", async () => {
-    const apiClientSpy = vi.spyOn(apiClientModule, "apiClient").mockResolvedValueOnce(null);
+    const apiClientSpy = vi.spyOn(apiClientModule, "apiClient").mockImplementation(async (endpoint: string) => {
+      if (endpoint === "/me") {
+        return { id: "u1", email: "user@tadex.app", status: "active" };
+      }
+      return null;
+    });
 
     render(<AccountSettings />);
 
@@ -95,9 +113,15 @@ describe("AccountSettings", () => {
   });
 
   it("displays explicit error message when current password is wrong", async () => {
-    vi.spyOn(apiClientModule, "apiClient").mockRejectedValueOnce(
-      new Error("Current password is invalid")
-    );
+    vi.spyOn(apiClientModule, "apiClient").mockImplementation(async (endpoint: string) => {
+      if (endpoint === "/me") {
+        return { id: "u1", email: "user@tadex.app", status: "active" };
+      }
+      if (endpoint === "/auth/change-password") {
+        throw new Error("Current password is invalid");
+      }
+      return null;
+    });
 
     render(<AccountSettings />);
 
@@ -118,16 +142,21 @@ describe("AccountSettings", () => {
   });
 
   it("requires explicit confirmation before calling POST /auth/logout-all and redirects to /login on success", async () => {
-    const apiClientSpy = vi.spyOn(apiClientModule, "apiClient").mockResolvedValueOnce(null);
+    const apiClientSpy = vi.spyOn(apiClientModule, "apiClient").mockImplementation(async (endpoint: string) => {
+      if (endpoint === "/me") {
+        return { id: "u1", email: "user@tadex.app", status: "active" };
+      }
+      return null;
+    });
 
     render(<AccountSettings />);
 
     const openLogoutAllBtn = screen.getByRole("button", { name: "Log Out of All Devices" });
     fireEvent.click(openLogoutAllBtn);
 
-    // Assert confirmation prompt opens without calling API yet
+    // Assert confirmation prompt opens without calling logout-all API yet
     expect(screen.getByText("Confirm Log Out Everywhere")).toBeInTheDocument();
-    expect(apiClientSpy).not.toHaveBeenCalled();
+    expect(apiClientSpy).not.toHaveBeenCalledWith("/auth/logout-all", expect.anything());
 
     // Confirm logout-all
     const confirmBtn = screen.getByRole("button", { name: "Yes, Log Out Everywhere" });

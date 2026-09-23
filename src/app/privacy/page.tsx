@@ -180,8 +180,7 @@ export default function PrivacyPage() {
             </p>
             <p className="text-slate-600">
               <strong>Voreza Technologies</strong><br />
-              17 Peaceland Estate, Igbe Kapo,<br />
-              Ikorodu, Lagos State, Nigeria<br />
+              Lagos, Nigeria<br />
               Email: <a href="mailto:tadex.team@gmail.com" className="text-[#004859] underline">tadex.team@gmail.com</a>
             </p>
           </div>

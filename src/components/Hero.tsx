@@ -1,193 +1,176 @@
 'use client';
+
 import { Button } from '@/components/ui/button';
-import { Play, TrendingUp, Zap, Send } from 'lucide-react';
+import { Play, ArrowRight, ShieldCheck, Zap, Activity } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Hero() {
-  // Link to pricing section
-  const PRICING_URL = "#pricing";
-  // Placeholder for YouTube video
-  const YOUTUBE_DEMO_URL = "https://youtu.be/7cLw92poCss"; 
+  const YOUTUBE_DEMO_URL = "https://youtu.be/7cLw92poCss";
 
   return (
-    <section className="relative bg-gradient-to-br from-[#004859] via-[#006B7C] to-[#004859] text-white overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%220.03%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+    <section className="relative bg-slate-950 text-white overflow-hidden py-16 sm:py-24 lg:py-32 border-b border-slate-800">
+      {/* Subtle Grid Background Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-        <div className="text-center max-w-6xl mx-auto">
-          {/* Badge - Original Style */}
-          <div className="inline-flex items-center bg-[#00B894]/20 text-[#00B894] px-4 py-2 rounded-full text-sm font-medium mb-8 border border-[#00B894]/30">
-            <Zap className="w-4 h-4 mr-2" />
-            Public Beta Live
-          </div>
+      {/* Ambient Radial Gradient Accent */}
+      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#004859]/30 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-1/3 right-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#00B894]/15 rounded-full blur-[120px] pointer-events-none"></div>
 
-          {/* Main Headline - Original Large Typography */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            Automate Your Workflows
-            <span className="block text-[#00B894]">Route Data Instantly.</span>
-          </h1>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          {/* Left Column: Copy & Actions */}
+          <div className="lg:col-span-7 text-left">
+            {/* Live Indicator Chip */}
+            <div className="inline-flex items-center gap-2 bg-[#00B894]/15 border border-[#00B894]/30 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#00B894] mb-6">
+              <span className="w-2 h-2 rounded-full bg-[#00B894] animate-pulse"></span>
+              Non-Custodial Cloud Execution
+            </div>
 
-          {/* Subheadline - Original Style */}
-          <p className="text-xl md:text-2xl mb-10 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Connect your systems, automate event routing, and track execution logs in real time. Tadex simplifies payload dispatch and rule-based workflow automation.
-          </p>
+            {/* H1 Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1] mb-6">
+              Automate Your Trading Signals.{' '}
+              <span className="text-[#00B894] block mt-1">No More Manual Copying.</span>
+            </h1>
 
-          {/* CTA Buttons - New Actions with Original Styling */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Link href={PRICING_URL}>
-              <Button 
-                size="lg" 
-                className="bg-[#00B894] hover:bg-[#00A085] text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-              >
-                <Send className="w-5 h-5 mr-2" />
-                Get Started for Free
-              </Button>
-            </Link>
-            <Link href={YOUTUBE_DEMO_URL} target="_blank">
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="text-white border-2 border-white/30 hover:bg-white/10 px-8 py-6 text-lg font-semibold rounded-xl backdrop-blur-sm transition-all duration-300"
-              >
-                <Play className="w-5 h-5 mr-2" />
-                Watch Setup Video
-              </Button>
-            </Link>
-          </div>
+            {/* Subheadline */}
+            <p className="text-lg sm:text-xl text-slate-300 leading-relaxed mb-8 max-w-2xl">
+              Connect your Telegram groups and exchanges. Tadex reads signals and places trades for you 24/7—so you don’t miss entries or make costly mistakes.
+            </p>
 
-          {/* Content Grid - Text + Visual */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-            {/* Trust Stats - Original Beautiful Cards */}
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
-                  <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">Instant</div>
-                  <p className="text-blue-100 font-medium">Event Routing</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
-                  <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">24/7</div>
-                  <p className="text-blue-100 font-medium">Uptime</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
-                  <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">99.9%</div>
-                  <p className="text-blue-100 font-medium">Delivery Accuracy</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300">
-                  <div className="text-3xl md:text-4xl font-bold text-[#00B894] mb-2">0</div>
-                  <p className="text-blue-100 font-medium">Setup Fees</p>
-                </div>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-6">
+              <div className="flex flex-col items-center sm:items-start">
+                <Link href="#pricing" className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto bg-[#00B894] hover:bg-[#00A085] text-slate-950 font-bold px-8 py-6 text-base rounded-xl shadow-lg shadow-[#00B894]/20 transition-all duration-300 transform hover:scale-[1.02]"
+                  >
+                    Start Free
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+                <span className="text-xs text-slate-400 mt-2">
+                  No credit card required
+                </span>
               </div>
 
-              {/* Additional Benefits */}
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                <h3 className="text-lg font-semibold text-white mb-4">Why Developers Choose Tadex</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-blue-100">
+              <div className="flex flex-col items-center sm:items-start">
+                <Link href={YOUTUBE_DEMO_URL} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full sm:w-auto bg-slate-900/60 hover:bg-slate-800 text-slate-200 border border-slate-700 px-6 py-6 text-base font-medium rounded-xl backdrop-blur-sm transition-all"
+                  >
+                    <Play className="w-4 h-4 mr-2 text-[#00B894]" />
+                    Watch 2‑min Demo
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Trust Line */}
+            <div className="pt-2 text-xs sm:text-sm font-medium text-slate-400 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-[#00B894]" />
+              <span>99.9% uptime</span>
+              <span className="text-slate-600">•</span>
+              <span>2,000+ users</span>
+              <span className="text-slate-600">•</span>
+              <span>Instant setup</span>
+            </div>
+          </div>
+
+          {/* Right Column: Terminal Product Visual */}
+          <div className="lg:col-span-5">
+            <div className="relative mx-auto max-w-lg lg:max-w-none">
+              {/* Terminal Frame */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/90 shadow-2xl backdrop-blur-md overflow-hidden">
+                {/* Terminal Header */}
+                <div className="flex items-center justify-between px-4 py-3 bg-slate-950/80 border-b border-slate-800/80">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#00B894] rounded-full"></div>
-                    <span>Real-time Event Logging</span>
+                    <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                    <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                    <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                    <span className="text-xs font-mono text-slate-400 ml-2">tadex-execution-node v2.4</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#00B894] rounded-full"></div>
-                    <span>Multi-Platform Connectors</span>
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">
+                    <Activity className="w-3 h-3 animate-pulse" />
+                    <span>ENGINE LIVE</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#00B894] rounded-full"></div>
-                    <span>Custom Event Rules</span>
+                </div>
+
+                {/* Terminal Content Body */}
+                <div className="p-5 font-mono text-xs space-y-4">
+                  {/* Step 1: Telegram Signal Ingest */}
+                  <div className="rounded-lg bg-slate-950/60 p-3.5 border border-slate-800">
+                    <div className="flex items-center justify-between text-slate-400 mb-2">
+                      <span className="text-[#00B894] font-semibold flex items-center gap-1.5">
+                        <Zap className="w-3.5 h-3.5" /> 1. Ingest Signal
+                      </span>
+                      <span className="text-[10px] text-slate-500">Telegram VIP</span>
+                    </div>
+                    <div className="text-slate-200 bg-slate-900/90 p-2.5 rounded border border-slate-800/70 font-mono text-[11px] leading-relaxed">
+                      <span className="text-amber-400">#BTC/USDT</span> BUY ZONE: <span className="text-emerald-400">$68,400</span><br />
+                      SL: <span className="text-red-400">$66,200</span> | TP1: <span className="text-emerald-400">$70,500</span> | TP2: <span className="text-emerald-400">$72,500</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-[#00B894] rounded-full"></div>
-                    <span>Fail-safe Routing Logic</span>
+
+                  {/* Step 2: Risk Guard Verification */}
+                  <div className="rounded-lg bg-slate-950/60 p-3.5 border border-slate-800">
+                    <div className="flex items-center justify-between text-slate-400 mb-1.5">
+                      <span className="text-sky-400 font-semibold">2. Pre-Trade Risk Rules</span>
+                      <span className="text-emerald-400 text-[10px] font-bold">PASSED</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300">
+                      <div className="bg-slate-900/80 p-2 rounded border border-slate-800/60">
+                        <span className="text-slate-500 text-[10px] block">Position Sizing</span>
+                        <span className="font-semibold text-slate-200">2.0% Account Risk</span>
+                      </div>
+                      <div className="bg-slate-900/80 p-2 rounded border border-slate-800/60">
+                        <span className="text-slate-500 text-[10px] block">Max Drawdown Guard</span>
+                        <span className="font-semibold text-emerald-400">Safe (OK)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 3: Bybit Execution Dispatch */}
+                  <div className="rounded-lg bg-emerald-950/30 p-3.5 border border-emerald-700/40">
+                    <div className="flex items-center justify-between text-slate-400 mb-1.5">
+                      <span className="text-emerald-400 font-semibold">3. Exchange Dispatch</span>
+                      <span className="text-[10px] text-slate-400">Latency: 14ms</span>
+                    </div>
+                    <div className="bg-slate-900/90 p-2.5 rounded border border-emerald-800/40 text-[11px] space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-400">Target Exchange:</span>
+                        <span className="font-bold text-white">Bybit Futures</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-400">Order Placed:</span>
+                        <span className="text-emerald-400 font-bold">Market Buy BTCUSDT</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-1 border-t border-slate-800">
+                        <span className="text-slate-400">Execution Status:</span>
+                        <span className="bg-emerald-500 text-slate-950 font-extrabold px-2 py-0.5 rounded text-[10px]">
+                          FILLED @ $68,402
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* High-Level Visual Flow Banner */}
+                  <div className="bg-gradient-to-r from-[#004859]/30 to-[#00B894]/20 border border-[#00B894]/40 rounded-xl p-3 text-center">
+                    <div className="text-[11px] font-bold text-slate-200">
+                      <span className="text-slate-400">Signal:</span> <span className="text-amber-300">BTC Long</span>
+                      <span className="text-slate-500 mx-1.5">→</span>
+                      <span className="text-slate-400">Exchange:</span> <span className="text-white">Bybit</span>
+                      <span className="text-slate-500 mx-1.5">→</span>
+                      <span className="text-slate-400">Status:</span> <span className="text-[#00B894]">Filled</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Phone Mockup - New Visual */}
-            <div className="relative">
-              <div className="relative z-10 bg-white rounded-[2.5rem] shadow-2xl p-4 border-8 border-slate-800 max-w-xs mx-auto transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
-                {/* Phone Speaker */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 h-6 w-32 bg-slate-800 rounded-b-xl"></div>
-                
-                {/* Screen Content */}
-                <div className="bg-slate-50 rounded-[1.5rem] overflow-hidden h-[500px] flex flex-col relative">
-                  {/* Mock Header */}
-                  <div className="bg-[#004859] p-4 pt-8 text-white flex items-center gap-3">
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-xs">T</div>
-                    <div>
-                      <div className="font-bold text-sm">Tadex Platform</div>
-                      <div className="text-[10px] text-[#00B894]">● Online</div>
-                    </div>
-                  </div>
-
-                  {/* Mock Chat */}
-                  <div className="flex-1 p-4 space-y-4">
-                    {/* User Msg */}
-                    <div className="flex justify-end">
-                      <div className="bg-[#00B894] text-white p-3 rounded-2xl rounded-tr-sm text-xs max-w-[80%] shadow-sm">
-                        TRIGGER: webhook_event SRC: main_app PAYLOAD: status=active
-                      </div>
-                    </div>
-
-                    {/* Bot Msg */}
-                    <div className="flex justify-start">
-                      <div className="bg-white border border-slate-200 text-slate-800 p-3 rounded-2xl rounded-tl-sm text-xs max-w-[90%] shadow-sm">
-                        <p className="font-bold text-[#004859] mb-1">✅ Event Dispatched</p>
-                        <div className="space-y-1 text-slate-600">
-                          <p>Event: Webhook Trigger</p>
-                          <p>Destination: Slack/Bybit API</p>
-                          <p>Status: Dispatched</p>
-                        </div>
-                        <div className="mt-2 pt-2 border-t border-slate-100 text-[10px] text-slate-400 flex justify-between">
-                          <span>Routing payload...</span>
-                          <span className="text-[#00B894]">Just now</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Success Notification */}
-                    <div className="absolute top-1/2 left-4 right-4 bg-white p-3 rounded-xl shadow-xl border-l-4 border-[#00B894] animate-in fade-in slide-in-from-bottom-4">
-                      <div className="flex gap-3 items-center">
-                        <div className="bg-green-100 p-2 rounded-full">
-                          <Zap className="w-4 h-4 text-green-600" />
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-slate-800">Delivery Confirmed</p>
-                          <p className="text-[10px] text-slate-500">Webhook event delivered successfully</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Background Blob */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#00B894]/20 rounded-full blur-3xl -z-10"></div>
-            </div>
-          </div>
-
-          {/* Bottom CTA */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-white mb-4">Ready to Automate Your Workflows?</h3>
-            <p className="text-blue-100 mb-6">Join hundreds of users already optimizing their event-driven logic</p>
-            <Link href={PRICING_URL}>
-              <Button 
-                size="lg" 
-                className="bg-[#00B894] hover:bg-[#00A085] text-white px-8 py-4 text-lg font-semibold rounded-xl"
-              >
-                <Send className="w-5 h-5 mr-2" />
-                Get Started Now
-              </Button>
-            </Link>
           </div>
         </div>
-      </div>
-
-      {/* Bottom wave - Original Beautiful Transition */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg className="w-full h-16" viewBox="0 0 1200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 120L50 110C100 100 200 80 300 70C400 60 500 60 600 65C700 70 800 80 900 85C1000 90 1100 90 1150 90L1200 90V120H1150C1100 120 1000 120 900 120C800 120 700 120 600 120C500 120 400 120 300 120C200 120 100 120 50 120H0Z" fill="white"/>
-        </svg>
       </div>
     </section>
   );

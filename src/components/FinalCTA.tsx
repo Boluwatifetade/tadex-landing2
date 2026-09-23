@@ -1,171 +1,59 @@
 'use client';
 
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Send, TrendingUp, Shield, Zap, Users, ArrowRight, CheckCircle } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap, Lock } from 'lucide-react';
 import Link from 'next/link';
 
 export default function FinalCTA() {
-  const [email, setEmail] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.error || "Something went wrong");
-        return;
-      }
-
-      console.log("Email captured and saved:", email);
-      setIsSubmitted(true);
-      setEmail("");
-
-      setTimeout(() => setIsSubmitted(false), 3000);
-    } catch (err) {
-      console.error("Network error", err);
-      alert("Network error. Try again.");
-    }
-  };
-
-  const benefits = [
-    { icon: TrendingUp, text: "99.9% routing accuracy" },
-    { icon: Zap, text: "Instant routing" },
-    { icon: Shield, text: "99.9% uptime" },
-    { icon: Users, text: "2,000+ users" }
-  ];
-
   return (
-    <section className="relative bg-gradient-to-br from-[#004859] via-[#006B7C] to-[#004859] text-white overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%220.03%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+    <section className="relative bg-slate-950 text-white overflow-hidden py-20 lg:py-28 border-t border-slate-800">
+      {/* Subtle Background Radial Accent */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#004859]/25 rounded-full blur-[140px] pointer-events-none"></div>
 
-      {/* Floating Elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-[#00B894]/20 rounded-full blur-xl animate-pulse"></div>
-      <div className="absolute bottom-20 right-10 w-32 h-32 bg-[#00B894]/10 rounded-full blur-2xl animate-pulse delay-1000"></div>
-      <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white/10 rounded-full blur-lg"></div>
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {/* Headline */}
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-6">
+          Ready to Stop Copying Trades Manually?
+        </h2>
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-        <div className="text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center bg-[#00B894]/20 text-[#00B894] px-4 py-2 rounded-full text-sm font-medium mb-6 border border-[#00B894]/30">
-            <TrendingUp className="w-4 h-4 mr-2" />
-            Join the workflow revolution
+        {/* Subheadline */}
+        <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Join thousands of traders who already use Tadex to automate their signals and protect their capital.
+        </p>
+
+        {/* Primary CTA Button */}
+        <div className="flex flex-col items-center justify-center mb-10">
+          <Link href="#pricing">
+            <Button
+              size="lg"
+              className="bg-[#00B894] hover:bg-[#00A085] text-slate-950 font-bold px-10 py-7 text-lg rounded-xl shadow-xl shadow-[#00B894]/20 transition-all duration-300 transform hover:scale-105"
+            >
+              Start Free
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </Link>
+          <span className="text-xs text-slate-400 mt-3 font-medium">
+            No credit card required
+          </span>
+        </div>
+
+        {/* Trust Line */}
+        <div className="pt-8 border-t border-slate-800/80 flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm text-slate-400">
+          <div className="flex items-center gap-2">
+            <Zap className="w-4 h-4 text-[#00B894]" />
+            <span>99.9% uptime</span>
           </div>
-
-          {/* Main Headline */}
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-            Start Automating in <span className="text-[#00B894]">2 Minutes</span>
-          </h2>
-
-          {/* Subheadline */}
-          <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Join the beta today. No credit card required. No complex setup. Just pure workflow efficiency.
-          </p>
-
-          {/* Benefits Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            {benefits.map((benefit, index) => {
-              const IconComponent = benefit.icon;
-              return (
-                <div key={index} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 hover:border-[#00B894]/30 transition-all duration-300 hover:scale-105">
-                  <IconComponent className="w-6 h-6 text-[#00B894] mx-auto mb-2" />
-                  <p className="text-sm text-blue-100 font-medium">{benefit.text}</p>
-                </div>
-              );
-            })}
+          <span className="text-slate-600 hidden sm:inline">•</span>
+          <div className="flex items-center gap-2">
+            <Lock className="w-4 h-4 text-[#00B894]" />
+            <span>Secure API handling</span>
           </div>
-
-          {/* Dual CTA Section */}
-          <div className="max-w-2xl mx-auto mb-12">
-            {/* CTA - Waitlist */}
-            <div>
-              <p className="text-blue-100 mb-4 font-medium">Join the waitlist for early platform access</p>
-              {!isSubmitted ? (
-                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email address"
-                    className="flex-1 bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder:text-blue-200 focus:border-[#00B894] rounded-xl py-4 px-6 text-lg"
-                    required
-                  />
-                  <Button
-                    type="submit"
-                    className="bg-white/20 hover:bg-white/30 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold transition-all duration-300 text-lg whitespace-nowrap group"
-                  >
-                    Join Waitlist
-                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </form>
-              ) : (
-                <div className="flex items-center justify-center gap-3 bg-[#00B894]/20 backdrop-blur-sm border border-[#00B894]/30 rounded-xl py-4 px-6 max-w-md mx-auto">
-                  <CheckCircle className="w-6 h-6 text-[#00B894]" />
-                  <span className="text-[#00B894] font-semibold text-lg">
-                    You're on the waitlist! Check your email.
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Trust Indicators */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-blue-100 mb-8">
-            <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-[#00B894]" />
-              <span className="text-sm">Strong API security</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-[#00B894]" />
-              <span className="text-sm">99.9% uptime guarantee</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-[#00B894]" />
-              <span className="text-sm">No credit card required</span>
-            </div>
-          </div>
-
-          {/* Social Proof */}
-          <div className="pt-8 border-t border-white/20">
-            <p className="text-blue-100 mb-4">Trusted by users testing right now. Join the private beta to shape the product.</p>
-            <div className="flex justify-center items-center gap-8 opacity-80">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-[#00B894]">100+</div>
-                <div className="text-xs text-blue-100">Users</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-[#00B894]">99.9%</div>
-                <div className="text-xs text-blue-100">Routing Accuracy</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-[#00B894]">Instant</div>
-                <div className="text-xs text-blue-100">Event Dispatch</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-[#00B894]">99.9%</div>
-                <div className="text-xs text-blue-100">Uptime</div>
-              </div>
-            </div>
+          <span className="text-slate-600 hidden sm:inline">•</span>
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-[#00B894]" />
+            <span>Instant setup</span>
           </div>
         </div>
-      </div>
-
-      {/* Bottom wave */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg className="w-full h-16" viewBox="0 0 1200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 120L50 110C100 100 200 80 300 70C400 60 500 60 600 65C700 70 800 80 900 85C1000 90 1100 90 1150 90L1200 90V120H1150C1100 120 1000 120 900 120C800 120 700 120 600 120C500 120 400 120 300 120C200 120 100 120 50 120H0Z" fill="#f8fafc"/>
-        </svg>
       </div>
     </section>
   );

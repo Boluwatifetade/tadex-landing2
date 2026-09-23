@@ -4,6 +4,35 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Landing Page Overhaul: 7-Section Architecture & Final Copy] - 2026-09-23
+
+### 1. 7-Section Page Structure (`src/app/page.tsx`)
+- Streamlined landing page architecture into 7 clean, scan-friendly sections:
+  1. **Hero (`Hero.tsx`)**: High-contrast dark theme with large typography, value proposition, primary and secondary CTAs, trust metrics, and interactive execution terminal mock showing live signal parsing to Bybit order execution.
+  2. **What Tadex Does (`WhatTadexDoes.tsx`)**: 3 benefit cards (*Never Miss a Trade*, *Remove Human Error*, *Run Like a Pro Operation*).
+  3. **How It Works (`HowItWorks.tsx`)**: 4 simple setup steps (*Create Your Account*, *Connect Your Accounts*, *Set Your Rules*, *Let Tadex Handle the Rest*) with visual signal-flow pipeline and quick start CTA.
+  4. **Who This Is For (`WhoThisIsFor.tsx`)**: 3 user segment cards (*Signal Followers*, *Signal Providers*, *Busy Traders & Prop Traders*).
+  5. **Pricing (`Pricing.tsx`)**: Model-aligned Naira pricing:
+     - Free: `₦0` (12 automated trades/month across free communities, basic risk controls).
+     - Tadex Premium: `₦5,000/month` launch price (regular ₦10,000/month) with portfolio-wide risk rules, drawdown protection, and execution analytics.
+     - For Signal Providers: Monetization tier with 10% platform fee and multi-currency support (NGN/USD/GHS/KES).
+     - "How Tadex Pricing Works" explainer card.
+  6. **FAQ (`FAQ.tsx`)**: 7 key questions answering installation, free tier, exchanges, security, beginners, cancellation, and non-custodial execution.
+  7. **Final CTA (`FinalCTA.tsx`) & Footer (`Footer.tsx`)**: Conversion block with trust line, unified links, and cleaned footer.
+- Removed legacy `WhyAutomated.tsx` and `ComparisonTable.tsx` from the primary page flow to eliminate redundant text blocks.
+
+### 2. Legal & Compliance Cleanup
+- Removed developer tagline (`"Made with ❤️ for developers"`) from footer.
+- Removed physical street address (`17 Peaceland Estate, Igbe Kapo...`) from `Footer.tsx`, `terms/page.tsx`, and `privacy/page.tsx`, displaying strictly `"Lagos, Nigeria"`.
+
+### 3. Automated Tests & Build Verification
+- Added `src/test/LandingPageComponents.test.tsx` testing all 7 landing page sections.
+- Updated `src/test/AccountSettings.test.tsx` to handle the `/me` user refresh on mount.
+- Full Vitest suite: 36 test files, 135 tests passing (100%).
+- Next.js Turbopack build (`next build --turbopack`) generated all 34 routes cleanly.
+
+---
+
 ## [Design System & Master Handoff Specification v2] - 2026-08-28
 
 ### 1. Specification Audit & Master Handoff Document (`docs/Tadex_Web_Design_Handoff_v2.md`, `Tadex_Web_Design_Handoff_v2.md`)
