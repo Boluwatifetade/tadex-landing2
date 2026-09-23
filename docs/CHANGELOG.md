@@ -4,6 +4,27 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Tadex for Signal Providers: Dedicated Landing Page & Copy] - 2026-09-23
+
+### 1. Dedicated Provider Landing Page (`/for-providers`, `/providers`)
+- Built dedicated, conversion-optimized landing page at `src/app/for-providers/page.tsx` (aliased at `src/app/providers/page.tsx`):
+  1. **Provider Hero (`ProviderHero.tsx`)**: Headline, subheadline, primary CTA ("Become a Provider / Talk to our team"), secondary indicators, trust line, and live provider dashboard mock (`Active Plans: 3`, `Monthly Revenue: ₦1,250,000`, `Connected Channel: @AlphaSignals VIP`).
+  2. **The Problem (`ProviderProblem.tsx`)**: 3 manual management pain cards (*Payment & Access Chaos*, *Leaked Links & Free Riders*, *No Automation, No Scale*).
+  3. **What Tadex Gives You (`ProviderBenefits.tsx`)**: 4 provider benefit cards (*Automated Billing & Access*, *You Set the Price, We Handle the Rest*, *Automated Execution for Your Members*, *Clear Revenue & Subscriber Insights*).
+  4. **How It Works (`ProviderHowItWorks.tsx`)**: 4-step onboarding pipeline (*Create Account*, *Create Plans*, *Connect Telegram*, *Share Checkout Link*) with mini flow visual.
+  5. **Pricing & Revenue (`ProviderPricingRevenue.tsx`)**: Transparent 90/10 revenue share split breakdown (e.g. ₦30,000/mo $\rightarrow$ You: ₦27,000, Tadex: ₦3,000) and feature inventory with non-PnL cut guarantee.
+  6. **Provider FAQ (`ProviderFAQ.tsx`)**: 8 provider-specific Q&As covering Telegram channel persistence, payouts, custom pricing, external member migration, failure automation, free vs. paid communities, minimums, and price adjustments.
+  7. **Provider Final CTA (`ProviderFinalCTA.tsx`) & Footer (`ProviderFooter.tsx`)**: Dedicated provider closing CTA, unified links, `Tadex for Providers` branding, and location `Lagos, Nigeria`.
+- Added interactive `ProviderLeadModal.tsx` for capturing provider brand, email, Telegram handle, and community size with direct portal registration routing.
+- Linked "Become a Provider" on main landing page `Pricing.tsx` directly to `/for-providers`.
+
+### 2. Automated Tests & Build Verification
+- Created `src/test/ProviderLandingPage.test.tsx` (9 tests passing).
+- Full Vitest suite: 37 test files, 144 tests passing (100%).
+- Next.js Turbopack build (`next build --turbopack`) successfully compiled all 36 routes including `/for-providers` and `/providers`.
+
+---
+
 ## [Landing Page Overhaul: 7-Section Architecture & Final Copy] - 2026-09-23
 
 ### 1. 7-Section Page Structure (`src/app/page.tsx`)

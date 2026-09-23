@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { Check, Zap, Crown, Radio, Shield, Sparkles } from 'lucide-react';
 
 interface PricingProps {
@@ -245,12 +246,14 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
             </div>
 
             <div>
-              <Button
-                onClick={() => onPlanSelect('provider')}
-                className="w-full bg-[#004859] hover:bg-[#00323B] text-white py-6 text-base font-bold rounded-xl transition-all duration-200"
-              >
-                Become a Provider
-              </Button>
+              <Link href="/for-providers" className="block w-full">
+                <Button
+                  onClick={() => onPlanSelect('provider')}
+                  className="w-full bg-[#004859] hover:bg-[#00323B] text-white py-6 text-base font-bold rounded-xl transition-all duration-200"
+                >
+                  Become a Provider
+                </Button>
+              </Link>
               <p className="text-[11px] text-slate-500 text-center mt-2">
                 Talk to our team
               </p>
