@@ -30,7 +30,7 @@ Design is not finalized yet. Build using semantic design tokens, not hardcoded v
 ## Coding conventions
 - Backend: FastAPI (Python), Pydantic schemas for every request/response.
 - Frontend: Next.js + TypeScript.
-- State: server state via React Query, UI state via Zustand/local state — do not mix the two.
+- State: For the current beta milestone, server state is managed via the canonical `apiClient` fetch wrapper + local component state, with cross-cutting auth/session state managed via Zustand (`useAuthStore`). Full React Query migration is deferred to post-beta optimization.
 - Forms: React Hook Form + Zod schema per form.
 - Every PR/change touching an execution or auth flow must include or update a test.
 

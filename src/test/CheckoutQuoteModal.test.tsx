@@ -1,12 +1,20 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import CheckoutQuoteModal from "@/components/dashboard/CheckoutQuoteModal";
 import * as apiClientModule from "@/lib/api-client";
 import { PlanOut } from "@/components/dashboard/PricingGrid";
 
 describe("CheckoutQuoteModal", () => {
+  const originalLocation = window.location;
+
   beforeEach(() => {
     vi.restoreAllMocks();
+    delete (window as unknown as { location: unknown }).location;
+    window.location = { ...originalLocation, href: "", assign: vi.fn() } as unknown as Location;
+  });
+
+  afterEach(() => {
+    window.location = originalLocation;
   });
 
   const mockPlan: PlanOut = {
@@ -151,6 +159,7 @@ describe("CheckoutQuoteModal", () => {
         method: "POST",
         body: expect.stringContaining("plan_pro_101"),
       }));
+      expect(window.location.href).toBe("https://checkout.flutterwave.com/v3/hosted/pay/test12345");
     });
   });
 });

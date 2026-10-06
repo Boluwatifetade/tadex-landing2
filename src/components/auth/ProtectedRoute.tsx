@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/lib/auth-store";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { API_BASE_URL } from "@/lib/api-client";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

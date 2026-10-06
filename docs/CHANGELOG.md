@@ -4,6 +4,95 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Frontend Forensic Audit Hardening & Freshness Architecture] - 2026-10-07
+
+### 1. P1: Coordinated Trading Freshness Semantics (`TradingPage.tsx`, `PositionsTable.tsx`, `OrdersTable.tsx`)
+- Coordinated multi-dataset sync tracking across exchange keys (`/keys`), open positions (`/trading/positions`), and active orders (`/trading/orders`).
+- `lastSyncedAt` timestamp and `"fresh"` badge are now strictly updated ONLY when all 3 fetch operations successfully resolve.
+- If any endpoint encounters a failure, freshness transitions to `"error"` and previous `lastSyncedAt` is preserved without fake sync timestamps.
+- Polling timer and manual refresh button transition status to `"syncing"` while requests are in flight.
+- Added regression tests verifying failure isolation on `/trading/positions` and `/trading/orders`.
+
+### 2. P2: API Key Active Status Filtering in Readiness Wizard (`dashboard/page.tsx`)
+- Step 2 ("Exchange API Key") and the Exchange Connection summary card now check `keys.length > 0 && keys.some((k) => k.status === "active")`.
+- Revoked and suspended keys are no longer treated as active connections. Mixed active and revoked keys resolve the active key correctly.
+- Added comprehensive unit tests in `DashboardOverview.test.tsx` covering active, revoked, suspended, and mixed key sets.
+
+### 3. P2: AccountSettings to DashboardHeader Real-Time Sync (`auth-store.ts`, `dashboard/layout.tsx`, `AccountSettings.tsx`, `DashboardHeader.tsx`)
+- Extended memory-only Zustand auth store (`useAuthStore`) with `user: UserProfile | null` and `setUser`.
+- `DashboardLayout` reads authoritative user state from `useAuthStore` and supplies it to `DashboardHeader`.
+- Unlinking Telegram or clicking "Check Status" in `AccountSettings` invokes `setUser` with fresh `/me` data, instantaneously updating the header badge across the app without page reload.
+- Created dedicated integration suite `src/test/AccountSettingsSync.test.tsx` verifying end-to-end reactive synchronization.
+
+### 4. P2: State Management Documentation Alignment (`AGENTS.md`)
+- Formally documented the beta milestone architecture in `AGENTS.md`: canonical `apiClient` fetch wrapper + local component state + selective Zustand session store (`useAuthStore`).
+- Documented deferral of full TanStack/React Query migration to post-beta optimization.
+
+### 5. P3: Console Logging Elimination
+- Removed email logging in `PlanWaitlistModal.tsx` and `WaitlistModal.tsx`.
+- Verified 0 `console.log` statements remain across the entire `src/` directory.
+
+### 6. P3: Canonical ProtectedRoute API Base URL (`ProtectedRoute.tsx`, `api-client.ts`)
+- Exported `API_BASE_URL` from `src/lib/api-client.ts` and imported it into `src/components/auth/ProtectedRoute.tsx`, ensuring consistent API base URLs across all authentication refresh calls.
+
+### 7. P3: Checkout Redirection Assertion & Clean JSDOM Navigation (`CheckoutQuoteModal.test.tsx`)
+- Mocked `window.location` in `CheckoutQuoteModal.test.tsx` to eliminate JSDOM navigation warnings.
+- Added assertion verifying that `window.location.href` is updated with the backend-returned `authorization_url`.
+
+---
+
+## [Frontend Architecture Rebuild & Multi-Currency Dynamic Billing] - 2026-10-06
+
+### 1. Dashboard Shell & Layout Architecture (`src/app/dashboard/layout.tsx`)
+- Established unified root dashboard layout with `ErrorBoundary`, `ProtectedRoute`, background `/me` auth syncing, and sticky responsive `DashboardHeader`.
+- Streamlined downstream views (`/dashboard/keys`, `/dashboard/providers`, `/dashboard/settings`) by removing duplicated header instances and container bloat.
+
+### 2. Dashboard Overview Rebuild (`src/app/dashboard/page.tsx`)
+- Eliminated all fake/mocked metrics (arbitrary win-rate gauges, fabricated trade summaries).
+- Implemented honest 5-step execution readiness checklist evaluating verified backend contracts:
+  1. Email Verified (`GET /api/v1/auth/me`)
+  2. Exchange API Key Connected (`GET /api/v1/keys`)
+  3. Telegram Account Linked (`user.telegram_id`)
+  4. Active Subscription Entitlement (`GET /api/v1/billing/subscription`)
+  5. Active Signal Provider Followed (`GET /api/v1/providers`)
+- Surfaced trade-only Bybit account readiness card, actionable subscription billing alert cards, live open positions table, and verified signal provider catalog.
+
+### 3. Live Trading Execution Monitoring (`src/app/dashboard/trading/page.tsx`)
+- Rebuilt trading view exclusively as an execution monitoring dashboard reflecting confirmed backend & exchange state:
+  - Removed hypothetical manual trading mutation triggers (e.g. panic close, cancel all) that lack verified backend endpoints.
+  - Added live execution freshness monitoring (`Fresh`, `Syncing`, `Stale`, `Error`) with timestamp display.
+  - Tab visibility awareness (`document.visibilityState`): Polling automatically pauses when user leaves tab to prevent unnecessary exchange rate-limit consumption and CPU usage.
+  - Manual sync trigger with instantaneous refetch of positions, orders, and key state.
+
+### 4. Gated Trader Analytics (`src/app/dashboard/analytics/page.tsx`)
+- Created honest gated status screen for trader historical analytics (`/dashboard/analytics`).
+- Explicitly discloses ongoing exchange fill reconciliation and trade history synchronization.
+- Strictly adheres to the core architectural rule: zero client-side financial calculations (PnL, win rate, drawdown) or fabricated equity charts.
+
+### 5. Dynamic Multi-Currency Billing & Provider-Agnostic Checkout (`CheckoutQuoteModal.tsx`, `billing/page.tsx`)
+- Removed hardcoded NGN-only restrictions and gateway selections from frontend.
+- Paystack vs Flutterwave gateway routing is resolved dynamically by the backend `PaymentProviderRouter` based on selected currency (`NGN`, `USD`, `KES`, `GHS`, `JPY`).
+- Updated checkout payload dispatching `POST /api/v1/billing/checkout` with `{ plan_id, currency, duration_months, success_url, cancel_url }`.
+- Stored non-sensitive pending reference (`tadex_pending_checkout_ref`) in `sessionStorage` with resume verification banner on `/dashboard/billing`.
+
+### 6. Dedicated 8-State Payment Result Verification Route (`/dashboard/billing/checkout/result`)
+- Built dedicated payment result page (`src/app/dashboard/billing/checkout/result/page.tsx`) eliminating raw gateway JSON leaks.
+- Handles complete transaction lifecycle: `VERIFICATION_PENDING`, `CONFIRMED`, `FAILED`, `CANCELLED`, `TIMEOUT`, and `INVALID_REFERENCE`.
+- Cross-gateway reference extraction normalizing `reference`, `tx_ref`, `trxref`, and `sessionStorage`.
+- Automated polling with exponential backoff against `GET /api/v1/billing/transactions/{reference}`.
+- Refetches active subscription on confirmation and cleans up session state.
+
+### 7. Automated Tests & Build Verification
+- Added 4 test suites:
+  - `src/test/MultiCurrencyCheckout.test.tsx` (4 tests passed)
+  - `src/test/CheckoutResult.test.tsx` (7 tests passed)
+  - `src/test/DashboardOverview.test.tsx` (3 tests passed)
+  - `src/test/TradingPage.test.tsx` (3 tests passed)
+- Full Vitest suite: 41 test files, 161 tests passing (100%).
+- Full production `next build --turbopack` and TypeScript compilation verified.
+
+---
+
 ## [Tadex for Signal Providers: Dedicated Landing Page & Copy] - 2026-09-23
 
 ### 1. Dedicated Provider Landing Page (`/for-providers`, `/providers`)

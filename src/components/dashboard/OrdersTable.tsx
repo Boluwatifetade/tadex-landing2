@@ -19,7 +19,12 @@ export interface OrderOut {
   timestamp?: string | null;
 }
 
-export default function OrdersTable() {
+interface OrdersTableProps {
+  onSyncSuccess?: () => void;
+  onSyncError?: (error: Error) => void;
+}
+
+export default function OrdersTable({ onSyncSuccess, onSyncError }: OrdersTableProps = {}) {
   const [orders, setOrders] = useState<OrderOut[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -32,13 +37,15 @@ export default function OrdersTable() {
       const query = statusFilter !== "all" ? `?status=${encodeURIComponent(statusFilter)}` : "";
       const data = await apiClient<OrderOut[]>(`/trading/orders${query}`);
       setOrders(Array.isArray(data) ? data : []);
+      onSyncSuccess?.();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to load orders";
       setFetchError(msg);
+      onSyncError?.(err instanceof Error ? err : new Error(msg));
     } finally {
       setIsLoading(false);
     }
-  }, [statusFilter]);
+  }, [statusFilter, onSyncSuccess, onSyncError]);
 
   useEffect(() => {
     fetchOrders();

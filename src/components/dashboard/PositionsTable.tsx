@@ -18,7 +18,12 @@ export interface PositionOut {
   take_profit?: number | null;
 }
 
-export default function PositionsTable() {
+interface PositionsTableProps {
+  onSyncSuccess?: () => void;
+  onSyncError?: (error: Error) => void;
+}
+
+export default function PositionsTable({ onSyncSuccess, onSyncError }: PositionsTableProps = {}) {
   const [positions, setPositions] = useState<PositionOut[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -29,13 +34,15 @@ export default function PositionsTable() {
     try {
       const data = await apiClient<PositionOut[]>("/trading/positions");
       setPositions(Array.isArray(data) ? data : []);
+      onSyncSuccess?.();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to load positions";
       setFetchError(msg);
+      onSyncError?.(err instanceof Error ? err : new Error(msg));
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [onSyncSuccess, onSyncError]);
 
   useEffect(() => {
     fetchPositions();

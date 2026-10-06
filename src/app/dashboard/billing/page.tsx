@@ -1,189 +1,135 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import SubscriptionCard from "@/components/dashboard/SubscriptionCard";
 import PricingGrid from "@/components/dashboard/PricingGrid";
-import { apiClient } from "@/lib/api-client";
-import { CreditCard, CheckCircle2, AlertTriangle, Loader2, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CreditCard, Clock, ArrowRight, X, Loader2 } from "lucide-react";
 
-export interface TransactionStatusResponse {
-  id: string;
+interface PendingCheckoutStorage {
   reference: string;
-  user_id: string;
-  provider: string;
-  status: string;
-  amount_cents: number;
-  amount: number;
-  currency: string;
-  created_at?: string;
-  updated_at?: string;
+  plan_id?: string;
+  plan_name?: string;
+  currency?: string;
+  initiated_at?: string;
 }
 
 function BillingPageContent() {
   const searchParams = useSearchParams();
-  const statusParam = searchParams.get("status");
-  const rawRef = searchParams.get("tx_ref") || searchParams.get("ref") || searchParams.get("reference") || searchParams.get("trxref");
-  const refParam = rawRef && rawRef !== "{reference}" && rawRef !== "%7Breference%7D" ? rawRef : null;
+  const router = useRouter();
 
-  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
-  const [banner, setBanner] = useState<{
-    type: "verifying" | "success" | "cancelled" | "failed";
-    message: string;
-  } | null>(null);
+  // If user arrived with checkout return query parameters, redirect to the dedicated result page
+  const queryRef =
+    searchParams.get("reference") ||
+    searchParams.get("tx_ref") ||
+    searchParams.get("trxref") ||
+    searchParams.get("ref");
+  const queryStatus = searchParams.get("status");
 
-  const hasPolledRef = useRef<string | null>(null);
-  const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const pollTransactionStatus = useCallback((reference: string) => {
-    if (hasPolledRef.current === reference) return;
-    hasPolledRef.current = reference;
-
-    let attempts = 0;
-    const maxAttempts = 8; // 16 seconds total
-
-    const poll = async () => {
-      attempts++;
-      try {
-        const tx = await apiClient<TransactionStatusResponse>(`/billing/transactions/${encodeURIComponent(reference)}`);
-        const statusLower = (tx?.status || "").toLowerCase();
-
-        if (statusLower === "success" || statusLower === "successful" || statusLower === "paid") {
-          setBanner({
-            type: "success",
-            message: "Payment successful! Your subscription has been activated.",
-          });
-          setRefreshTrigger((prev) => prev + 1);
-          return;
-        }
-
-        if (statusLower === "failed" || statusLower === "cancelled") {
-          setBanner({
-            type: "failed",
-            message: "Payment transaction failed or was rejected.",
-          });
-          return;
-        }
-      } catch (err) {
-        console.error("Polling error for reference", reference, err);
-      }
-
-      if (attempts < maxAttempts) {
-        pollTimerRef.current = setTimeout(poll, 2000);
-      } else {
-        setBanner({
-          type: "failed",
-          message: "Payment verification is still processing. Check back shortly — your subscription will activate automatically once confirmed.",
-        });
-        setRefreshTrigger((prev) => prev + 1);
-      }
-    };
-
-    poll();
-  }, []);
+  const [pendingRefData, setPendingRefData] = useState<PendingCheckoutStorage | null>(null);
 
   useEffect(() => {
-    if (!statusParam) return;
-
-    const s = statusParam.toLowerCase();
-    if (s === "success" || s === "successful" || s === "completed") {
-      if (refParam) {
-        setBanner({
-          type: "verifying",
-          message: "Payment submitted — verifying transaction status...",
-        });
-        pollTransactionStatus(refParam);
-      } else {
-        setBanner({
-          type: "success",
-          message: "Payment returned successfully. Refreshing subscription status...",
-        });
-        setRefreshTrigger((prev) => prev + 1);
-      }
-    } else if (s === "cancelled" || s === "cancel" || s === "failed") {
-      setBanner({
-        type: "cancelled",
-        message: "Payment was cancelled or not completed. Your account remains on the current plan.",
-      });
+    // If incoming query params indicate a payment return, seamlessly route to the dedicated result page
+    if (queryRef && queryRef !== "{reference}" && queryRef !== "%7Breference%7D") {
+      router.replace(`/dashboard/billing/checkout/result?reference=${encodeURIComponent(queryRef)}`);
+      return;
+    }
+    if (queryStatus === "cancelled" || queryStatus === "cancel") {
+      router.replace("/dashboard/billing/checkout/result?status=cancelled");
+      return;
     }
 
-    return () => {
-      if (pollTimerRef.current) {
-        clearTimeout(pollTimerRef.current);
+    // Check for pending unverified transactions in sessionStorage
+    if (typeof window !== "undefined") {
+      try {
+        const stored = sessionStorage.getItem("tadex_pending_checkout_ref");
+        if (stored) {
+          const parsed: PendingCheckoutStorage = JSON.parse(stored);
+          if (parsed?.reference) {
+            setPendingRefData(parsed);
+          }
+        }
+      } catch {
+        // Non-blocking
       }
-    };
-  }, [statusParam, refParam, pollTransactionStatus]);
+    }
+  }, [queryRef, queryStatus, router]);
+
+  const handleDismissPending = () => {
+    try {
+      sessionStorage.removeItem("tadex_pending_checkout_ref");
+    } catch {
+      // Non-blocking
+    }
+    setPendingRefData(null);
+  };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <DashboardHeader />
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <CreditCard className="h-6 w-6 text-primary" />
-            Subscription & Billing
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Manage your trade execution plan, browse pricing tiers, and generate transparent checkout quotes.
-          </p>
-        </div>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+          <CreditCard className="h-6 w-6 text-primary" />
+          Subscription & Billing
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Manage your trade execution plan, browse multi-currency pricing tiers, and generate transparent checkout quotes.
+        </p>
+      </div>
 
-        {/* Return Notification Banner */}
-        {banner && (
-          <div
-            className={`rounded-xl border p-4 text-sm flex items-center justify-between gap-3 shadow-sm transition-all ${
-              banner.type === "success"
-                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-500"
-                : banner.type === "verifying"
-                ? "border-primary/30 bg-primary/10 text-primary"
-                : "border-amber-500/30 bg-amber-500/10 text-amber-500"
-            }`}
-          >
-            <div className="flex items-center gap-2.5 font-medium">
-              {banner.type === "verifying" ? (
-                <Loader2 className="h-5 w-5 animate-spin shrink-0" />
-              ) : banner.type === "success" ? (
-                <CheckCircle2 className="h-5 w-5 shrink-0" />
-              ) : (
-                <AlertTriangle className="h-5 w-5 shrink-0" />
-              )}
-              <span>{banner.message}</span>
+      {/* Pending Transaction Resume Alert */}
+      {pendingRefData && (
+        <div className="rounded-xl border border-primary/30 bg-primary/10 p-4 text-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2.5 font-medium text-foreground">
+            <Clock className="h-5 w-5 text-primary shrink-0 animate-pulse" />
+            <div>
+              <span>You have a pending checkout verification in progress for </span>
+              <span className="font-bold">{pendingRefData.plan_name || "a subscription plan"}</span>
+              <span className="text-muted-foreground"> ({pendingRefData.currency || "USD"})</span>.
             </div>
+          </div>
 
-            <button
-              onClick={() => setBanner(null)}
-              className="rounded-md p-1 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-              title="Dismiss alert"
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <Link href={`/dashboard/billing/checkout/result?reference=${encodeURIComponent(pendingRefData.reference)}`}>
+              <Button size="sm" variant="default" className="text-xs gap-1.5 h-8">
+                Check Status
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={handleDismissPending}
+              className="text-xs h-8 text-muted-foreground hover:text-foreground"
+              title="Dismiss notification"
             >
               <X className="h-4 w-4" />
-            </button>
+            </Button>
           </div>
-        )}
+        </div>
+      )}
 
-        <SubscriptionCard refreshTrigger={refreshTrigger} />
-        <PricingGrid />
-      </main>
+      {/* Active Subscription Status Card */}
+      <SubscriptionCard />
+
+      {/* Multi-Currency Dynamic Pricing Grid */}
+      <PricingGrid />
     </div>
   );
 }
 
 export default function BillingPage() {
   return (
-    <ErrorBoundary>
-      <ProtectedRoute>
-        <Suspense
-          fallback={
-            <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          }
-        >
-          <BillingPageContent />
-        </Suspense>
-      </ProtectedRoute>
-    </ErrorBoundary>
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center justify-center py-24 space-y-3 text-muted-foreground">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm font-medium">Loading billing details...</p>
+        </div>
+      }
+    >
+      <BillingPageContent />
+    </Suspense>
   );
 }

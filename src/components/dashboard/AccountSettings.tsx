@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 import { apiClient } from "@/lib/api-client";
-import { useAuthStore } from "@/lib/auth-store";
+import { useAuthStore, UserProfile } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -29,7 +29,7 @@ type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
 
 export default function AccountSettings() {
   const router = useRouter();
-  const { clear } = useAuthStore();
+  const { clear, setUser } = useAuthStore();
 
   // Change Password State
   const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null);
@@ -37,14 +37,7 @@ export default function AccountSettings() {
   const [isSubmittingPassword, setIsSubmittingPassword] = useState(false);
 
   // User Identity & Telegram State
-  const [userInfo, setUserInfo] = useState<{
-    id?: string;
-    email?: string;
-    status?: string;
-    email_verified?: boolean;
-    telegram_linked?: boolean;
-    telegram_username?: string | null;
-  } | null>(null);
+  const [userInfo, setUserInfo] = useState<UserProfile | null>(null);
 
   const [linkLoading, setLinkLoading] = useState(false);
   const [deepLinkUrl, setDeepLinkUrl] = useState<string | null>(null);
@@ -59,12 +52,15 @@ export default function AccountSettings() {
 
   const refreshUser = useCallback(async () => {
     try {
-      const data = await apiClient<any>("/me");
-      if (data) setUserInfo(data);
+      const data = await apiClient<UserProfile>("/me");
+      if (data) {
+        setUserInfo(data);
+        setUser(data);
+      }
     } catch {
       /* non-blocking */
     }
-  }, []);
+  }, [setUser]);
 
   useEffect(() => {
     refreshUser();
@@ -397,6 +393,14 @@ export default function AccountSettings() {
                         >
                           <ExternalLink className="h-3.5 w-3.5" /> Open Telegram to Link
                         </a>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => refreshUser()}
+                          className="text-xs h-8"
+                        >
+                          Check Status
+                        </Button>
                         <Button
                           variant="outline"
                           size="sm"

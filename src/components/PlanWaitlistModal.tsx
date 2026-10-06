@@ -81,7 +81,6 @@ export default function PlanWaitlistModal({ isOpen, onClose, selectedPlan }: Pla
         throw new Error(data.error || 'Something went wrong');
       }
 
-      console.log('Plan interest submitted:', { email, selectedPlan });
       setIsSubmitted(true);
       setEmail('');
       setEventVolume('');

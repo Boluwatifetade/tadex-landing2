@@ -96,6 +96,11 @@ export default function DashboardHeader({ userEmail, userStatus = "active", user
               }`}>
                 {userEmailVerified ? "Verified" : "Unverified"}
               </span>
+              {telegramLinked && (
+                <span data-testid="header-telegram" className="rounded-full bg-sky-500/10 text-sky-400 px-2.5 py-1 text-xs font-medium">
+                  @{telegramUsername || "telegram"}
+                </span>
+              )}
               <span className="rounded-full bg-secondary px-2.5 py-1 text-secondary-foreground capitalize">
                 {userStatus}
               </span>
@@ -138,6 +143,11 @@ export default function DashboardHeader({ userEmail, userStatus = "active", user
                 }`}>
                   {userEmailVerified ? "Verified" : "Unverified"}
                 </span>
+                {telegramLinked && (
+                  <span className="rounded-full bg-sky-500/10 text-sky-400 px-2.5 py-1 text-xs font-medium">
+                    @{telegramUsername || "telegram"}
+                  </span>
+                )}
                 <span className="rounded-full bg-secondary px-2.5 py-1 text-secondary-foreground capitalize">
                   {userStatus}
                 </span>

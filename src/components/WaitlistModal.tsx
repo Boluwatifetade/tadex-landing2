@@ -32,7 +32,6 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
         throw new Error(data.error || 'Something went wrong');
       }
 
-      console.log('Email submitted successfully:', email);
       setIsSubmitted(true);
       setEmail('');
       

@@ -61,12 +61,28 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
           plan_id: plan.id,
           currency: selectedCurrency,
           duration_months: durationMonths,
-          success_url: `${origin}/dashboard/billing?status=success`,
-          cancel_url: `${origin}/dashboard/billing?status=cancelled`,
+          success_url: `${origin}/dashboard/billing/checkout/result`,
+          cancel_url: `${origin}/dashboard/billing/checkout/result?status=cancelled`,
         }),
       });
 
       if (res?.authorization_url) {
+        if (typeof window !== "undefined" && res?.reference) {
+          try {
+            sessionStorage.setItem(
+              "tadex_pending_checkout_ref",
+              JSON.stringify({
+                reference: res.reference,
+                plan_id: plan.id,
+                plan_name: plan.name,
+                currency: selectedCurrency,
+                initiated_at: new Date().toISOString(),
+              })
+            );
+          } catch {
+            // Non-blocking
+          }
+        }
         window.location.href = res.authorization_url;
       } else {
         throw new Error("No payment authorization URL returned.");
@@ -163,8 +179,11 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
         <div className="grid grid-cols-2 gap-4 pt-2">
           {/* Duration Dropdown */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground">Duration</label>
+            <label htmlFor="checkout-duration-select" className="text-xs font-medium text-foreground">
+              Duration
+            </label>
             <select
+              id="checkout-duration-select"
               value={durationMonths}
               onChange={(e) => setDurationMonths(Number(e.target.value))}
               disabled={isLoading}
@@ -180,8 +199,11 @@ export default function CheckoutQuoteModal({ plan, isOpen, onClose }: CheckoutQu
 
           {/* Currency Dropdown */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground">Settlement Currency</label>
+            <label htmlFor="checkout-currency-select" className="text-xs font-medium text-foreground">
+              Settlement Currency
+            </label>
             <select
+              id="checkout-currency-select"
               value={selectedCurrency}
               onChange={(e) => setSelectedCurrency(e.target.value)}
               disabled={isLoading}
