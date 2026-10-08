@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import ErrorBoundary from "@/components/ErrorBoundary";
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import ProviderApplyForm from "@/components/dashboard/provider/ProviderApplyForm";
 import ProviderDashboard from "@/components/dashboard/provider/ProviderDashboard";
 import { apiClient } from "@/lib/api-client";
 import { ProviderMeResponse, ProviderApplicationOut } from "@/types/provider";
+import { useAuthStore } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import {
@@ -25,14 +23,8 @@ import {
   XCircle,
 } from "lucide-react";
 
-interface UserMeResponse {
-  id?: string;
-  email?: string;
-  status?: string;
-}
-
 function ProviderPortalContent() {
-  const [user, setUser] = useState<UserMeResponse | null>(null);
+  const { user } = useAuthStore();
   const [portalData, setPortalData] = useState<ProviderMeResponse | null>(null);
   const [is404Unregistered, setIs404Unregistered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,13 +35,6 @@ function ProviderPortalContent() {
     setIsLoading(true);
     setFetchError(null);
     setIs404Unregistered(false);
-
-    try {
-      const userRes = await apiClient<UserMeResponse>("/me");
-      setUser(userRes || {});
-    } catch {
-      /* non-blocking session fetch */
-    }
 
     try {
       const data = await apiClient<ProviderMeResponse>("/provider/me");
@@ -101,10 +86,7 @@ function ProviderPortalContent() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <DashboardHeader userEmail={user?.email} userStatus={user?.status} />
-
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <div className="space-y-8">
         {/* Page Title */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -342,17 +324,10 @@ function ProviderPortalContent() {
             </div>
           )
         )}
-      </main>
     </div>
   );
 }
 
 export default function ProviderPortalPage() {
-  return (
-    <ProtectedRoute>
-      <ErrorBoundary>
-        <ProviderPortalContent />
-      </ErrorBoundary>
-    </ProtectedRoute>
-  );
+  return <ProviderPortalContent />;
 }

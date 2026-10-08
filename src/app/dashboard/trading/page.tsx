@@ -42,32 +42,30 @@ export default function TradingPage() {
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  // Cycle tracking ref
+  // Cycle tracking ref: execution state freshness is strictly derived from exchange-authoritative positions and orders
   const syncCycleRef = useRef<{
     cycleId: number;
-    keys: "pending" | "success" | "error";
     positions: "pending" | "success" | "error";
     orders: "pending" | "success" | "error";
   }>({
     cycleId: 0,
-    keys: "pending",
     positions: "pending",
     orders: "pending",
   });
 
   const evaluateCycle = useCallback((cycleId: number) => {
     if (syncCycleRef.current.cycleId !== cycleId) return;
-    const { keys, positions, orders } = syncCycleRef.current;
+    const { positions, orders } = syncCycleRef.current;
 
-    // If any component failed, mark error and do not update lastSyncedAt
-    if (keys === "error" || positions === "error" || orders === "error") {
+    // If either exchange execution component failed, mark error and do not update lastSyncedAt
+    if (positions === "error" || orders === "error") {
       setFreshness("error");
       setIsRefreshing(false);
       return;
     }
 
-    // Only when all 3 have successfully resolved
-    if (keys === "success" && positions === "success" && orders === "success") {
+    // Only when both exchange execution feeds have successfully resolved
+    if (positions === "success" && orders === "success") {
       setFreshness("fresh");
       setLastSyncedAt(new Date());
       setIsRefreshing(false);
@@ -77,32 +75,24 @@ export default function TradingPage() {
   const startSyncCycle = useCallback((newCycleId: number) => {
     syncCycleRef.current = {
       cycleId: newCycleId,
-      keys: "pending",
       positions: "pending",
       orders: "pending",
     };
     setFreshness("syncing");
   }, []);
 
-  // Fetch exchange key health
-  const fetchExchangeKeys = useCallback(async (cycleId: number) => {
+  // Fetch exchange key health independently (Tadex backend credential authority; does not gate exchange execution freshness)
+  const fetchExchangeKeys = useCallback(async () => {
     setIsKeysLoading(true);
     try {
       const data = await apiClient<KeyResponse[]>("/keys");
       setKeys(Array.isArray(data) ? data : []);
-      if (syncCycleRef.current.cycleId === cycleId) {
-        syncCycleRef.current.keys = "success";
-        evaluateCycle(cycleId);
-      }
     } catch {
-      if (syncCycleRef.current.cycleId === cycleId) {
-        syncCycleRef.current.keys = "error";
-        evaluateCycle(cycleId);
-      }
+      setKeys([]);
     } finally {
       setIsKeysLoading(false);
     }
-  }, [evaluateCycle]);
+  }, []);
 
   const handlePositionsSuccess = useCallback(() => {
     const cycleId = syncCycleRef.current.cycleId;
@@ -133,14 +123,14 @@ export default function TradingPage() {
     setRefreshTrigger((prev) => {
       const next = prev + 1;
       startSyncCycle(next);
-      fetchExchangeKeys(next);
+      fetchExchangeKeys();
       return next;
     });
   }, [startSyncCycle, fetchExchangeKeys]);
 
   useEffect(() => {
     startSyncCycle(0);
-    fetchExchangeKeys(0);
+    fetchExchangeKeys();
   }, [startSyncCycle, fetchExchangeKeys]);
 
   // Tab-aware polling: Poll every 15s only when tab is active/visible
@@ -154,7 +144,7 @@ export default function TradingPage() {
           setRefreshTrigger((prev) => {
             const next = prev + 1;
             startSyncCycle(next);
-            fetchExchangeKeys(next);
+            fetchExchangeKeys();
             return next;
           });
         }

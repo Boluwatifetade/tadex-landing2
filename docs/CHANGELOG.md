@@ -4,6 +4,25 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Frontend Final Beta Readiness Hardening] - 2026-10-08
+
+### 1. F-01: Duplicate Dashboard Header Elimination (`dashboard/provider/page.tsx`, `dashboard/providers/[id]/page.tsx`)
+- Eliminated redundant `DashboardHeader`, outer `min-h-screen`, inner `<main>`, and redundant `ProtectedRoute`/`ErrorBoundary` wrappers from `/dashboard/provider` and `/dashboard/providers/[id]`.
+- Aligned subpages with canonical dashboard subpage pattern established in `dashboard/keys/page.tsx`, letting `src/app/dashboard/layout.tsx` serve as the single source of truth for dashboard header and shell layout.
+- Connected `ProviderPortalContent` to `useAuthStore` for session email resolution, avoiding redundant `/me` network calls.
+
+### 2. F-02: Decouple `/keys` from Trading Execution Freshness (`src/app/dashboard/trading/page.tsx`, `src/test/TradingPage.test.tsx`)
+- Enforced authoritative source-of-truth boundary: Exchange is authoritative for execution state (`/trading/positions`, `/trading/orders`); Tadex backend is authoritative for credentials (`/keys`).
+- Freshness state machine now evaluates execution freshness strictly based on positions and orders feeds (`positions === "success" && orders === "success"` -> `"fresh"`).
+- Failure of `/keys` now affects only the exchange connection banner ("No Exchange Connected" / "Connect Bybit Key"), without falsely flagging Bybit execution sync as errored.
+- Implemented and verified all 10 comprehensive freshness and source-of-truth scenarios in `src/test/TradingPage.test.tsx`, including Case 2 (keys error + positions success + orders success -> fresh).
+
+### 3. F-03: JSDOM Navigation Warning Elimination (`src/test/MultiCurrencyCheckout.test.tsx`)
+- Mocked `window.location` in `beforeEach` and restored in `afterEach` in `MultiCurrencyCheckout.test.tsx`, completely silencing `Error: Not implemented: navigation` during JSDOM execution.
+- Added explicit assertions in all 4 test cases (NGN, USD, KES, GHS) verifying that `window.location.href` updates to the backend-returned `authorization_url`.
+
+---
+
 ## [Frontend Forensic Audit Hardening & Freshness Architecture] - 2026-10-07
 
 ### 1. P1: Coordinated Trading Freshness Semantics (`TradingPage.tsx`, `PositionsTable.tsx`, `OrdersTable.tsx`)

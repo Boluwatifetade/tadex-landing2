@@ -1,13 +1,21 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import CheckoutQuoteModal from "@/components/dashboard/CheckoutQuoteModal";
 import * as apiClientModule from "@/lib/api-client";
 import { PlanOut } from "@/components/dashboard/PricingGrid";
 
 describe("Dynamic Multi-Currency Billing Checkout", () => {
+  const originalLocation = window.location;
+
   beforeEach(() => {
     vi.restoreAllMocks();
     sessionStorage.clear();
+    delete (window as unknown as { location: unknown }).location;
+    window.location = { ...originalLocation, href: "", assign: vi.fn() } as unknown as Location;
+  });
+
+  afterEach(() => {
+    window.location = originalLocation;
   });
 
   const mockMultiCurrencyPlan: PlanOut = {
@@ -100,6 +108,7 @@ describe("Dynamic Multi-Currency Billing Checkout", () => {
     // Assert reference was stored in sessionStorage for recovery
     const storedRef = sessionStorage.getItem("tadex_pending_checkout_ref");
     expect(storedRef).toContain("tdx_txn_ngn_12345");
+    expect(window.location.href).toBe("https://checkout.paystack.com/000-ngn-test");
   });
 
   it("submits USD checkout request without specifying payment provider/gateway", async () => {
@@ -158,6 +167,7 @@ describe("Dynamic Multi-Currency Billing Checkout", () => {
     });
     expect(capturedCheckoutPayload).not.toHaveProperty("provider");
     expect(capturedCheckoutPayload).not.toHaveProperty("settlement_method");
+    expect(window.location.href).toBe("https://checkout.flutterwave.com/v3/usd-test");
   });
 
   it("submits KES checkout request without specifying payment provider/gateway", async () => {
@@ -218,6 +228,7 @@ describe("Dynamic Multi-Currency Billing Checkout", () => {
       duration_months: 1,
     });
     expect(capturedCheckoutPayload).not.toHaveProperty("provider");
+    expect(window.location.href).toBe("https://checkout.flutterwave.com/v3/kes-test");
   });
 
   it("submits GHS checkout request without specifying payment provider/gateway", async () => {
@@ -278,5 +289,6 @@ describe("Dynamic Multi-Currency Billing Checkout", () => {
       duration_months: 1,
     });
     expect(capturedCheckoutPayload).not.toHaveProperty("provider");
+    expect(window.location.href).toBe("https://checkout.flutterwave.com/v3/ghs-test");
   });
 });
