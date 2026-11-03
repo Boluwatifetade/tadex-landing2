@@ -57,10 +57,10 @@ export default function ProviderBenefits() {
   ];
 
   return (
-    <section className="py-20 lg:py-24 bg-surface-canvas" id="what-tadex-gives-you">
+    <section className="py-16 sm:py-20 lg:py-24 bg-surface-canvas" id="what-tadex-gives-you">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <div className="max-w-[680px] mb-16">
+          <div className="max-w-[680px] mb-12 sm:mb-16">
             <h2 className="heading-2 text-content-primary mb-4">
               What You Get as a Tadex Provider
             </h2>
@@ -75,11 +75,11 @@ export default function ProviderBenefits() {
               return (
                 <div
                   key={idx}
-                  className="bg-surface-primary hover:bg-surface-subtle rounded-2xl p-8 border border-surface-elevated transition-[background-color,transform] duration-500 ease-weighted hover:-translate-y-1 flex flex-col justify-between"
+                  className="bg-surface-primary hover:bg-surface-subtle rounded-2xl p-5 sm:p-8 border border-surface-elevated transition-[background-color,transform] duration-500 ease-weighted hover:-translate-y-1 flex flex-col justify-between"
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-surface-subtle border border-surface-elevated flex items-center justify-center text-brand-accent">
+                    <div className="flex items-center justify-between gap-2 mb-6">
+                      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-surface-subtle border border-surface-elevated flex items-center justify-center text-brand-accent flex-shrink-0">
                         <Icon size={24} />
                       </div>
                       <span className="caption-3 text-content-tertiary bg-surface-subtle px-3 py-1 rounded-full border border-surface-elevated">

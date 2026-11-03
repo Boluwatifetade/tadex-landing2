@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   title: "Tadex | Automated Telegram Signal Execution for Crypto Traders",
   description:
     "Connect your Telegram signal groups and crypto exchanges. Tadex reads signals and places trades automatically 24/7 with strict risk rules. Start free.",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: "/icon.svg",
+  },
   openGraph: {
     title: "Tadex | Automated Telegram Signal Execution for Crypto Traders",
     description:

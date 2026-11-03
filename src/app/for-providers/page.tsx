@@ -70,11 +70,11 @@ export default function ForProvidersPage() {
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex items-center gap-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded-lg"
+            className="flex items-center gap-2 sm:gap-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded-lg min-w-0"
           >
             <TadexLogo size={32} />
             <span className="title-2 text-content-primary">Tadex</span>
-            <span className="caption-5 text-brand-accent bg-surface-secondary px-2 py-0.5 rounded-md">
+            <span className="hidden sm:inline-block caption-5 text-brand-accent bg-surface-secondary px-2 py-0.5 rounded-md whitespace-nowrap">
               For Providers
             </span>
           </button>
@@ -119,11 +119,11 @@ export default function ForProvidersPage() {
           </div>
 
           {/* Mobile Actions & Animated 3-Bar Menu Button */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex md:hidden items-center gap-2 flex-shrink-0">
             <button
               type="button"
               onClick={handleOpenModal}
-              className="bg-brand-accent hover:bg-brand-accent-hover text-surface-canvas px-3 py-1.5 rounded-lg button-xsm transition-colors duration-200 ease-weighted"
+              className="bg-brand-accent hover:bg-brand-accent-hover text-surface-canvas px-3 py-1.5 rounded-lg button-xsm whitespace-nowrap transition-colors duration-200 ease-weighted"
             >
               Become a Provider
             </button>

@@ -103,17 +103,38 @@ describe("Tadex for Signal Providers Landing Page", () => {
     expect(screen.getByText("2. Tadex Billing & Signal Engine")).toBeInTheDocument();
   });
 
-  it("renders ProviderPricingRevenue with transparent 90/10 split and fee features", () => {
+  it("renders ProviderPricingRevenue with interactive calculator, dynamic 100k/150k pricing, and price freedom notice", () => {
     const onOpenModal = vi.fn();
     render(<ProviderPricingRevenue onOpenModal={onOpenModal} />);
 
     expect(screen.getByText("Simple, Transparent Revenue Share")).toBeInTheDocument();
     expect(screen.getByText("How You Earn")).toBeInTheDocument();
+    expect(screen.getByText("Interactive Revenue Calculator")).toBeInTheDocument();
     expect(screen.getByText("What You Get for That Fee")).toBeInTheDocument();
 
-    // Split numbers
-    expect(screen.getByText("₦27,000")).toBeInTheDocument();
-    expect(screen.getByText("₦3,000")).toBeInTheDocument();
+    // Default state: ₦30,000/mo × 100 VIPs -> ₦2,700,000/mo (₦27,000/sub) and ₦300,000/mo fee (₦3,000/sub)
+    expect(screen.getByText("₦2,700,000")).toBeInTheDocument();
+    expect(screen.getByText("₦300,000")).toBeInTheDocument();
+    expect(screen.getByText(/₦27,000 per subscriber\/mo/i)).toBeInTheDocument();
+    expect(screen.getByText(/₦3,000 per subscriber\/mo/i)).toBeInTheDocument();
+
+    // Price freedom notice
+    expect(
+      screen.getByText(/100% Price Freedom — We Never Fix Your Price:/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Tadex never caps or dictates your subscription price/i)
+    ).toBeInTheDocument();
+
+    // Click ₦150k preset -> 100 members × ₦150,000 * 90% = ₦13,500,000/mo
+    fireEvent.click(screen.getByRole("button", { name: "₦150k" }));
+    expect(screen.getByText("₦13,500,000")).toBeInTheDocument();
+    expect(screen.getByText(/₦135,000 per subscriber\/mo/i)).toBeInTheDocument();
+
+    // Click 250 VIPs preset -> 250 members × ₦135,000 = ₦33,750,000/mo
+    fireEvent.click(screen.getByRole("button", { name: "250 VIPs" }));
+    expect(screen.getByText("₦33,750,000")).toBeInTheDocument();
+
     expect(
       screen.getByText(/Tadex does not take a cut of your members’ trading PnL/i)
     ).toBeInTheDocument();

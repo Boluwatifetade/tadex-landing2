@@ -1,5 +1,6 @@
 'use client';
 
+import TadexLogo from '@/components/ui/TadexLogo';
 import {
   ArrowRightIcon,
   BroadcastIcon,
@@ -14,9 +15,9 @@ interface ProviderHeroProps {
 
 export default function ProviderHero({ onOpenModal }: ProviderHeroProps) {
   return (
-    <section className="relative bg-surface-canvas text-content-primary overflow-hidden pt-28 pb-20 lg:pt-32 lg:pb-24">
+    <section className="relative bg-surface-canvas text-content-primary overflow-hidden pt-24 pb-16 sm:pt-28 sm:pb-20 lg:pt-32 lg:pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* Left Column: Copy & Actions */}
           <div className="lg:col-span-7 text-left">
             {/* H1 Headline: Capped at 680px with left-to-right #FFFFFF -> #9B9B9B text gradient per B5 */}
@@ -52,8 +53,8 @@ export default function ProviderHero({ onOpenModal }: ProviderHeroProps) {
             </p>
 
             {/* Trust line */}
-            <div className="pt-2 caption-1 text-content-tertiary flex items-center gap-2">
-              <ShieldCheckIcon size={16} className="text-brand-accent flex-shrink-0" />
+            <div className="pt-2 caption-1 text-content-tertiary flex items-start sm:items-center gap-2">
+              <ShieldCheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5 sm:mt-0" />
               <span>Used by signal providers across Nigeria, Kenya, Ghana, and beyond</span>
             </div>
           </div>
@@ -62,33 +63,33 @@ export default function ProviderHero({ onOpenModal }: ProviderHeroProps) {
           <div className="lg:col-span-5">
             <div className="relative mx-auto max-w-lg lg:max-w-none">
               <div className="rounded-2xl border border-surface-elevated bg-surface-primary p-2">
-                {/* Dashboard Frame Header */}
-                <div className="flex items-center justify-between px-3 py-2.5 bg-surface-subtle rounded-lg mb-2">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-brand flex items-center justify-center text-content-primary button-xsm">
-                      T
-                    </div>
-                    <div>
-                      <div className="caption-3 text-content-primary flex items-center gap-2">
+                {/* Dashboard Frame Header — responsive wrap so mobile never crams */}
+                <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5 bg-surface-subtle rounded-lg mb-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <TadexLogo size={32} />
+                    <div className="min-w-0">
+                      <div className="caption-3 text-content-primary flex items-center gap-1.5 flex-wrap">
                         <span>Provider Portal</span>
-                        <span className="caption-4 bg-brand-accentSubtle text-brand-accent border border-brand-accent/40 px-1.5 py-0.5 rounded font-mono">
+                        <span className="caption-5 bg-brand-accentSubtle text-brand-accent border border-brand-accent/40 px-1.5 py-0.5 rounded font-mono">
                           LIVE
                         </span>
                       </div>
-                      <div className="caption-5 text-content-tertiary">@AlphaSignals VIP</div>
+                      <div className="caption-5 text-content-tertiary truncate">
+                        @AlphaSignals VIP
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 caption-4 text-brand-accent bg-brand-accentSubtle border border-brand-accent/30 px-2.5 py-1 rounded-full">
+                  <div className="flex items-center gap-1.5 caption-5 sm:caption-4 text-brand-accent bg-brand-accentSubtle border border-brand-accent/30 px-2.5 py-1 rounded-full flex-shrink-0">
                     <PulseIcon size={14} />
                     <span>Bot Sync Active</span>
                   </div>
                 </div>
 
                 {/* Dashboard Content */}
-                <div className="p-2 space-y-3">
-                  {/* KPI Cards */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="rounded-xl bg-surface-subtle p-4 border border-surface-elevated">
+                <div className="p-1.5 sm:p-2 space-y-3">
+                  {/* KPI Cards: 1 col on narrow phones so ₦1,250,000 never crams, 2 cols on sm+ */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+                    <div className="rounded-xl bg-surface-subtle p-3.5 sm:p-4 border border-surface-elevated">
                       <span className="caption-4 text-content-tertiary block mb-1">
                         Active Plans
                       </span>
@@ -100,11 +101,11 @@ export default function ProviderHero({ onOpenModal }: ProviderHeroProps) {
                       </span>
                     </div>
 
-                    <div className="rounded-xl bg-surface-subtle p-4 border border-surface-elevated">
+                    <div className="rounded-xl bg-surface-subtle p-3.5 sm:p-4 border border-surface-elevated">
                       <span className="caption-4 text-content-tertiary block mb-1">
                         Monthly Revenue
                       </span>
-                      <span className="heading-4 text-brand-accent font-mono">
+                      <span className="heading-4 text-brand-accent font-mono break-words">
                         ₦1,250,000
                       </span>
                       <span className="caption-5 text-content-secondary block mt-1">
@@ -114,31 +115,33 @@ export default function ProviderHero({ onOpenModal }: ProviderHeroProps) {
                   </div>
 
                   {/* Connected Channel Card */}
-                  <div className="rounded-xl bg-surface-subtle p-4 border border-surface-elevated flex items-center justify-between">
-                    <div>
+                  <div className="rounded-xl bg-surface-subtle p-3.5 sm:p-4 border border-surface-elevated flex items-center justify-between gap-3">
+                    <div className="min-w-0">
                       <span className="caption-4 text-content-tertiary block">
                         Connected Channel
                       </span>
-                      <span className="body-4 text-content-primary">
+                      <span className="body-4 text-content-primary block truncate">
                         @AlphaSignals VIP
                       </span>
                       <span className="caption-5 text-content-secondary block mt-0.5">
                         84 Active Subscribers
                       </span>
                     </div>
-                    <div className="w-10 h-10 rounded-lg bg-surface-secondary border border-surface-elevated text-brand-accent flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-surface-secondary border border-surface-elevated text-brand-accent flex items-center justify-center flex-shrink-0">
                       <BroadcastIcon size={20} />
                     </div>
                   </div>
 
                   {/* Live Activity Feed Item */}
-                  <div className="rounded-xl bg-brand-accentSubtle p-4 border border-brand-accent/40 space-y-1.5">
-                    <div className="flex items-center justify-between caption-3 text-brand-accent">
+                  <div className="rounded-xl bg-brand-accentSubtle p-3.5 sm:p-4 border border-brand-accent/40 space-y-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-1 caption-3 text-brand-accent">
                       <span className="flex items-center gap-1.5">
-                        <CheckCircleIcon size={16} />
+                        <CheckCircleIcon size={16} className="flex-shrink-0" />
                         <span>New Automated Subscriber</span>
                       </span>
-                      <span className="caption-5 text-content-secondary">2m ago</span>
+                      <span className="caption-5 text-content-secondary flex-shrink-0">
+                        2m ago
+                      </span>
                     </div>
                     <p className="caption-5 text-content-secondary">
                       @crypto_trader subscribed to{' '}

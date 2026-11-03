@@ -46,6 +46,11 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 - Upgraded `zod` from `^4.4.3` to `^4.6.7` (`>=4.6.6`) to remediate GHSA-mrhx-c7xc-m3w5 (memory exhaustion on oversized array validation).
 - Added `overrides` (`glob: ^14.0.3`, `minimatch: ^11.0.4`) and ran `npm audit fix` so `npm audit --omit=dev` reports **0 vulnerabilities** across all production dependencies.
 
+### 9. Vector Favicon, OpenGraph Card, Interactive Provider Revenue Calculator & Mobile Layout Polish (`src/app/icon.svg`, `src/app/apple-icon.tsx`, `src/app/opengraph-image.tsx`, `src/components/providers/*`)
+- Added [`src/app/icon.svg`](file:///c:/Users/user/Documents/tadex-landing2/src/app/icon.svg), [`src/app/apple-icon.tsx`](file:///c:/Users/user/Documents/tadex-landing2/src/app/apple-icon.tsx), and [`src/app/opengraph-image.tsx`](file:///c:/Users/user/Documents/tadex-landing2/src/app/opengraph-image.tsx) with the official Tadex upward-arrow vector mark and linked `metadata.icons` in `src/app/layout.tsx`.
+- Built an **Interactive Revenue Calculator** in [`ProviderPricingRevenue.tsx`](file:///c:/Users/user/Documents/tadex-landing2/src/components/providers/ProviderPricingRevenue.tsx) with `NGN (₦)` / `USD ($)` toggle, dynamic monthly price slider + editable custom price input + quick presets (`₦15k`, `₦30k`, `₦50k`, `₦100k`, `₦150k`), active VIP subscriber slider + presets (`25`–`500` VIPs), real-time 90/10 split calculation, and an explicit **100% Price Freedom** notice clarifying that Tadex never fixes or caps provider prices.
+- Fixed mobile phone (`360px–390px`) layout cramming across `/for-providers` (`src/app/for-providers/page.tsx`, `ProviderHero.tsx`, `ProviderProblem.tsx`, `ProviderBenefits.tsx`, `ProviderHowItWorks.tsx`, `ProviderPricingRevenue.tsx`, and `ProviderFinalCTA.tsx`), replacing cramped 2-column sub-cards and `p-8` mobile padding with responsive `grid-cols-1 sm:grid-cols-2` layouts and `p-5 sm:p-8` card padding.
+
 ---
 
 ## [Frontend Final Beta Readiness Hardening] - 2026-10-08

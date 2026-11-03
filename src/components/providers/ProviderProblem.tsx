@@ -43,10 +43,10 @@ export default function ProviderProblem() {
   ];
 
   return (
-    <section className="py-20 lg:py-24 bg-surface-primary" id="the-problem">
+    <section className="py-16 sm:py-20 lg:py-24 bg-surface-primary" id="the-problem">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
-          <div className="max-w-[680px] mb-16">
+          <div className="max-w-[680px] mb-12 sm:mb-16">
             <h2 className="heading-2 text-content-primary mb-4">
               Running a VIP Group Manually Is a Full-Time Job
             </h2>
@@ -61,11 +61,11 @@ export default function ProviderProblem() {
               return (
                 <div
                   key={idx}
-                  className="bg-surface-subtle hover:bg-surface-secondary rounded-2xl p-8 border border-surface-elevated transition-[background-color,transform] duration-500 ease-weighted hover:-translate-y-1 flex flex-col justify-between"
+                  className="bg-surface-subtle hover:bg-surface-secondary rounded-2xl p-5 sm:p-8 border border-surface-elevated transition-[background-color,transform] duration-500 ease-weighted hover:-translate-y-1 flex flex-col justify-between"
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="w-12 h-12 rounded-xl bg-surface-secondary border border-surface-elevated flex items-center justify-center text-status-warning">
+                    <div className="flex items-center justify-between gap-2 mb-6">
+                      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-surface-secondary border border-surface-elevated flex items-center justify-center text-status-warning flex-shrink-0">
                         <Icon size={24} />
                       </div>
                       <span className="caption-3 text-content-tertiary bg-surface-primary px-3 py-1 rounded-full border border-surface-elevated">
