@@ -9,18 +9,21 @@ import ProviderFAQ from "@/components/providers/ProviderFAQ";
 import ProviderFinalCTA from "@/components/providers/ProviderFinalCTA";
 import ProviderFooter from "@/components/providers/ProviderFooter";
 import ProviderLeadModal from "@/components/providers/ProviderLeadModal";
+import ProviderTaglineReveal from "@/components/providers/ProviderTaglineReveal";
+import ForProvidersPage from "@/app/for-providers/page";
 
 describe("Tadex for Signal Providers Landing Page", () => {
   it("renders ProviderHero with headline, subhead, CTA, and dashboard mock metrics", () => {
     const onOpenModal = vi.fn();
     render(<ProviderHero onOpenModal={onOpenModal} />);
 
-    expect(
-      screen.getByRole("heading", {
-        level: 1,
-        name: "Turn Your Signal Group Into a Real Business",
-      })
-    ).toBeInTheDocument();
+    const heading = screen.getByRole("heading", {
+      level: 1,
+      name: "Turn Your Signal Group Into a Real Business",
+    });
+    expect(heading).toBeInTheDocument();
+    expect(heading.className).toContain("hero-heading-gradient");
+    expect(heading.className).toContain("max-w-[680px]");
 
     expect(
       screen.getByText(/Tadex handles billing, access control, and automated execution for your members/i)
@@ -46,6 +49,14 @@ describe("Tadex for Signal Providers Landing Page", () => {
     const btn = screen.getByRole("button", { name: /Become a Provider/i });
     fireEvent.click(btn);
     expect(onOpenModal).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders mandatory B11 ProviderTaglineReveal section with word-by-word spans", () => {
+    render(<ProviderTaglineReveal />);
+
+    expect(screen.getAllByText("every", { selector: "span" })).toHaveLength(2);
+    expect(screen.getByText("Telegram.")).toBeInTheDocument();
+    expect(screen.getByText("exchanges.")).toBeInTheDocument();
   });
 
   it("renders ProviderProblem with 3 manual pain point cards", () => {
@@ -108,8 +119,8 @@ describe("Tadex for Signal Providers Landing Page", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders ProviderFAQ with 8 questions and toggles answers", () => {
-    render(<ProviderFAQ />);
+  it("renders ProviderFAQ with 8 questions, JSON-LD schema, and toggles answers", () => {
+    const { container } = render(<ProviderFAQ />);
 
     expect(screen.getByText("Frequently Asked Questions (Providers)")).toBeInTheDocument();
     expect(screen.getByText("Do I need to stop using Telegram?")).toBeInTheDocument();
@@ -120,6 +131,11 @@ describe("Tadex for Signal Providers Landing Page", () => {
     expect(screen.getByText("Can I offer both free and paid communities?")).toBeInTheDocument();
     expect(screen.getByText("Is there a minimum number of members to become a provider?")).toBeInTheDocument();
     expect(screen.getByText("Can I change my prices later?")).toBeInTheDocument();
+
+    // JSON-LD FAQPage schema check (A7)
+    const ldJson = container.querySelector('script[type="application/ld+json"]');
+    expect(ldJson).not.toBeNull();
+    expect(ldJson?.textContent).toContain("FAQPage");
 
     // Toggle Q2
     const q2 = screen.getByText("How do I get paid?");
@@ -137,8 +153,8 @@ describe("Tadex for Signal Providers Landing Page", () => {
     expect(screen.getByText("Multi-currency support")).toBeInTheDocument();
   });
 
-  it("renders ProviderFooter with Tadex for Providers and location Lagos, Nigeria", () => {
-    render(<ProviderFooter />);
+  it("renders ProviderFooter with Tadex for Providers, location Lagos, Nigeria, and zero dead links", () => {
+    const { container } = render(<ProviderFooter />);
 
     expect(screen.getByText("Tadex for Providers")).toBeInTheDocument();
     expect(
@@ -146,6 +162,9 @@ describe("Tadex for Signal Providers Landing Page", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("Location: Lagos, Nigeria")).toBeInTheDocument();
     expect(screen.queryByText(/Made with ❤️ for developers/i)).not.toBeInTheDocument();
+
+    const deadLinks = container.querySelectorAll('a[href="#"]');
+    expect(deadLinks.length).toBe(0);
   });
 
   it("opens ProviderLeadModal, submits details, and shows confirmation", async () => {
@@ -181,5 +200,13 @@ describe("Tadex for Signal Providers Landing Page", () => {
     });
 
     fetchSpy.mockRestore();
+  });
+
+  it("renders ForProvidersPage with skip-to-content link and floating provider navigation", () => {
+    render(<ForProvidersPage />);
+
+    expect(screen.getByText("Skip to content")).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: /Provider navigation/i })).toBeInTheDocument();
+    expect(screen.getByText("For Providers")).toBeInTheDocument();
   });
 });

@@ -2,70 +2,165 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom globals if needed */
-
 @layer base {
   :root {
-    --background: hsl(0 0% 100%);
-    --foreground: hsl(0 0% 3.9%);
-    --card: hsl(0 0% 100%);
-    --card-foreground: hsl(0 0% 3.9%);
-    --popover: hsl(0 0% 100%);
-    --popover-foreground: hsl(0 0% 3.9%);
-    --primary: hsl(0 0% 9%);
-    --primary-foreground: hsl(0 0% 98%);
-    --secondary: hsl(0 0% 96.1%);
-    --secondary-foreground: hsl(0 0% 9%);
-    --muted: hsl(0 0% 96.1%);
-    --muted-foreground: hsl(0 0% 45.1%);
-    --accent: hsl(0 0% 96.1%);
-    --accent-foreground: hsl(0 0% 9%);
+    --background: hsl(0 0% 9%);
+    --foreground: hsl(0 0% 98%);
+    --card: hsl(0 0% 12%);
+    --card-foreground: hsl(0 0% 98%);
+    --popover: hsl(0 0% 12%);
+    --popover-foreground: hsl(0 0% 98%);
+    --primary: hsl(0 0% 98%);
+    --primary-foreground: hsl(0 0% 9%);
+    --secondary: hsl(0 0% 15%);
+    --secondary-foreground: hsl(0 0% 98%);
+    --muted: hsl(0 0% 15%);
+    --muted-foreground: hsl(0 0% 61%);
+    --accent: hsl(0 0% 15%);
+    --accent-foreground: hsl(0 0% 98%);
     --destructive: hsl(0 84.2% 60.2%);
     --destructive-foreground: hsl(0 0% 98%);
-    --border: hsl(0 0% 89.8%);
-    --input: hsl(0 0% 89.8%);
-    --ring: hsl(0 0% 3.9%);
-    --chart-1: hsl(12 76% 61%);
+    --border: hsl(0 0% 19%);
+    --input: hsl(0 0% 19%);
+    --ring: hsl(160 84% 39%);
+    --chart-1: hsl(160 84% 39%);
     --chart-2: hsl(173 58% 39%);
     --chart-3: hsl(197 37% 24%);
     --chart-4: hsl(43 74% 66%);
     --chart-5: hsl(27 87% 67%);
     --radius: 0.5rem;
+    --hero-gradient-start: #FFFFFF;
+    --hero-gradient-end: #9B9B9B;
   }
-  .dark {
-    --background: hsl(0 0% 3.9%);
-    --foreground: hsl(0 0% 98%);
-    --card: hsl(0 0% 3.9%);
-    --card-foreground: hsl(0 0% 98%);
-    --popover: hsl(0 0% 3.9%);
-    --popover-foreground: hsl(0 0% 98%);
-    --primary: hsl(0 0% 98%);
-    --primary-foreground: hsl(0 0% 9%);
-    --secondary: hsl(0 0% 14.9%);
-    --secondary-foreground: hsl(0 0% 98%);
-    --muted: hsl(0 0% 14.9%);
-    --muted-foreground: hsl(0 0% 63.9%);
-    --accent: hsl(0 0% 14.9%);
-    --accent-foreground: hsl(0 0% 98%);
-    --destructive: hsl(0 62.8% 30.6%);
-    --destructive-foreground: hsl(0 0% 98%);
-    --border: hsl(0 0% 14.9%);
-    --input: hsl(0 0% 14.9%);
-    --ring: hsl(0 0% 83.1%);
-    --chart-1: hsl(220 70% 50%);
-    --chart-2: hsl(160 60% 45%);
-    --chart-3: hsl(30 80% 55%);
-    --chart-4: hsl(280 65% 60%);
-    --chart-5: hsl(340 75% 55%);
-  }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-surface-canvas text-content-primary font-sans antialiased;
+    text-wrap: pretty;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+    font-style: normal;
+  }
+
+  p, li, dd, blockquote {
+    text-wrap: pretty;
+    font-style: normal;
+  }
+}
+
+/* Part B1: Named Text Styles on Tailwind's Default Type Scale */
+@layer components {
+  /* Headings (Semibold, never ultra-bold 900) */
+  .heading-1 {
+    @apply text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+  .heading-2 {
+    @apply text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+  .heading-3 {
+    @apply text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+  .heading-4 {
+    @apply text-2xl sm:text-3xl font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+  .heading-5 {
+    @apply text-xl sm:text-2xl font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+  .heading-6 {
+    @apply text-xl font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+
+  /* Titles (Medium) */
+  .title-1 {
+    @apply text-lg sm:text-xl font-medium;
+  }
+  .title-2 {
+    @apply text-lg font-medium;
+  }
+  .title-3 {
+    @apply text-base font-medium;
+  }
+  .title-4 {
+    @apply text-sm font-medium;
+  }
+  .title-5 {
+    @apply text-xs font-medium;
+  }
+
+  /* Body (16px and 14px across Semibold, Medium, Regular) */
+  .body-1 {
+    @apply text-base font-semibold;
+    text-wrap: pretty;
+  }
+  .body-2 {
+    @apply text-base font-medium;
+    text-wrap: pretty;
+  }
+  .body-3 {
+    @apply text-base font-normal;
+    text-wrap: pretty;
+  }
+  .body-4 {
+    @apply text-sm font-semibold;
+    text-wrap: pretty;
+  }
+  .body-5 {
+    @apply text-sm font-medium;
+    text-wrap: pretty;
+  }
+  .body-6 {
+    @apply text-sm font-normal;
+    text-wrap: pretty;
+  }
+
+  /* Buttons (Text inside buttons only) */
+  .button-lg {
+    @apply text-lg font-semibold;
+  }
+  .button-md {
+    @apply text-base font-semibold;
+  }
+  .button-sm {
+    @apply text-sm font-semibold;
+  }
+  .button-xsm {
+    @apply text-xs font-semibold;
+  }
+
+  /* Captions (Metadata, helper text, badges, timestamps, fine print) */
+  .caption-1 {
+    @apply text-sm font-medium;
+  }
+  .caption-2 {
+    @apply text-sm font-normal;
+  }
+  .caption-3 {
+    @apply text-xs font-semibold;
+  }
+  .caption-4 {
+    @apply text-xs font-medium;
+  }
+  .caption-5 {
+    @apply text-xs font-normal;
+  }
+
+  /* Part B5: Hero Heading Left-to-Right Text Gradient (#FFFFFF -> #9B9B9B) */
+  .hero-heading-gradient {
+    background-image: linear-gradient(90deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }
 
@@ -74,11 +169,11 @@
   .bg-brand-primary { background-color: #004859; }
   .bg-brand-light { background-color: #006B7C; }
   .bg-brand-dark { background-color: #00323B; }
-  .bg-brand-accent { background-color: #00B894; }
+  .bg-brand-accent { background-color: #10B981; }
   .text-brand-primary { color: #004859; }
   .text-brand-light { color: #006B7C; }
   .text-brand-dark { color: #00323B; }
-  .text-brand-accent { color: #00B894; }
+  .text-brand-accent { color: #10B981; }
   .border-brand-primary { border-color: #004859; }
-  .border-brand-accent { border-color: #00B894; }
+  .border-brand-accent { border-color: #10B981; }
 }

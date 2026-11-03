@@ -53,14 +53,45 @@ module.exports = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
-        // your custom brand and accent go here:
+        // Semantic dark mode surfaces (B4 approved palette)
+        surface: {
+          canvas: '#000000',
+          primary: '#181818',
+          subtle: '#1F1F1F',
+          secondary: '#272727',
+          elevated: '#313131',
+          warm: '#131209',
+        },
+        // Semantic text tokens
+        content: {
+          primary: '#FAFAFA',
+          secondary: '#D4D4D4',
+          tertiary: '#9B9B9B',
+          muted: '#737373',
+          inverted: '#181818',
+        },
+        // Semantic brand and action tokens (saturation capped per B4)
         brand: {
           DEFAULT: '#004859',
           light: '#006B7C',
           dark: '#00323B',
+          accent: '#10B981',
+          accentHover: '#059669',
+          accentSubtle: '#132A23',
         },
-        // or a flat accent if you want:
-        customAccent: '#00B894',
+        status: {
+          success: '#10B981',
+          warning: '#F59E0B',
+          danger: '#EF4444',
+        },
+        customAccent: '#10B981',
+      },
+      transitionTimingFunction: {
+        weighted: 'cubic-bezier(0.22, 1, 0.36, 1)',
+      },
+      fontFamily: {
+        sans: ['var(--font-sans)', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
     },
   },

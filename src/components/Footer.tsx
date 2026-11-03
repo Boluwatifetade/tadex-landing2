@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import TadexLogo from '@/components/ui/TadexLogo';
 
 export default function Footer() {
   const footerLinks = {
@@ -11,7 +12,7 @@ export default function Footer() {
       { name: 'FAQ', href: '#faq' },
     ],
     company: [
-      { name: 'About', href: '#' },
+      { name: 'For Signal Providers', href: '/for-providers' },
       { name: 'Privacy Policy', href: '/privacy' },
       { name: 'Terms of Service', href: '/terms' },
       { name: 'Security', href: '/security' },
@@ -19,36 +20,33 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-slate-900 border-t border-slate-800 text-slate-400">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-16">
+    <footer className="bg-surface-primary text-content-tertiary">
+      <div className="h-px bg-surface-elevated" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
           {/* Left Column: Brand & One-Liner */}
           <div className="md:col-span-6 space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#004859] rounded-lg flex items-center justify-center text-white font-bold">
-                T
-              </div>
-              <span className="text-xl font-bold text-white tracking-tight">Tadex</span>
+            <div className="flex items-center gap-2.5">
+              <TadexLogo size={32} />
+              <span className="title-1 text-content-primary">Tadex</span>
             </div>
-            <p className="text-slate-400 text-sm max-w-sm leading-relaxed">
+            <p className="body-6 text-content-secondary max-w-sm">
               Automate trading signals and webhook workflows without manual work.
             </p>
-            <div className="text-xs text-slate-500 pt-1">
+            <div className="caption-4 text-content-tertiary pt-1">
               Location: Lagos, Nigeria
             </div>
           </div>
 
           {/* Center Column: Product Links */}
           <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
-              Product
-            </h4>
-            <ul className="space-y-2.5 text-sm">
+            <h4 className="caption-3 text-content-primary">Product</h4>
+            <ul className="space-y-2.5 body-6">
               {footerLinks.product.map((link, idx) => (
                 <li key={idx}>
                   <Link
                     href={link.href}
-                    className="hover:text-[#00B894] transition-colors"
+                    className="text-content-secondary hover:text-brand-accent transition-colors duration-300 ease-weighted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded"
                   >
                     {link.name}
                   </Link>
@@ -59,15 +57,13 @@ export default function Footer() {
 
           {/* Right Column: Company & Legal Links */}
           <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-semibold text-slate-200 uppercase tracking-wider">
-              Company & Legal
-            </h4>
-            <ul className="space-y-2.5 text-sm">
+            <h4 className="caption-3 text-content-primary">Company & Legal</h4>
+            <ul className="space-y-2.5 body-6">
               {footerLinks.company.map((link, idx) => (
                 <li key={idx}>
                   <Link
                     href={link.href}
-                    className="hover:text-[#00B894] transition-colors"
+                    className="text-content-secondary hover:text-brand-accent transition-colors duration-300 ease-weighted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent rounded"
                   >
                     {link.name}
                   </Link>
@@ -77,14 +73,16 @@ export default function Footer() {
           </div>
         </div>
 
+        <div className="h-px bg-surface-elevated mb-8" />
+
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div>
-            © 2026 Voreza Technologies. All rights reserved.
-          </div>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 caption-4 text-content-tertiary">
+          <div>© 2026 Voreza Technologies. All rights reserved.</div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#00B894] animate-pulse"></span>
-            <span className="text-slate-400 font-medium">All systems operational</span>
+            <span className="w-2 h-2 rounded-full bg-brand-accent" />
+            <span className="text-content-secondary caption-4">
+              All systems operational
+            </span>
           </div>
         </div>
       </div>

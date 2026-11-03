@@ -1,11 +1,18 @@
 'use client';
 
-import { CreditCard, Sliders, Bot, LineChart, CheckCircle2 } from 'lucide-react';
+import ScrollReveal from '@/components/ui/ScrollReveal';
+import {
+  CreditCardIcon,
+  SlidersIcon,
+  RobotIcon,
+  ChartLineUpIcon,
+  CheckCircleIcon,
+} from '@/components/ui/PhosphorIcons';
 
 export default function ProviderBenefits() {
   const benefits = [
     {
-      icon: CreditCard,
+      icon: CreditCardIcon,
       title: 'Automated Billing & Access',
       bullets: [
         'Members subscribe through Tadex, not random transfers.',
@@ -14,10 +21,9 @@ export default function ProviderBenefits() {
         'No more “Did you receive my payment?” DMs.',
       ],
       badge: 'Zero Admin',
-      iconBg: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400',
     },
     {
-      icon: Sliders,
+      icon: SlidersIcon,
       title: 'You Set the Price, We Handle the Rest',
       bullets: [
         'Create up to 3 paid plans (e.g., Monthly VIP, Quarterly VIP, Free Community).',
@@ -25,22 +31,20 @@ export default function ProviderBenefits() {
         'Tadex handles checkout, receipts, and subscription status.',
         'You keep the majority of revenue; Tadex takes a small platform fee (around 10%).',
       ],
-      badge: 'Multi-Currency',
-      iconBg: 'bg-teal-50 text-teal-600 dark:bg-teal-950/40 dark:text-teal-400',
+      badge: 'Multi Currency',
     },
     {
-      icon: Bot,
+      icon: RobotIcon,
       title: 'Automated Execution for Your Members',
       bullets: [
         'Your signals are read by Tadex and executed on your members’ exchange accounts.',
         'They get better entries, consistent risk, and clear logs.',
         'Better results → higher retention → you can charge more.',
       ],
-      badge: 'Trade-Only API',
-      iconBg: 'bg-sky-50 text-sky-600 dark:bg-sky-950/40 dark:text-sky-400',
+      badge: 'Trade Only API',
     },
     {
-      icon: LineChart,
+      icon: ChartLineUpIcon,
       title: 'Clear Revenue & Subscriber Insights',
       bullets: [
         'Dashboard shows monthly revenue, platform fees, active subscribers, and churn.',
@@ -49,60 +53,64 @@ export default function ProviderBenefits() {
         'Use this data to market your service and justify price increases.',
       ],
       badge: 'Growth Data',
-      iconBg: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400',
     },
   ];
 
   return (
-    <section className="py-20 lg:py-28 bg-slate-50 border-y border-slate-200" id="what-tadex-gives-you">
+    <section className="py-20 lg:py-24 bg-surface-canvas" id="what-tadex-gives-you">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 bg-[#004859]/10 text-[#004859] px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase mb-4">
-            Platform Capabilities
+        <ScrollReveal>
+          <div className="max-w-[680px] mb-16">
+            <h2 className="heading-2 text-content-primary mb-4">
+              What You Get as a Tadex Provider
+            </h2>
+            <p className="title-1 text-content-secondary">
+              A ready infrastructure that turns your Telegram signal group into a scalable, automated business.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#004859]">
-            What You Get as a Tadex Provider
-          </h2>
-          <p className="mt-4 text-lg text-slate-600">
-            A turn-key infrastructure that transforms your Telegram signal group into a scalable, automated business.
-          </p>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {benefits.map((card, idx) => {
-            const Icon = card.icon;
-            return (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-8 border border-slate-200 hover:border-[#004859]/30 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${card.iconBg} shadow-sm`}>
-                      <Icon className="w-7 h-7" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {benefits.map((card, idx) => {
+              const Icon = card.icon;
+              return (
+                <div
+                  key={idx}
+                  className="bg-surface-primary hover:bg-surface-subtle rounded-2xl p-8 border border-surface-elevated transition-[background-color,transform] duration-500 ease-weighted hover:-translate-y-1 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-12 h-12 rounded-xl bg-surface-subtle border border-surface-elevated flex items-center justify-center text-brand-accent">
+                        <Icon size={24} />
+                      </div>
+                      <span className="caption-3 text-content-tertiary bg-surface-subtle px-3 py-1 rounded-full border border-surface-elevated">
+                        {card.badge}
+                      </span>
                     </div>
-                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider bg-slate-100 px-3 py-1 rounded-full">
-                      {card.badge}
-                    </span>
+
+                    <h3 className="title-1 text-content-primary mb-4">
+                      {card.title}
+                    </h3>
+
+                    <ul className="space-y-3.5">
+                      {card.bullets.map((bullet, bIdx) => (
+                        <li
+                          key={bIdx}
+                          className="flex items-start gap-3 body-6 text-content-secondary"
+                        >
+                          <CheckCircleIcon
+                            size={18}
+                            className="text-brand-accent flex-shrink-0 mt-0.5"
+                          />
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-
-                  <h3 className="text-xl font-bold text-slate-900 mb-5">
-                    {card.title}
-                  </h3>
-
-                  <ul className="space-y-3.5">
-                    {card.bullets.map((bullet, bIdx) => (
-                      <li key={bIdx} className="flex items-start gap-3 text-slate-600 text-sm leading-relaxed">
-                        <CheckCircle2 className="w-4 h-4 text-[#00B894] flex-shrink-0 mt-0.5" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

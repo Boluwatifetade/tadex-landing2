@@ -1,14 +1,21 @@
 'use client';
 
-import { UserCheck, Key, Sliders, Zap, ArrowRight, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import ScrollReveal from '@/components/ui/ScrollReveal';
+import {
+  UserCheckIcon,
+  KeyIcon,
+  SlidersIcon,
+  LightningIcon,
+  ArrowRightIcon,
+  CheckIcon,
+} from '@/components/ui/PhosphorIcons';
 
 export default function HowItWorks() {
   const steps = [
     {
       number: '01',
-      icon: UserCheck,
+      icon: UserCheckIcon,
       title: 'Create Your Account',
       bullets: [
         'Open Tadex in your browser.',
@@ -18,7 +25,7 @@ export default function HowItWorks() {
     },
     {
       number: '02',
-      icon: Key,
+      icon: KeyIcon,
       title: 'Connect Your Accounts',
       bullets: [
         'Add your exchange API keys (Bybit, Binance, OKX, etc.).',
@@ -28,20 +35,20 @@ export default function HowItWorks() {
     },
     {
       number: '03',
-      icon: Sliders,
+      icon: SlidersIcon,
       title: 'Set Your Rules',
       bullets: [
         'Choose which signals to act on.',
         'Define position size, stop loss, and risk limits.',
-        'Add filters like “only trade BTC” or “only during London session.”',
+        'Add filters like only trade BTC or only during London session.',
       ],
     },
     {
       number: '04',
-      icon: Zap,
+      icon: LightningIcon,
       title: 'Let Tadex Handle the Rest',
       bullets: [
-        'Signals come in → Tadex checks your rules → trades are placed.',
+        'Signals come in, Tadex checks your rules, and trades are placed.',
         'Watch live logs of every action.',
         'Adjust or pause anytime from your dashboard.',
       ],
@@ -49,98 +56,114 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="py-20 lg:py-28 bg-white" id="how-it-works">
+    <section className="py-20 lg:py-24 bg-surface-canvas" id="how-it-works">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 bg-[#004859]/10 text-[#004859] px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase mb-4">
-            Simple 4-Step Process
+        <ScrollReveal>
+          {/* Section Header */}
+          <div className="max-w-[680px] mb-12">
+            <h2 className="heading-2 text-content-primary mb-4">
+              Set Up in Minutes, Not Days
+            </h2>
+            <p className="title-1 text-content-secondary">
+              No downloads. No complex code. Just connect, configure, and go.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#004859]">
-            Set Up in Minutes, Not Days
-          </h2>
-          <p className="mt-4 text-lg text-slate-600">
-            No downloads. No complex code. Just connect, configure, and go.
-          </p>
-        </div>
 
-        {/* Signal Flow Simulation Diagram */}
-        <div className="mb-14 p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white max-w-4xl mx-auto border border-slate-700 shadow-md">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono">
-            <div className="flex items-center gap-2 bg-slate-800/80 px-3 py-2 rounded-lg border border-slate-700 w-full sm:w-auto justify-center">
-              <span className="w-2 h-2 rounded-full bg-blue-400"></span>
-              <span>1. Telegram Signal</span>
-            </div>
-            <ArrowRight className="w-4 h-4 text-[#00B894] hidden sm:block" />
-            <div className="flex items-center gap-2 bg-slate-800/80 px-3 py-2 rounded-lg border border-slate-700 w-full sm:w-auto justify-center">
-              <span className="w-2 h-2 rounded-full bg-[#00B894]"></span>
-              <span>2. Tadex Risk Engine</span>
-            </div>
-            <ArrowRight className="w-4 h-4 text-[#00B894] hidden sm:block" />
-            <div className="flex items-center gap-2 bg-slate-800/80 px-3 py-2 rounded-lg border border-slate-700 w-full sm:w-auto justify-center">
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span>3. Bybit API (Trade-Only)</span>
-            </div>
-            <ArrowRight className="w-4 h-4 text-[#00B894] hidden sm:block" />
-            <div className="flex items-center gap-2 bg-emerald-950/80 text-emerald-300 px-3 py-2 rounded-lg border border-emerald-800 w-full sm:w-auto justify-center">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span className="font-bold">4. Order Filled</span>
-            </div>
-          </div>
-        </div>
+          {/* Flat Signal Flow Simulation Bar (Outer rounded-2xl 16px, p-2 8px -> Inner rounded-lg 8px per B3) */}
+          <div className="mb-12 p-2 rounded-2xl bg-surface-primary border border-surface-elevated">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 font-mono">
+              <div className="flex items-center justify-between bg-surface-subtle px-4 py-3 rounded-lg border border-surface-elevated">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-content-secondary" />
+                  <span className="caption-4 text-content-primary">1. Telegram Signal</span>
+                </div>
+                <ArrowRightIcon size={14} className="text-content-tertiary hidden sm:block" />
+              </div>
 
-        {/* 4 Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          {steps.map((step, idx) => {
-            const Icon = step.icon;
-            return (
-              <div
-                key={idx}
-                className="relative bg-slate-50 hover:bg-white rounded-2xl p-6 lg:p-7 border border-slate-200 hover:border-[#004859]/30 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="text-2xl font-black text-[#004859]/30 font-mono">
-                      {step.number}
-                    </span>
-                    <div className="w-12 h-12 rounded-xl bg-[#004859]/10 text-[#004859] flex items-center justify-center">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                  </div>
+              <div className="flex items-center justify-between bg-surface-subtle px-4 py-3 rounded-lg border border-surface-elevated">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-brand-accent" />
+                  <span className="caption-4 text-content-primary">2. Tadex Risk Engine</span>
+                </div>
+                <ArrowRightIcon size={14} className="text-content-tertiary hidden sm:block" />
+              </div>
 
-                  <h3 className="text-lg font-bold text-slate-900 mb-4">
-                    {step.title}
-                  </h3>
+              <div className="flex items-center justify-between bg-surface-subtle px-4 py-3 rounded-lg border border-surface-elevated">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-brand-accent" />
+                  <span className="caption-4 text-content-primary">3. Bybit API Trade Only</span>
+                </div>
+                <ArrowRightIcon size={14} className="text-content-tertiary hidden sm:block" />
+              </div>
 
-                  <ul className="space-y-3">
-                    {step.bullets.map((bullet, bIdx) => (
-                      <li key={bIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
-                        <Check className="w-4 h-4 text-[#00B894] flex-shrink-0 mt-0.5" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
+              <div className="flex items-center justify-between bg-brand-accentSubtle px-4 py-3 rounded-lg border border-brand-accent/40">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-brand-accent" />
+                  <span className="caption-3 text-brand-accent">4. Order Filled</span>
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          </div>
 
-        {/* CTA Under Steps */}
-        <div className="text-center">
-          <Link href="#pricing">
-            <Button
-              size="lg"
-              className="bg-[#00B894] hover:bg-[#00A085] text-slate-950 font-bold px-8 py-6 text-base rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105"
-            >
-              Start Free
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </Link>
-          <p className="text-xs text-slate-500 mt-2 font-medium">
-            No credit card required
-          </p>
-        </div>
+          {/* 4 Steps Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {steps.map((step, idx) => {
+              const Icon = step.icon;
+              return (
+                <div
+                  key={idx}
+                  className="relative bg-surface-primary hover:bg-surface-subtle rounded-2xl p-6 border border-surface-elevated transition-[background-color,transform] duration-500 ease-weighted hover:-translate-y-1 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <span className="heading-5 text-content-tertiary font-mono">
+                        {step.number}
+                      </span>
+                      <div className="w-12 h-12 rounded-xl bg-surface-secondary border border-surface-elevated text-brand-accent flex items-center justify-center">
+                        <Icon size={22} />
+                      </div>
+                    </div>
+
+                    <h3 className="title-2 text-content-primary mb-4">
+                      {step.title}
+                    </h3>
+
+                    <ul className="space-y-3">
+                      {step.bullets.map((bullet, bIdx) => (
+                        <li
+                          key={bIdx}
+                          className="flex items-start gap-2.5 body-6 text-content-secondary"
+                        >
+                          <CheckIcon
+                            size={16}
+                            className="text-brand-accent flex-shrink-0 mt-0.5"
+                          />
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* CTA Under Steps */}
+          <div className="flex flex-col items-start">
+            <Link href="#pricing">
+              <button
+                type="button"
+                className="inline-flex items-center justify-center gap-2 bg-brand-accent hover:bg-brand-accentHover text-content-inverted button-md px-6 py-3 rounded-xl transition-[background-color,transform] duration-300 ease-weighted hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas"
+              >
+                <span>Start Free</span>
+                <ArrowRightIcon size={18} />
+              </button>
+            </Link>
+            <p className="caption-4 text-content-tertiary mt-2">
+              No credit card required
+            </p>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

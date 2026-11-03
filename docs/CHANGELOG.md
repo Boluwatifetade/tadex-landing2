@@ -4,6 +4,45 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Landing Page Revamp with `ai-design-skills`] - 2026-11-01
+
+### 1. Skill Installation (`elayadesign/ai-design-skills`)
+- Installed [`landing-page-design`](file:///c:/Users/user/Documents/tadex-landing2/.agents/skills/landing-page-design/SKILL.md) and [`figma-designer`](file:///c:/Users/user/Documents/tadex-landing2/.agents/skills/figma-designer/SKILL.md) in both workspace (`.agents/skills/`) and global (`~/.gemini/config/skills/`) skill directories.
+
+### 2. Visual System & Semantic Tokens (`tailwind.config.js`, `src/app/globals.css`, `src/app/layout.tsx`)
+- Configured `Geist` and `Geist Mono` fonts (weights 400–700, non-italic) and SEO/OpenGraph metadata in `src/app/layout.tsx`.
+- Defined all 26 named text styles (`heading-1`..`heading-6`, `title-1`..`title-5`, `body-1`..`body-6`, `button-lg`..`button-xsm`, `caption-1`..`caption-5`) snapped strictly to the Tailwind type scale with `text-wrap: balance` on headings and `text-wrap: pretty` on body copy.
+- Mapped B4 dark mode surface palette (`#000000`, `#181818`, `#1F1F1F`, `#272727`, `#313131`, `#131209`), content tokens, and `ease-weighted` (`cubic-bezier(0.22, 1, 0.36, 1)`) motion curve in `tailwind.config.js`.
+- Removed all background gradients, radial blur blobs, single-sided card borders, ultra-bold 900 weights, and off-scale font sizes (`text-[10px]`, `text-[11px]`).
+
+### 3. Landing Page Components & Mandatory Tagline Reveal (`src/app/page.tsx`, `src/components/*`)
+- Built `TaglineReveal.tsx` implementing the mandatory B11 word-by-word scroll activation from `30%` to `100%` opacity via `IntersectionObserver` + `requestAnimationFrame` with `prefers-reduced-motion` support.
+- Built `ScrollReveal.tsx` (`IntersectionObserver`, `32px` rise, `700ms` duration on `cubic-bezier(0.22, 1, 0.36, 1)`) and `PhosphorIcons.tsx` (uniform `1.5px` stroke weight SVG icons).
+- Revamped `src/app/page.tsx` with B7 compact floating navigation bar, animated menu toggle icon, full-height mobile menu panel with staggered link entrance (`60ms` step, `24px` rise), and B10 keyboard skip-to-content link.
+- Revamped `Hero.tsx` (left-to-right `#FFFFFF` → `#9B9B9B` text gradient on H1, `680px` max width on H1 and subhead, nested radius terminal visual), `WhatTadexDoes.tsx`, `HowItWorks.tsx`, `WhoThisIsFor.tsx`, `Pricing.tsx`, `FAQ.tsx` (with `FAQPage` JSON-LD schema), `FinalCTA.tsx`, `Footer.tsx` (zero dead `#` links), and added branded `src/app/not-found.tsx`.
+
+### 4. Popups & Modals Revamp (`WaitlistModal.tsx`, `PlanWaitlistModal.tsx`, `ProviderLeadModal.tsx`)
+- Revamped all 3 modals (`src/components/WaitlistModal.tsx`, `src/components/PlanWaitlistModal.tsx`, `src/components/providers/ProviderLeadModal.tsx`) to use semantic dark surfaces (`bg-surface-primary`, `bg-surface-subtle`, `bg-surface-secondary`), B1 named text styles, B3 nested radius hierarchy (`rounded-3xl` outer → `rounded-2xl` / `rounded-xl` inner), uniform `1.5px` stroke Phosphor icons, and calm error/confirmation states.
+- Fixed `PlanWaitlistModal.tsx` plan key resolution by adding `'free'`, `'premium'`, and `'provider'` keys with Naira pricing (`₦0 / forever` and `₦5,000 / month` launch special) and crypto signal execution form fields.
+
+### 5. Tadex for Signal Providers (`/for-providers`) Revamp (`src/app/for-providers/page.tsx`, `src/components/providers/*`)
+- Revamped `src/app/for-providers/page.tsx` with `bg-surface-canvas text-content-primary`, B10 keyboard skip-to-content link, B7 compact floating navigation bar (`top-4`) with `For Providers` badge, animated 3-bar mobile menu toggle, and full-height mobile menu panel.
+- Created `src/components/providers/ProviderTaglineReveal.tsx` implementing the mandatory B11 word-by-word scroll activation section for `/for-providers`.
+- Revamped `ProviderHero.tsx` (with `.hero-heading-gradient`, `680px` max width, and nested radius Provider Portal mock), `ProviderProblem.tsx`, `ProviderBenefits.tsx`, `ProviderHowItWorks.tsx`, `ProviderPricingRevenue.tsx`, `ProviderFAQ.tsx` (with `FAQPage` JSON-LD schema), `ProviderFinalCTA.tsx`, and `ProviderFooter.tsx` (zero dead `#` links, `Location: Lagos, Nigeria`).
+
+### 6. Legal & Security Pages Revamp + GDPR Self-Hosted Fonts & Vercel Analytics (`src/app/privacy/page.tsx`, `src/app/terms/page.tsx`, `src/components/SecurityTransparency.tsx`, `src/app/layout.tsx`)
+- Added `<Analytics />` from `@vercel/analytics/next` to `src/app/layout.tsx` for first-party, cookie-free web analytics.
+- Configured `next/font/google` (`Geist` and `Geist_Mono`) in `src/app/layout.tsx` with `display: "swap"` and `adjustFontFallback: true` on Next.js `16.1.1`.
+- Verified production `.next/` build output: 11 self-hosted `.woff2` subsets generated in `.next/static/media/`, preloaded from `/_next/static/media/...` in rendered HTML, and 0 matches for `googleapis` or `gstatic` across all compiled `.next/static` and `.next/server/app` bundles (outside the Privacy Policy disclosure text itself).
+- Revamped `/privacy` (`src/app/privacy/page.tsx`), `/terms` (`src/app/terms/page.tsx`), and `/security` (`src/components/SecurityTransparency.tsx`) to the dark `landing-page-design` visual system and explicitly documented first-party cookie-free Vercel Analytics (`/_vercel/insights/*`), self-hosted web fonts (`/_next/static/media/`), NDPA 2023 & GAID 2025 compliance, and strictly necessary cookie legal consent basis in Section 5, 6 & 7 of the Privacy Policy.
+
+### 7. Official Tadex Brand Logo, Prop Firm Claim Removal & Hero Illustrative Label (`src/components/ui/TadexLogo.tsx`, `src/components/Hero.tsx`, `src/components/WhoThisIsFor.tsx`, `src/components/Pricing.tsx`)
+- Created [`TadexLogo.tsx`](file:///c:/Users/user/Documents/tadex-landing2/src/components/ui/TadexLogo.tsx) (vector SVG recreation of the official Tadex upward signal arrow + parallel execution bars mark) and saved the uploaded asset to `public/tadex-logo.jpg`, replacing placeholder `"T"` badges across `/`, `/for-providers`, `/privacy`, `/terms`, `/security`, `/login`, `/register`, `Footer.tsx`, and `ProviderFooter.tsx`.
+- Added an explicit `"Sample illustrative execution · Not live market data or investment advice"` label inside the interactive Hero execution terminal (`src/components/Hero.tsx`) alongside current BTC (`$77,850`), ETH (`$2,262`), and SOL (`$94.20`) scenarios.
+- Removed all prop firm claims from `WhoThisIsFor.tsx` (replaced *"Busy Traders & Prop Traders"* with *"Busy & Multi-Account Traders"*) and `Pricing.tsx`.
+
+---
+
 ## [Frontend Final Beta Readiness Hardening] - 2026-10-08
 
 ### 1. F-01: Duplicate Dashboard Header Elimination (`dashboard/provider/page.tsx`, `dashboard/providers/[id]/page.tsx`)

@@ -1,10 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { X, CheckCircle2, Radio, Send, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import {
+  CloseIcon,
+  CheckCircleIcon,
+  BroadcastIcon,
+  SendIcon,
+  ArrowRightIcon,
+} from '@/components/ui/PhosphorIcons';
 
 interface ProviderLeadModalProps {
   isOpen: boolean;
@@ -33,13 +37,13 @@ export default function ProviderLeadModal({ isOpen, onClose }: ProviderLeadModal
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
-          plan: 'provider',
-          features: [`name:${name}`, `telegram:${telegramHandle}`, `size:${communitySize}`],
+          selectedPlan: 'provider',
+          eventVolume: communitySize,
+          currentTool: `${name} (${telegramHandle})`,
         }),
       });
 
       if (!res.ok) {
-        // Fallback to general waitlist if plan-waitlist endpoint rejects extra payload
         await fetch('/api/waitlist', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -48,9 +52,7 @@ export default function ProviderLeadModal({ isOpen, onClose }: ProviderLeadModal
       }
 
       setIsSubmitted(true);
-    } catch (err: any) {
-      console.error('Submission error:', err);
-      // Still show success if network issue was partial
+    } catch {
       setIsSubmitted(true);
     } finally {
       setIsSubmitting(false);
@@ -67,142 +69,167 @@ export default function ProviderLeadModal({ isOpen, onClose }: ProviderLeadModal
     onClose();
   };
 
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl text-white">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="provider-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-canvas/85 backdrop-blur-md transition-opacity duration-300 ease-weighted"
+      onClick={handleBackdropClick}
+    >
+      <div className="relative w-full max-w-lg bg-surface-primary border border-surface-elevated rounded-2xl p-6 sm:p-8 text-content-primary">
         {/* Close Button */}
         <button
+          type="button"
           onClick={handleClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-slate-800"
+          className="absolute top-4 right-4 text-content-tertiary hover:text-content-primary hover:bg-surface-subtle transition-colors duration-300 ease-weighted p-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
           aria-label="Close dialog"
         >
-          <X className="w-5 h-5" />
+          <CloseIcon size={18} />
         </button>
 
         {!isSubmitted ? (
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-[#00B894]/20 text-[#00B894] flex items-center justify-center">
-                <Radio className="w-5 h-5" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-11 h-11 rounded-xl bg-brand-accentSubtle border border-brand-accent/40 text-brand-accent flex items-center justify-center flex-shrink-0">
+                <BroadcastIcon size={22} />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">Become a Tadex Provider</h3>
-                <p className="text-xs text-[#00B894] font-medium">Talk to our community onboarding team</p>
+                <h3 id="provider-modal-title" className="heading-5 text-content-primary">
+                  Become a Tadex Provider
+                </h3>
+                <p className="caption-3 text-brand-accent">
+                  Talk to our community onboarding team
+                </p>
               </div>
             </div>
 
-            <p className="text-sm text-slate-300 mb-6 mt-3 leading-relaxed">
-              Tell us a bit about your Telegram group. Our team will reach out within 24 hours to help you set up plans and start automated execution.
+            <p className="body-6 text-content-secondary mb-6">
+              Tell us about your Telegram group. Our team will reach out within 24 hours to help you configure plans and automated member execution.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                <label className="block caption-3 text-content-secondary mb-1.5">
                   Your Name or Brand Name
                 </label>
-                <Input
+                <input
                   type="text"
                   required
                   placeholder="e.g. Alpha Signals or Alex"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-500 rounded-xl h-11"
+                  className="w-full bg-surface-subtle border border-surface-elevated focus:border-brand-accent text-content-primary placeholder:text-content-tertiary rounded-xl py-3 px-4 body-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                <label className="block caption-3 text-content-secondary mb-1.5">
                   Email Address
                 </label>
-                <Input
+                <input
                   type="email"
                   required
                   placeholder="you@domain.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-500 rounded-xl h-11"
+                  className="w-full bg-surface-subtle border border-surface-elevated focus:border-brand-accent text-content-primary placeholder:text-content-tertiary rounded-xl py-3 px-4 body-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                  <label className="block caption-3 text-content-secondary mb-1.5">
                     Telegram Handle / Channel
                   </label>
-                  <Input
+                  <input
                     type="text"
                     required
                     placeholder="@yourchannel"
                     value={telegramHandle}
                     onChange={(e) => setTelegramHandle(e.target.value)}
-                    className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-500 rounded-xl h-11"
+                    className="w-full bg-surface-subtle border border-surface-elevated focus:border-brand-accent text-content-primary placeholder:text-content-tertiary rounded-xl py-3 px-4 body-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                  <label className="block caption-3 text-content-secondary mb-1.5">
                     Community Size
                   </label>
-                  <Input
+                  <input
                     type="text"
                     placeholder="e.g. 150 members"
                     value={communitySize}
                     onChange={(e) => setCommunitySize(e.target.value)}
-                    className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-500 rounded-xl h-11"
+                    className="w-full bg-surface-subtle border border-surface-elevated focus:border-brand-accent text-content-primary placeholder:text-content-tertiary rounded-xl py-3 px-4 body-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
                   />
                 </div>
               </div>
 
               {errorMsg && (
-                <p className="text-xs text-red-400 bg-red-950/40 p-2.5 rounded-lg border border-red-800/50">
+                <p className="caption-4 text-status-danger bg-surface-subtle p-3 rounded-xl border border-status-danger/40">
                   {errorMsg}
                 </p>
               )}
 
-              <Button
+              <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#00B894] hover:bg-[#00A085] text-slate-950 font-bold py-6 text-base rounded-xl shadow-lg transition-all"
+                className="w-full inline-flex items-center justify-center gap-2 bg-brand-accent hover:bg-brand-accentHover text-content-inverted button-md py-3.5 px-6 rounded-xl transition-[background-color,transform] duration-300 ease-weighted active:scale-[0.98] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
               >
-                {isSubmitting ? 'Submitting...' : 'Submit & Connect with Team'}
-                <Send className="w-4 h-4 ml-2" />
-              </Button>
+                <span>{isSubmitting ? 'Submitting...' : 'Submit & Connect with Team'}</span>
+                <SendIcon size={16} />
+              </button>
             </form>
 
-            <div className="mt-6 pt-5 border-t border-slate-800 text-center">
-              <p className="text-xs text-slate-400">
+            <div className="h-px bg-surface-elevated my-5" />
+
+            <div className="text-center">
+              <p className="caption-4 text-content-tertiary">
                 Ready to register right now?{' '}
                 <Link
                   href="/register?redirect=/dashboard/provider"
-                  className="text-[#00B894] hover:underline font-semibold"
+                  className="text-brand-accent hover:underline caption-3 inline-flex items-center gap-1"
                 >
-                  Create account & open portal <ArrowRight className="w-3 h-3 inline ml-0.5" />
+                  <span>Create account & open portal</span>
+                  <ArrowRightIcon size={14} />
                 </Link>
               </p>
             </div>
           </div>
         ) : (
           <div className="text-center py-6">
-            <div className="w-14 h-14 bg-emerald-500/20 text-[#00B894] rounded-full flex items-center justify-center mx-auto mb-4 border border-[#00B894]/30">
-              <CheckCircle2 className="w-8 h-8" />
+            <div className="w-12 h-12 bg-brand-accentSubtle text-brand-accent rounded-xl flex items-center justify-center mx-auto mb-4 border border-brand-accent/40">
+              <CheckCircleIcon size={24} />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">We Received Your Details!</h3>
-            <p className="text-sm text-slate-300 max-w-sm mx-auto mb-6 leading-relaxed">
+            <h3 className="heading-5 text-content-primary mb-2">
+              We Received Your Details!
+            </h3>
+            <p className="body-6 text-content-secondary max-w-sm mx-auto mb-6">
               Our provider onboarding team will review your channel and contact you shortly via Telegram or Email.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/register?redirect=/dashboard/provider">
-                <Button className="w-full sm:w-auto bg-[#00B894] hover:bg-[#00A085] text-slate-950 font-bold px-6 py-5 rounded-xl">
+                <button
+                  type="button"
+                  className="w-full sm:w-auto bg-brand-accent hover:bg-brand-accentHover text-content-inverted button-md px-6 py-3 rounded-xl transition-colors duration-300 ease-weighted active:scale-[0.98]"
+                >
                   Register Now
-                </Button>
+                </button>
               </Link>
-              <Button
-                variant="outline"
+              <button
+                type="button"
                 onClick={handleClose}
-                className="w-full sm:w-auto border-slate-700 text-slate-300 hover:bg-slate-800 px-6 py-5 rounded-xl"
+                className="w-full sm:w-auto bg-surface-subtle hover:bg-surface-secondary border border-surface-elevated text-content-primary button-md px-6 py-3 rounded-xl transition-colors duration-300 ease-weighted active:scale-[0.98]"
               >
                 Done
-              </Button>
+              </button>
             </div>
           </div>
         )}

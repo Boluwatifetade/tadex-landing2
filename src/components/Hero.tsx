@@ -1,170 +1,313 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Play, ArrowRight, ShieldCheck, Zap, Activity } from 'lucide-react';
+import { useState } from 'react';
 import Link from 'next/link';
+import {
+  ArrowRightIcon,
+  PlayIcon,
+  ShieldCheckIcon,
+  LightningIcon,
+  PulseIcon,
+} from '@/components/ui/PhosphorIcons';
+
+interface TradeScenario {
+  id: string;
+  tabLabel: string;
+  pair: string;
+  channel: string;
+  direction: string;
+  buyZone: string;
+  stopLoss: string;
+  tp1: string;
+  tp2: string;
+  riskPercent: string;
+  drawdownGuard: string;
+  exchange: string;
+  exchangeShort: string;
+  orderPlaced: string;
+  fillStatus: string;
+  latency: string;
+  summarySignal: string;
+}
+
+const TRADE_SCENARIOS: TradeScenario[] = [
+  {
+    id: 'btc',
+    tabLabel: 'BTC/USDT',
+    pair: 'BTC/USDT',
+    channel: '@AlphaSignals VIP',
+    direction: 'BUY ZONE',
+    buyZone: '$77,850',
+    stopLoss: '$76,400',
+    tp1: '$79,500',
+    tp2: '$81,200',
+    riskPercent: '2.0% Account Risk',
+    drawdownGuard: 'Safe (OK)',
+    exchange: 'Bybit Futures',
+    exchangeShort: 'Bybit',
+    orderPlaced: 'Market Buy BTCUSDT',
+    fillStatus: 'FILLED @ $77,852',
+    latency: '14ms',
+    summarySignal: 'BTC Long',
+  },
+  {
+    id: 'eth',
+    tabLabel: 'ETH/USDT',
+    pair: 'ETH/USDT',
+    channel: '@LagosWhales VIP',
+    direction: 'BUY ZONE',
+    buyZone: '$2,262',
+    stopLoss: '$2,195',
+    tp1: '$2,340',
+    tp2: '$2,420',
+    riskPercent: '1.5% Account Risk',
+    drawdownGuard: 'Safe (OK)',
+    exchange: 'Binance Futures',
+    exchangeShort: 'Binance',
+    orderPlaced: 'Market Buy ETHUSDT',
+    fillStatus: 'FILLED @ $2,263',
+    latency: '18ms',
+    summarySignal: 'ETH Long',
+  },
+  {
+    id: 'sol',
+    tabLabel: 'SOL/USDT',
+    pair: 'SOL/USDT',
+    channel: '@NairobiPerps VIP',
+    direction: 'BUY ZONE',
+    buyZone: '$94.20',
+    stopLoss: '$91.50',
+    tp1: '$98.00',
+    tp2: '$102.50',
+    riskPercent: '1.0% Account Risk',
+    drawdownGuard: 'Safe (OK)',
+    exchange: 'OKX Perpetual',
+    exchangeShort: 'OKX',
+    orderPlaced: 'Market Buy SOLUSDT',
+    fillStatus: 'FILLED @ $94.24',
+    latency: '16ms',
+    summarySignal: 'SOL Long',
+  },
+];
 
 export default function Hero() {
-  const YOUTUBE_DEMO_URL = "https://youtu.be/7cLw92poCss";
+  const YOUTUBE_DEMO_URL = 'https://youtu.be/7cLw92poCss';
+  const [activeId, setActiveId] = useState<string>('btc');
+
+  const activeTrade =
+    TRADE_SCENARIOS.find((s) => s.id === activeId) || TRADE_SCENARIOS[0];
 
   return (
-    <section className="relative bg-slate-950 text-white overflow-hidden py-16 sm:py-24 lg:py-32 border-b border-slate-800">
-      {/* Subtle Grid Background Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-
-      {/* Ambient Radial Gradient Accent */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#004859]/30 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute top-1/3 right-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#00B894]/15 rounded-full blur-[120px] pointer-events-none"></div>
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative bg-surface-canvas text-content-primary overflow-hidden pt-28 pb-20 lg:pt-32 lg:pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Copy & Actions */}
           <div className="lg:col-span-7 text-left">
-            {/* Live Indicator Chip */}
-            <div className="inline-flex items-center gap-2 bg-[#00B894]/15 border border-[#00B894]/30 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#00B894] mb-6">
-              <span className="w-2 h-2 rounded-full bg-[#00B894] animate-pulse"></span>
-              Non-Custodial Cloud Execution
-            </div>
-
-            {/* H1 Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1] mb-6">
+            {/* H1 Headline: Capped at 680px with left-to-right #FFFFFF -> #9B9B9B text gradient per B5 */}
+            <h1 className="heading-1 hero-heading-gradient max-w-[680px] mb-6">
               Automate Your Trading Signals.{' '}
-              <span className="text-[#00B894] block mt-1">No More Manual Copying.</span>
+              <span className="block mt-2">No More Manual Copying.</span>
             </h1>
 
-            {/* Subheadline */}
-            <p className="text-lg sm:text-xl text-slate-300 leading-relaxed mb-8 max-w-2xl">
-              Connect your Telegram groups and exchanges. Tadex reads signals and places trades for you 24/7—so you don’t miss entries or make costly mistakes.
+            {/* Subheadline: Capped at 680px per B5 */}
+            <p className="title-1 text-content-secondary max-w-[680px] mb-8">
+              Connect your Telegram groups and exchanges. Tadex reads signals and places trades for you 24/7 so you do not miss entries or make costly mistakes.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-4 mb-6">
               <div className="flex flex-col items-center sm:items-start">
                 <Link href="#pricing" className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    className="w-full sm:w-auto bg-[#00B894] hover:bg-[#00A085] text-slate-950 font-bold px-8 py-6 text-base rounded-xl shadow-lg shadow-[#00B894]/20 transition-all duration-300 transform hover:scale-[1.02]"
+                  <button
+                    type="button"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-accent hover:bg-brand-accentHover text-content-inverted button-md px-6 py-3 rounded-xl transition-[background-color,transform] duration-300 ease-weighted hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas"
                   >
-                    Start Free
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
+                    <span>Start Free</span>
+                    <ArrowRightIcon size={18} />
+                  </button>
                 </Link>
-                <span className="text-xs text-slate-400 mt-2">
+                <span className="caption-4 text-content-tertiary mt-2">
                   No credit card required
                 </span>
               </div>
 
               <div className="flex flex-col items-center sm:items-start">
-                <Link href={YOUTUBE_DEMO_URL} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full sm:w-auto bg-slate-900/60 hover:bg-slate-800 text-slate-200 border border-slate-700 px-6 py-6 text-base font-medium rounded-xl backdrop-blur-sm transition-all"
+                <Link
+                  href={YOUTUBE_DEMO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto"
+                >
+                  <button
+                    type="button"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-surface-primary hover:bg-surface-secondary text-content-primary border border-surface-elevated button-md px-6 py-3 rounded-xl transition-[background-color,transform] duration-300 ease-weighted hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-canvas"
                   >
-                    <Play className="w-4 h-4 mr-2 text-[#00B894]" />
-                    Watch 2‑min Demo
-                  </Button>
+                    <PlayIcon size={16} className="text-brand-accent" />
+                    <span>Watch 2‑min Demo</span>
+                  </button>
                 </Link>
               </div>
             </div>
 
-            {/* Trust Line */}
-            <div className="pt-2 text-xs sm:text-sm font-medium text-slate-400 flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#00B894]" />
+            {/* Proof Signal / Trust Line */}
+            <div className="pt-2 caption-1 text-content-tertiary flex flex-wrap items-center gap-2">
+              <ShieldCheckIcon size={16} className="text-brand-accent" />
               <span>99.9% uptime</span>
-              <span className="text-slate-600">•</span>
+              <span className="text-content-muted" aria-hidden="true">·</span>
               <span>2,000+ users</span>
-              <span className="text-slate-600">•</span>
+              <span className="text-content-muted" aria-hidden="true">·</span>
               <span>Instant setup</span>
             </div>
           </div>
 
-          {/* Right Column: Terminal Product Visual */}
+          {/* Right Column: Interactive Flat-Surface Terminal Product Visual */}
           <div className="lg:col-span-5">
             <div className="relative mx-auto max-w-lg lg:max-w-none">
-              {/* Terminal Frame */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/90 shadow-2xl backdrop-blur-md overflow-hidden">
-                {/* Terminal Header */}
-                <div className="flex items-center justify-between px-4 py-3 bg-slate-950/80 border-b border-slate-800/80">
+              {/* Outer Terminal Card: rounded-2xl (16px) with p-2 (8px) gap -> inner elements rounded-lg (8px) per B3 */}
+              <div className="rounded-2xl border border-surface-elevated bg-surface-primary p-2">
+                {/* Terminal Header Bar */}
+                <div className="flex items-center justify-between px-3 py-2 bg-surface-subtle rounded-lg mb-2">
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
-                    <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
-                    <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
-                    <span className="text-xs font-mono text-slate-400 ml-2">tadex-execution-node v2.4</span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-status-danger inline-block" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-status-warning inline-block" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-status-success inline-block" />
+                    <span className="caption-4 font-mono text-content-tertiary ml-2">
+                      tadex-execution-node v2.4
+                    </span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">
-                    <Activity className="w-3 h-3 animate-pulse" />
+                  <div className="flex items-center gap-1.5 caption-3 font-mono text-brand-accent bg-brand-accentSubtle px-2 py-1 rounded border border-brand-accent/30">
+                    <PulseIcon size={14} />
                     <span>ENGINE LIVE</span>
                   </div>
                 </div>
 
+                {/* Interactive Signal Pair Switcher */}
+                <div
+                  role="tablist"
+                  aria-label="Live signal execution examples"
+                  className="grid grid-cols-3 gap-1.5 px-2 pt-1 pb-2"
+                >
+                  {TRADE_SCENARIOS.map((scenario) => {
+                    const isSelected = scenario.id === activeTrade.id;
+                    return (
+                      <button
+                        key={scenario.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={isSelected}
+                        onClick={() => setActiveId(scenario.id)}
+                        className={`py-1.5 px-2.5 rounded-lg font-mono caption-3 transition-colors duration-200 ease-weighted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent ${
+                          isSelected
+                            ? 'bg-surface-secondary text-brand-accent border border-brand-accent/40'
+                            : 'bg-surface-subtle text-content-tertiary hover:text-content-primary border border-surface-elevated'
+                        }`}
+                      >
+                        {scenario.tabLabel}
+                      </button>
+                    );
+                  })}
+                </div>
+
                 {/* Terminal Content Body */}
-                <div className="p-5 font-mono text-xs space-y-4">
-                  {/* Step 1: Telegram Signal Ingest */}
-                  <div className="rounded-lg bg-slate-950/60 p-3.5 border border-slate-800">
-                    <div className="flex items-center justify-between text-slate-400 mb-2">
-                      <span className="text-[#00B894] font-semibold flex items-center gap-1.5">
-                        <Zap className="w-3.5 h-3.5" /> 1. Ingest Signal
+                <div className="p-2 font-mono space-y-3">
+                  {/* Step 1: Telegram Signal Ingest (outer rounded-xl 12px, p-3 12px -> inner rounded 4px) */}
+                  <div className="rounded-xl bg-surface-subtle p-3 border border-surface-elevated">
+                    <div className="flex items-center justify-between text-content-tertiary mb-2">
+                      <span className="caption-3 text-brand-accent flex items-center gap-1.5">
+                        <LightningIcon size={14} />
+                        <span>1. Ingest Signal</span>
                       </span>
-                      <span className="text-[10px] text-slate-500">Telegram VIP</span>
+                      <span className="caption-5 text-content-tertiary">
+                        {activeTrade.channel}
+                      </span>
                     </div>
-                    <div className="text-slate-200 bg-slate-900/90 p-2.5 rounded border border-slate-800/70 font-mono text-[11px] leading-relaxed">
-                      <span className="text-amber-400">#BTC/USDT</span> BUY ZONE: <span className="text-emerald-400">$68,400</span><br />
-                      SL: <span className="text-red-400">$66,200</span> | TP1: <span className="text-emerald-400">$70,500</span> | TP2: <span className="text-emerald-400">$72,500</span>
+                    <div className="text-content-secondary bg-surface-canvas p-3 rounded border border-surface-secondary caption-5">
+                      <span className="text-status-warning">{activeTrade.pair}</span>{' '}
+                      {activeTrade.direction}:{' '}
+                      <span className="text-brand-accent">{activeTrade.buyZone}</span>
+                      <br />
+                      SL: <span className="text-status-danger">{activeTrade.stopLoss}</span> · TP1:{' '}
+                      <span className="text-brand-accent">{activeTrade.tp1}</span> · TP2:{' '}
+                      <span className="text-brand-accent">{activeTrade.tp2}</span>
                     </div>
                   </div>
 
                   {/* Step 2: Risk Guard Verification */}
-                  <div className="rounded-lg bg-slate-950/60 p-3.5 border border-slate-800">
-                    <div className="flex items-center justify-between text-slate-400 mb-1.5">
-                      <span className="text-sky-400 font-semibold">2. Pre-Trade Risk Rules</span>
-                      <span className="text-emerald-400 text-[10px] font-bold">PASSED</span>
+                  <div className="rounded-xl bg-surface-subtle p-3 border border-surface-elevated">
+                    <div className="flex items-center justify-between text-content-tertiary mb-2">
+                      <span className="caption-3 text-content-primary">
+                        2. Pre Trade Risk Rules
+                      </span>
+                      <span className="caption-3 text-brand-accent">PASSED</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-300">
-                      <div className="bg-slate-900/80 p-2 rounded border border-slate-800/60">
-                        <span className="text-slate-500 text-[10px] block">Position Sizing</span>
-                        <span className="font-semibold text-slate-200">2.0% Account Risk</span>
+                    <div className="grid grid-cols-2 gap-2 caption-5 text-content-secondary">
+                      <div className="bg-surface-canvas p-2 rounded border border-surface-secondary">
+                        <span className="caption-5 text-content-tertiary block">
+                          Position Sizing
+                        </span>
+                        <span className="caption-3 text-content-primary">
+                          {activeTrade.riskPercent}
+                        </span>
                       </div>
-                      <div className="bg-slate-900/80 p-2 rounded border border-slate-800/60">
-                        <span className="text-slate-500 text-[10px] block">Max Drawdown Guard</span>
-                        <span className="font-semibold text-emerald-400">Safe (OK)</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Step 3: Bybit Execution Dispatch */}
-                  <div className="rounded-lg bg-emerald-950/30 p-3.5 border border-emerald-700/40">
-                    <div className="flex items-center justify-between text-slate-400 mb-1.5">
-                      <span className="text-emerald-400 font-semibold">3. Exchange Dispatch</span>
-                      <span className="text-[10px] text-slate-400">Latency: 14ms</span>
-                    </div>
-                    <div className="bg-slate-900/90 p-2.5 rounded border border-emerald-800/40 text-[11px] space-y-1">
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-400">Target Exchange:</span>
-                        <span className="font-bold text-white">Bybit Futures</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-slate-400">Order Placed:</span>
-                        <span className="text-emerald-400 font-bold">Market Buy BTCUSDT</span>
-                      </div>
-                      <div className="flex justify-between items-center pt-1 border-t border-slate-800">
-                        <span className="text-slate-400">Execution Status:</span>
-                        <span className="bg-emerald-500 text-slate-950 font-extrabold px-2 py-0.5 rounded text-[10px]">
-                          FILLED @ $68,402
+                      <div className="bg-surface-canvas p-2 rounded border border-surface-secondary">
+                        <span className="caption-5 text-content-tertiary block">
+                          Max Drawdown Guard
+                        </span>
+                        <span className="caption-3 text-brand-accent">
+                          {activeTrade.drawdownGuard}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* High-Level Visual Flow Banner */}
-                  <div className="bg-gradient-to-r from-[#004859]/30 to-[#00B894]/20 border border-[#00B894]/40 rounded-xl p-3 text-center">
-                    <div className="text-[11px] font-bold text-slate-200">
-                      <span className="text-slate-400">Signal:</span> <span className="text-amber-300">BTC Long</span>
-                      <span className="text-slate-500 mx-1.5">→</span>
-                      <span className="text-slate-400">Exchange:</span> <span className="text-white">Bybit</span>
-                      <span className="text-slate-500 mx-1.5">→</span>
-                      <span className="text-slate-400">Status:</span> <span className="text-[#00B894]">Filled</span>
+                  {/* Step 3: Exchange Execution Dispatch */}
+                  <div className="rounded-xl bg-brand-accentSubtle p-3 border border-brand-accent/40">
+                    <div className="flex items-center justify-between text-content-tertiary mb-2">
+                      <span className="caption-3 text-brand-accent">
+                        3. Exchange Dispatch
+                      </span>
+                      <span className="caption-5 text-content-secondary">
+                        Latency: {activeTrade.latency}
+                      </span>
                     </div>
+                    <div className="bg-surface-canvas p-3 rounded border border-surface-secondary caption-5 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-content-tertiary">Target Exchange:</span>
+                        <span className="caption-3 text-content-primary">
+                          {activeTrade.exchange}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-content-tertiary">Order Placed:</span>
+                        <span className="caption-3 text-brand-accent">
+                          {activeTrade.orderPlaced}
+                        </span>
+                      </div>
+                      <div className="h-px bg-surface-secondary" />
+                      <div className="flex justify-between items-center">
+                        <span className="text-content-tertiary">Execution Status:</span>
+                        <span className="bg-brand-accent text-content-inverted caption-3 px-2 py-0.5 rounded">
+                          {activeTrade.fillStatus}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Flat Summary Bar (no background gradient per B4) */}
+                  <div className="bg-surface-secondary border border-surface-elevated rounded-lg p-3 text-center">
+                    <div className="caption-3 text-content-primary">
+                      <span className="text-content-tertiary">Signal:</span>{' '}
+                      <span className="text-status-warning">{activeTrade.summarySignal}</span>
+                      <span className="text-content-muted mx-2">→</span>
+                      <span className="text-content-tertiary">Exchange:</span>{' '}
+                      <span className="text-content-primary">{activeTrade.exchangeShort}</span>
+                      <span className="text-content-muted mx-2">→</span>
+                      <span className="text-content-tertiary">Status:</span>{' '}
+                      <span className="text-brand-accent">Filled</span>
+                    </div>
+                    <p className="caption-5 text-content-muted mt-1.5">
+                      Sample illustrative execution · Not live market data or investment advice
+                    </p>
                   </div>
                 </div>
               </div>

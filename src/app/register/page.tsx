@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { apiClient } from "@/lib/api-client";
 import { useAuthStore } from "@/lib/auth-store";
 import { registerSchema, type RegisterFormValues } from "@/lib/schemas/auth";
+import TadexLogo from "@/components/ui/TadexLogo";
 
 interface UserOut {
   id: string;
@@ -91,10 +92,8 @@ export default function RegisterPage() {
     <div className="flex min-h-screen flex-col justify-center bg-background py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground shadow-sm">
-              T
-            </div>
+          <Link href="/" className="flex items-center gap-2.5">
+            <TadexLogo size={40} />
             <span className="text-2xl font-bold tracking-tight text-foreground">Tadex</span>
           </Link>
         </div>
