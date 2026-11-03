@@ -41,6 +41,11 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 - Added an explicit `"Sample illustrative execution · Not live market data or investment advice"` label inside the interactive Hero execution terminal (`src/components/Hero.tsx`) alongside current BTC (`$77,850`), ETH (`$2,262`), and SOL (`$94.20`) scenarios.
 - Removed all prop firm claims from `WhoThisIsFor.tsx` (replaced *"Busy Traders & Prop Traders"* with *"Busy & Multi-Account Traders"*) and `Pricing.tsx`.
 
+### 8. Production Dependency Security Hardening (`package.json`, `package-lock.json`)
+- Upgraded `next` from `16.1.1` to `^16.4.4` (`>=16.1.7`) to remediate CVE-2026-27978 (Server Action CSRF bypass), WebSocket Origin validation, HTTP request smuggling, and resource exhaustion advisories.
+- Upgraded `zod` from `^4.4.3` to `^4.6.7` (`>=4.6.6`) to remediate GHSA-mrhx-c7xc-m3w5 (memory exhaustion on oversized array validation).
+- Added `overrides` (`glob: ^14.0.3`, `minimatch: ^11.0.4`) and ran `npm audit fix` so `npm audit --omit=dev` reports **0 vulnerabilities** across all production dependencies.
+
 ---
 
 ## [Frontend Final Beta Readiness Hardening] - 2026-10-08

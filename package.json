@@ -18,14 +18,14 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.544.0",
-    "next": "16.1.1",
+    "next": "^16.4.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.83.0",
     "resend": "^6.0.3",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^4.4.3",
+    "zod": "^4.6.7",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
@@ -45,6 +45,10 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5",
     "vitest": "^3.0.5"
+  },
+  "overrides": {
+    "glob": "^14.0.3",
+    "minimatch": "^11.0.4"
   },
   "description": "Tadex Web Frontend - Non-custodial crypto signal execution automation platform",
   "main": "index.js",
