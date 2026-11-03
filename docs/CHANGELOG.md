@@ -42,8 +42,9 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 - Removed all prop firm claims from `WhoThisIsFor.tsx` (replaced *"Busy Traders & Prop Traders"* with *"Busy & Multi-Account Traders"*) and `Pricing.tsx`.
 
 ### 8. Production Dependency Security Hardening (`package.json`, `package-lock.json`)
-- Upgraded `next` from `16.1.1` to `^16.4.4` (`>=16.1.7`) to remediate CVE-2026-27978 (Server Action CSRF bypass), WebSocket Origin validation, HTTP request smuggling, and resource exhaustion advisories.
-- Upgraded `zod` from `^4.4.3` to `^4.6.7` (`>=4.6.6`) to remediate GHSA-mrhx-c7xc-m3w5 (memory exhaustion on oversized array validation).
+- `next` upgraded from `16.1.1` to `≥ 16.4.1` (actual: `16.4.4`) to remediate CVE-2026-27978 (Server Action CSRF bypass, fixed in `≥ 16.1.7`), WebSocket Origin validation, HTTP request smuggling, and resource exhaustion advisories.
+- Confirmed `sharp` resolved at `0.35.5` (`≥ 0.35.5`, verified via `npm ls sharp` under `next@16.4.4`) for the SVG RCE fix.
+- `zod` upgraded from `^4.4.3` to `≥ 4.6.6` (actual: `4.6.7`) to remediate GHSA-mrhx-c7xc-m3w5 (memory exhaustion on oversized array validation).
 - Added `overrides` (`glob: ^14.0.3`, `minimatch: ^11.0.4`) and ran `npm audit fix` so `npm audit --omit=dev` reports **0 vulnerabilities** across all production dependencies.
 
 ### 9. Vector Favicon, OpenGraph Card, Interactive Provider Revenue Calculator & Mobile Layout Polish (`src/app/icon.svg`, `src/app/apple-icon.tsx`, `src/app/opengraph-image.tsx`, `src/components/providers/*`)
