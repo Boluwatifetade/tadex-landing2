@@ -1,34 +1,32 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { apiClient } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { NumericValue } from "@/components/ui/NumericValue";
+import OperationalStatusBanner, { OperationalMode } from "@/components/dashboard/OperationalStatusBanner";
+import PortfolioKpiGrid, { KpiDataState } from "@/components/dashboard/PortfolioKpiGrid";
+import ExecutionReadinessChecklist from "@/components/dashboard/ExecutionReadinessChecklist";
+import { DEFAULT_COMMUNICATION_THRESHOLD_MS } from "@/lib/exchange-status";
 import {
-  KeyRound,
-  CreditCard,
-  LineChart,
-  Users,
-  Send,
-  CheckCircle2,
   AlertCircle,
-  Clock,
   ArrowRight,
   RefreshCw,
   Loader2,
-  ShieldCheck,
-  TrendingUp,
-  ExternalLink,
+  LineChart,
 } from "lucide-react";
 
 interface UserMeResponse {
   id?: string;
   email?: string;
+  role?: string;
   status?: string;
   email_verified?: boolean;
   telegram_linked?: boolean;
   telegram_username?: string | null;
+  created_at?: string;
 }
 
 interface KeyResponse {
@@ -36,8 +34,9 @@ interface KeyResponse {
   exchange: string;
   api_key_masked: string;
   is_testnet: boolean;
-  status: string;
+  status: string; // "active" | "inactive" | "invalid" | "revoked" | "suspended" | "error"
   created_at?: string;
+  last_used_at?: string | null;
 }
 
 interface SubscriptionOut {
@@ -63,6 +62,18 @@ interface PositionOut {
   entry_price?: number | null;
   unrealized_pnl?: number | null;
   leverage?: number | null;
+  stop_loss?: number | null;
+  take_profit?: number | null;
+}
+
+interface OrderOut {
+  id: string;
+  symbol: string;
+  side: string;
+  status: string;
+  size: number;
+  price?: number | null;
+  timestamp?: string;
 }
 
 interface ProviderOut {
@@ -79,44 +90,100 @@ export default function DashboardOverviewPage() {
   const [keys, setKeys] = useState<KeyResponse[]>([]);
   const [subData, setSubData] = useState<UserSubscriptionResponse | null>(null);
   const [positions, setPositions] = useState<PositionOut[]>([]);
+  const [orders, setOrders] = useState<OrderOut[]>([]);
   const [providers, setProviders] = useState<ProviderOut[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isMaintenance, setIsMaintenance] = useState(false);
+
+  // Explicit query states to prevent silent conversion of errors into zero
+  const [positionsState, setPositionsState] = useState<KpiDataState>("loading");
+  const [ordersState, setOrdersState] = useState<KpiDataState>("loading");
 
   const fetchDashboardData = useCallback(async (isSilent = false) => {
     if (!isSilent) setIsLoading(true);
     else setIsRefreshing(true);
     setErrorMsg(null);
+    setIsMaintenance(false);
 
     try {
-      const [userRes, keysRes, subRes, posRes, provRes] = await Promise.allSettled([
-        apiClient<UserMeResponse>("/me"),
-        apiClient<KeyResponse[]>("/keys"),
-        apiClient<UserSubscriptionResponse>("/billing/subscription"),
-        apiClient<PositionOut[]>("/trading/positions"),
-        apiClient<ProviderOut[]>("/providers"),
-      ]);
+      const [userRes, keysRes, subRes, posRes, ordRes, provRes] =
+        await Promise.allSettled([
+          apiClient<UserMeResponse>("/me"),
+          apiClient<KeyResponse[]>("/keys"),
+          apiClient<UserSubscriptionResponse>("/billing/subscription"),
+          apiClient<PositionOut[]>("/trading/positions"),
+          apiClient<OrderOut[]>("/trading/orders"),
+          apiClient<ProviderOut[]>("/providers"),
+        ]);
 
+      // Process User
       if (userRes.status === "fulfilled" && userRes.value) {
         setUser(userRes.value);
       }
+
+      // Process Keys
       if (keysRes.status === "fulfilled" && Array.isArray(keysRes.value)) {
         setKeys(keysRes.value);
+      } else {
+        setKeys([]);
       }
+
+      // Process Subscription
       if (subRes.status === "fulfilled" && subRes.value) {
         setSubData(subRes.value);
       }
+
+      // Process Positions - distinguish empty from error.
+      // A rejected request or a non-array (malformed) payload is an error, never an empty list.
       if (posRes.status === "fulfilled" && Array.isArray(posRes.value)) {
         setPositions(posRes.value);
+        setPositionsState(posRes.value.length === 0 ? "empty" : "success");
+      } else {
+        setPositions([]);
+        setPositionsState("error");
       }
+
+      // Process Orders - distinguish empty from error (same rule as positions).
+      if (ordRes.status === "fulfilled" && Array.isArray(ordRes.value)) {
+        setOrders(ordRes.value);
+        setOrdersState(ordRes.value.length === 0 ? "empty" : "success");
+      } else {
+        setOrders([]);
+        setOrdersState("error");
+      }
+
+      // Process Providers
       if (provRes.status === "fulfilled" && Array.isArray(provRes.value)) {
         setProviders(provRes.value);
+      }
+
+      // Check for authoritative maintenance signal.
+      // Must explicitly identify a maintenance state; a generic 503 or network failure is not maintenance.
+      const allSettledResults = [userRes, keysRes, subRes, posRes, ordRes, provRes];
+      const maintenanceDetected = allSettledResults.some((r) => {
+        if (r.status !== "rejected") return false;
+        const reason = r.reason as { status?: number; statusCode?: number; message?: string; detail?: string } | undefined;
+        const detailStr = String(reason?.detail || reason?.message || "").toLowerCase();
+        const statusCode = reason?.status || reason?.statusCode;
+        return (
+          statusCode === 503 &&
+          detailStr.includes("maintenance")
+        );
+      });
+
+      if (maintenanceDetected) {
+        setIsMaintenance(true);
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to load dashboard data";
       setErrorMsg(msg);
+      // Only set maintenance if the error explicitly declares maintenance
+      if (msg.toLowerCase().includes("maintenance") && msg.includes("503")) {
+        setIsMaintenance(true);
+      }
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
@@ -127,71 +194,126 @@ export default function DashboardOverviewPage() {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  // Compute Onboarding / Execution Readiness Checklist
-  const isEmailVerified = !!user?.email_verified;
-  const activeKey = keys.find((k) => k.status === "active");
-  const isExchangeConnected = keys.length > 0 && keys.some((k) => k.status === "active");
-  const isTelegramLinked = !!user?.telegram_linked;
-  const isSubscriptionActive = !!subData?.has_active_subscription;
-  const isProviderSelected = !!subData?.subscription?.provider_id;
+  // Derive active exchange key
+  const activeKey = useMemo(() => {
+    return keys.find((k) => k.status === "active") || null;
+  }, [keys]);
 
-  const checklistItems = [
-    {
-      title: "Email Verified",
-      subtitle: user?.email ? user.email : "Verify email for trading security",
-      completed: isEmailVerified,
-      href: "/dashboard/settings",
-      actionText: isEmailVerified ? "Verified" : "Verify Email",
-    },
-    {
-      title: "Exchange API Key",
-      subtitle: isExchangeConnected && activeKey ? `${activeKey.exchange.toUpperCase()} (${activeKey.api_key_masked})` : "Connect Bybit trade-only API key",
-      completed: isExchangeConnected,
-      href: "/dashboard/keys",
-      actionText: isExchangeConnected ? "Manage Key" : "Connect Key",
-    },
-    {
-      title: "Telegram Alerts & Bot",
-      subtitle: isTelegramLinked ? `@${user?.telegram_username || "Linked"}` : "Link Telegram account for signal notifications",
-      completed: isTelegramLinked,
-      href: "/dashboard/settings",
-      actionText: isTelegramLinked ? "Linked" : "Link Telegram",
-    },
-    {
-      title: "Active Platform Subscription",
-      subtitle: isSubscriptionActive ? `Tier: ${subData?.subscription?.tier || "Active"}` : "Select plan for automated execution",
-      completed: isSubscriptionActive,
-      href: "/dashboard/billing",
-      actionText: isSubscriptionActive ? "Manage Plan" : "Subscribe",
-    },
-    {
-      title: "Signal Provider",
-      subtitle: isProviderSelected ? "Active Provider Configured" : "Choose a verified signal provider",
-      completed: isProviderSelected,
-      href: "/dashboard/providers",
-      actionText: isProviderSelected ? "Change Provider" : "Browse Providers",
-    },
-  ];
+  const isExchangeConnected = !!activeKey;
 
-  const completedSteps = checklistItems.filter((i) => i.completed).length;
-  const isFullyReady = completedSteps === checklistItems.length;
+  // Authoritative operational mode derivation.
+  // This reflects exchange communication health ONLY (active key + last_used_at recency).
+  // Positions-feed health is an independent signal (positionsState) surfaced separately,
+  // so a failed positions query never demotes verified exchange communication.
+  const operationalMode: OperationalMode = useMemo(() => {
+    if (isMaintenance) {
+      return "maintenance";
+    }
+
+    if (!isExchangeConnected || !activeKey) {
+      return "disconnected";
+    }
+
+    // Check communication recency: last_used_at must exist and be <= 15m old
+    const lastUsedTime = activeKey.last_used_at
+      ? new Date(activeKey.last_used_at).getTime()
+      : null;
+    const isCommunicationRecent =
+      lastUsedTime !== null &&
+      !isNaN(lastUsedTime) &&
+      Date.now() - lastUsedTime <= DEFAULT_COMMUNICATION_THRESHOLD_MS;
+
+    if (!isCommunicationRecent) {
+      return "degraded";
+    }
+
+    return "optimal";
+  }, [isMaintenance, isExchangeConnected, activeKey]);
+
+  // Positions count - strictly null when errored or not connected
+  const positionsCount = useMemo(() => {
+    if (!isExchangeConnected) return null;
+    if (positionsState === "error") return null;
+    if (positionsState === "empty") return 0;
+    return positions.length;
+  }, [isExchangeConnected, positionsState, positions]);
+
+  // Aggregate PnL with non-finite and malformed value validation
+  const { netUnrealizedPnl, pnlState } = useMemo(() => {
+    if (!isExchangeConnected) {
+      return { netUnrealizedPnl: null, pnlState: "empty" as KpiDataState };
+    }
+    if (positionsState === "loading") {
+      return { netUnrealizedPnl: null, pnlState: "loading" as KpiDataState };
+    }
+    if (positionsState === "error") {
+      // Do not convert failed data into zero!
+      return { netUnrealizedPnl: null, pnlState: "error" as KpiDataState };
+    }
+    if (positionsState === "empty" || positions.length === 0) {
+      // Zero positions genuinely means 0 floating risk
+      return { netUnrealizedPnl: 0, pnlState: "empty" as KpiDataState };
+    }
+
+    let hasMalformedValue = false;
+    let sum = 0;
+    for (const p of positions) {
+      const val = p.unrealized_pnl;
+      if (typeof val === "number" && Number.isFinite(val)) {
+        sum += val;
+      } else {
+        hasMalformedValue = true;
+      }
+    }
+
+    if (hasMalformedValue) {
+      // Malformed value must not silently produce misleading total
+      return { netUnrealizedPnl: null, pnlState: "error" as KpiDataState };
+    }
+
+    return { netUnrealizedPnl: sum, pnlState: "success" as KpiDataState };
+  }, [isExchangeConnected, positionsState, positions]);
+
+  // Filled orders count
+  const filledOrdersCount = useMemo(() => {
+    if (!isExchangeConnected || ordersState === "error") return null;
+    if (ordersState === "empty" || orders.length === 0) return 0;
+    const filled = orders.filter((o) => o.status?.toLowerCase() === "filled");
+    return filled.length;
+  }, [isExchangeConnected, ordersState, orders]);
+
+  // Active provider
+  const activeProvider = useMemo(() => {
+    if (!subData?.subscription?.provider_id) return null;
+    return (
+      providers.find((p) => p.id === subData.subscription?.provider_id)?.name ||
+      null
+    );
+  }, [subData, providers]);
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 space-y-4 text-muted-foreground">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-sm font-medium">Loading system status & accounts...</p>
+      <div
+        data-testid="dashboard-loading-state"
+        className="flex flex-col items-center justify-center py-28 space-y-4 text-text-muted"
+      >
+        <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
+        <p className="body-sm font-medium text-text-secondary">
+          Synchronizing operational status & trading telemetry...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" data-testid="dashboard-overview-page">
       {/* Overview Top Bar */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Overview & Readiness</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h1 className="h2 text-text-primary tracking-tight">
+            Overview & Readiness
+          </h1>
+          <p className="body-sm text-text-muted mt-1">
             Non-custodial trading automation and account connectivity status.
           </p>
         </div>
@@ -201,27 +323,43 @@ export default function DashboardOverviewPage() {
           onClick={() => fetchDashboardData(true)}
           disabled={isRefreshing}
           className="gap-2 self-start sm:self-auto"
+          data-testid="dashboard-refresh-btn"
         >
-          <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
-          Refresh Status
+          <RefreshCw
+            className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+          />
+          <span>Refresh Status</span>
         </Button>
       </div>
 
+      {/* Global Error Banner */}
       {errorMsg && (
-        <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <AlertCircle className="h-4 w-4" />
+        <div
+          data-testid="dashboard-error-banner"
+          className="rounded-2xl border border-status-danger/30 bg-status-danger/10 p-4 text-sm text-status-danger flex items-center justify-between"
+        >
+          <div className="flex items-center gap-2.5">
+            <AlertCircle className="h-5 w-5 shrink-0" />
             <span>{errorMsg}</span>
           </div>
-          <Button variant="outline" size="sm" onClick={() => fetchDashboardData()}>Retry</Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => fetchDashboardData()}
+          >
+            Retry
+          </Button>
         </div>
       )}
 
       {/* Subscription Notifications Banner (if any) */}
       {subData?.notifications && subData.notifications.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-2" data-testid="subscription-notifications">
           {subData.notifications.map((notif, idx) => (
-            <div key={idx} className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-500 flex items-center gap-3">
+            <div
+              key={idx}
+              className="rounded-2xl border border-status-warning/30 bg-status-warning/10 p-4 text-sm text-status-warning flex items-center gap-3"
+            >
               <AlertCircle className="h-5 w-5 shrink-0" />
               <span>{notif}</span>
             </div>
@@ -229,242 +367,150 @@ export default function DashboardOverviewPage() {
         </div>
       )}
 
-      {/* 5-Step Execution Readiness Wizard */}
-      <Card className="border-border bg-card shadow-xs">
+      {/* 1. Operational Status Banner */}
+      <OperationalStatusBanner
+        mode={operationalMode}
+        exchangeName={activeKey?.exchange}
+        networkName={activeKey?.is_testnet ? "Testnet" : "Mainnet"}
+        providerName={activeProvider}
+        subscriptionTier={subData?.subscription?.tier}
+        positionsFeedStatus={positionsState}
+        onRefresh={() => fetchDashboardData(true)}
+      />
+
+      {/* 2. Portfolio KPI Grid */}
+      <PortfolioKpiGrid
+        positionsCount={positionsCount}
+        positionsStatus={positionsState}
+        netUnrealizedPnl={netUnrealizedPnl}
+        pnlStatus={pnlState}
+        filledOrdersCount={filledOrdersCount}
+        ordersStatus={ordersState}
+        isExchangeConnected={isExchangeConnected}
+      />
+
+      {/* 3. Account Setup Checklist (4 Authoritative Prerequisites) */}
+      <ExecutionReadinessChecklist
+        emailVerified={!!user?.email_verified}
+        userEmail={user?.email}
+        exchangeConnected={isExchangeConnected}
+        activeKeyMasked={activeKey?.api_key_masked}
+        activeExchange={activeKey?.exchange}
+        telegramLinked={!!user?.telegram_linked}
+        telegramUsername={user?.telegram_username}
+        subscriptionActive={!!subData?.has_active_subscription}
+        subscriptionTier={subData?.subscription?.tier}
+      />
+
+      {/* 4. Active Positions Table */}
+      <Card className="bg-surface-primary border-surface-elevated shadow-xs overflow-hidden">
         <CardHeader className="pb-4">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
-                <ShieldCheck className="h-5 w-5 text-primary" />
-                Execution Readiness Checklist
-              </CardTitle>
-              <CardDescription>
-                All 5 requirements must be completed before automated signals can execute on your exchange account.
-              </CardDescription>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                isFullyReady ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20" : "bg-primary/10 text-primary border border-primary/20"
-              }`}>
-                {isFullyReady ? "Ready for Execution" : `${completedSteps} of 5 Completed`}
-              </span>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {checklistItems.map((step, idx) => (
-              <div
-                key={idx}
-                className={`flex flex-col justify-between rounded-lg border p-3.5 transition-colors ${
-                  step.completed
-                    ? "border-emerald-500/30 bg-emerald-500/5"
-                    : "border-border bg-muted/20"
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-muted-foreground">Step {idx + 1}</span>
-                    {step.completed ? (
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                    ) : (
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                    )}
-                  </div>
-                  <p className="mt-2 text-sm font-semibold text-foreground">{step.title}</p>
-                  <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{step.subtitle}</p>
-                </div>
-                <div className="mt-4 pt-2 border-t border-border/50">
-                  <Link href={step.href}>
-                    <Button
-                      variant={step.completed ? "ghost" : "outline"}
-                      size="sm"
-                      className="w-full text-xs h-7"
-                    >
-                      {step.actionText}
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Quick Metrics / System State Grid */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {/* Exchange Key Card */}
-        <Card className="border-border bg-card shadow-xs">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardDescription className="text-xs font-medium">Exchange Connection</CardDescription>
-              <KeyRound className="h-4 w-4 text-primary" />
-            </div>
-            <CardTitle className="text-xl font-bold">
-              {isExchangeConnected && activeKey ? activeKey.exchange.toUpperCase() : "Not Connected"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pb-3 text-xs text-muted-foreground">
-            {isExchangeConnected && activeKey ? (
-              <div className="space-y-1">
-                <p>Key: <span className="font-mono text-foreground">{activeKey.api_key_masked}</span></p>
-                <p className="text-emerald-500 font-medium">Trade-Only (Non-Custodial)</p>
-              </div>
-            ) : (
-              <p>Connect Bybit API key with trade-only permissions.</p>
-            )}
-          </CardContent>
-          <CardFooter className="pt-0">
-            <Link href="/dashboard/keys" className="w-full">
-              <Button variant="outline" size="sm" className="w-full text-xs">
-                {isExchangeConnected ? "Manage Keys" : "Connect Key"}
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
-
-        {/* Subscription Tier Card */}
-        <Card className="border-border bg-card shadow-xs">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardDescription className="text-xs font-medium">Platform Subscription</CardDescription>
-              <CreditCard className="h-4 w-4 text-primary" />
-            </div>
-            <CardTitle className="text-xl font-bold capitalize">
-              {subData?.subscription?.tier || "Free"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pb-3 text-xs text-muted-foreground">
-            <div className="space-y-1">
-              <p>Status: <span className="font-medium text-foreground capitalize">{subData?.subscription?.status || "Inactive"}</span></p>
-              <p>
-                {subData?.subscription?.current_period_end
-                  ? `Renews: ${new Date(subData.subscription.current_period_end).toLocaleDateString()}`
-                  : "No active auto-renewal"}
-              </p>
-            </div>
-          </CardContent>
-          <CardFooter className="pt-0">
-            <Link href="/dashboard/billing" className="w-full">
-              <Button variant="outline" size="sm" className="w-full text-xs">
-                {isSubscriptionActive ? "Manage Billing" : "Upgrade Plan"}
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
-
-        {/* Open Positions Card */}
-        <Card className="border-border bg-card shadow-xs">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardDescription className="text-xs font-medium">Open Positions</CardDescription>
-              <LineChart className="h-4 w-4 text-primary" />
-            </div>
-            <CardTitle className="text-xl font-bold">
-              {positions.length} Active
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pb-3 text-xs text-muted-foreground">
-            <p>
-              {positions.length > 0
-                ? "Live positions being managed on exchange."
-                : "No open positions currently active."}
-            </p>
-          </CardContent>
-          <CardFooter className="pt-0">
-            <Link href="/dashboard/trading" className="w-full">
-              <Button variant="outline" size="sm" className="w-full text-xs">
-                Live Execution
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
-
-        {/* Telegram Integration Card */}
-        <Card className="border-border bg-card shadow-xs">
-          <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardDescription className="text-xs font-medium">Telegram Bot</CardDescription>
-              <Send className="h-4 w-4 text-primary" />
-            </div>
-            <CardTitle className="text-xl font-bold">
-              {isTelegramLinked ? "Connected" : "Unlinked"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pb-3 text-xs text-muted-foreground">
-            <p>
-              {isTelegramLinked
-                ? `@${user?.telegram_username || "Linked Account"}`
-                : "Link Telegram for live execution alerts."}
-            </p>
-          </CardContent>
-          <CardFooter className="pt-0">
-            <Link href="/dashboard/settings" className="w-full">
-              <Button variant="outline" size="sm" className="w-full text-xs">
-                {isTelegramLinked ? "Settings" : "Link Telegram"}
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
-      </div>
-
-      {/* Active Positions Summary */}
-      <Card className="border-border bg-card shadow-xs">
-        <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-base font-semibold">Active Exchange Positions</CardTitle>
-              <CardDescription>Live positions synchronized with your connected Bybit account.</CardDescription>
+              <CardTitle className="text-base font-semibold text-text-primary flex items-center gap-2">
+                <LineChart className="h-4 w-4 text-brand-accent" />
+                <span>Active Exchange Positions</span>
+              </CardTitle>
+              <CardDescription className="text-text-muted mt-0.5">
+                Live positions synchronized with your connected Bybit account.
+              </CardDescription>
             </div>
             <Link href="/dashboard/trading">
               <Button variant="outline" size="sm" className="text-xs gap-1.5">
-                View All in Trading
+                <span>View All in Trading</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </Link>
           </div>
         </CardHeader>
-        <CardContent>
-          {positions.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-border p-8 text-center text-muted-foreground space-y-1">
-              <p className="font-semibold text-foreground">No active positions</p>
-              <p className="text-xs">Positions opened by signal automations will appear here and in Live Trading.</p>
+        <CardContent className="pt-0">
+          {positionsState === "error" ? (
+            <div
+              data-testid="positions-error-state"
+              className="rounded-xl border border-status-warning/30 bg-status-warning/5 p-8 text-center text-text-muted space-y-1"
+            >
+              <p className="font-semibold text-text-primary text-sm">
+                Positions feed unavailable
+              </p>
+              <p className="text-xs text-text-muted">
+                Unable to retrieve open positions from exchange at this time.
+              </p>
+            </div>
+          ) : positions.length === 0 ? (
+            <div
+              data-testid="positions-empty-state"
+              className="rounded-xl border border-dashed border-surface-elevated p-8 text-center text-text-muted space-y-1 bg-surface-canvas/50"
+            >
+              <p className="font-semibold text-text-primary text-sm">
+                No active positions
+              </p>
+              <p className="text-xs text-text-muted">
+                Positions opened by signal automations will appear here and in
+                Live Trading.
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
+              <table
+                data-testid="positions-table"
+                className="w-full text-left text-sm"
+              >
                 <thead>
-                  <tr className="border-b border-border text-xs text-muted-foreground">
-                    <th className="pb-3 font-medium">Symbol</th>
-                    <th className="pb-3 font-medium">Side</th>
-                    <th className="pb-3 font-medium">Size</th>
-                    <th className="pb-3 font-medium">Entry Price</th>
-                    <th className="pb-3 font-medium">Unrealized PnL</th>
-                    <th className="pb-3 font-medium">Leverage</th>
+                  <tr className="border-b border-surface-elevated text-xs font-medium text-text-muted">
+                    <th className="pb-3 pl-2">Symbol</th>
+                    <th className="pb-3">Side</th>
+                    <th className="pb-3">Size</th>
+                    <th className="pb-3">Entry Price</th>
+                    <th className="pb-3">Unrealized PnL</th>
+                    <th className="pb-3 pr-2">Leverage</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/60">
+                <tbody className="divide-y divide-surface-elevated/60">
                   {positions.slice(0, 5).map((pos) => {
-                    const isLong = pos.side.toUpperCase() === "BUY" || pos.side.toUpperCase() === "LONG";
+                    const isLong =
+                      pos.side.toUpperCase() === "BUY" ||
+                      pos.side.toUpperCase() === "LONG";
                     const pnl = pos.unrealized_pnl ?? 0;
                     return (
-                      <tr key={pos.id} className="text-xs">
-                        <td className="py-3 font-semibold text-foreground">{pos.symbol}</td>
+                      <tr
+                        key={pos.id}
+                        className="text-xs hover:bg-surface-secondary/40 transition-colors"
+                      >
+                        <td className="py-3 pl-2 font-semibold font-mono text-text-primary">
+                          {pos.symbol}
+                        </td>
                         <td className="py-3">
-                          <span className={`inline-flex rounded px-1.5 py-0.5 font-bold ${
-                            isLong ? "bg-emerald-500/10 text-emerald-500" : "bg-destructive/10 text-destructive"
-                          }`}>
+                          <span
+                            className={`inline-flex rounded-md px-2 py-0.5 font-bold font-mono text-[11px] ${
+                              isLong
+                                ? "bg-status-success/10 text-status-success border border-status-success/20"
+                                : "bg-status-danger/10 text-status-danger border border-status-danger/20"
+                            }`}
+                          >
                             {isLong ? "LONG" : "SHORT"}
                           </span>
                         </td>
-                        <td className="py-3 font-mono">{pos.size}</td>
-                        <td className="py-3 font-mono">${pos.entry_price?.toLocaleString() ?? "-"}</td>
-                        <td className={`py-3 font-mono font-bold ${
-                          pnl > 0 ? "text-emerald-500" : pnl < 0 ? "text-destructive" : "text-muted-foreground"
-                        }`}>
-                          {pnl > 0 ? `+$${pnl.toFixed(2)}` : pnl < 0 ? `-$${Math.abs(pnl).toFixed(2)}` : "$0.00"}
+                        <td className="py-3 font-mono text-text-primary tabular-nums">
+                          {pos.size}
                         </td>
-                        <td className="py-3 font-mono">{pos.leverage ? `${pos.leverage}x` : "-"}</td>
+                        <td className="py-3 font-mono text-text-secondary tabular-nums">
+                          <NumericValue
+                            value={pos.entry_price ?? 0}
+                            currency="$"
+                            size="sm"
+                          />
+                        </td>
+                        <td className="py-3 font-mono tabular-nums">
+                          <NumericValue
+                            value={pnl}
+                            currency="$"
+                            signed={true}
+                            size="sm"
+                          />
+                        </td>
+                        <td className="py-3 pr-2 font-mono text-text-muted tabular-nums">
+                          {pos.leverage ? `${pos.leverage}x` : "—"}
+                        </td>
                       </tr>
                     );
                   })}
@@ -475,52 +521,68 @@ export default function DashboardOverviewPage() {
         </CardContent>
       </Card>
 
-      {/* Signal Providers Spotlight */}
+      {/* 5. Signal Providers Spotlight */}
       {providers.length > 0 && (
-        <Card className="border-border bg-card shadow-xs">
-          <CardHeader>
+        <Card className="bg-surface-primary border-surface-elevated shadow-xs overflow-hidden">
+          <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-base font-semibold">Signal Providers</CardTitle>
-                <CardDescription>Verified algorithmic and human crypto signal providers on Tadex.</CardDescription>
+                <CardTitle className="text-base font-semibold text-text-primary">
+                  Signal Providers
+                </CardTitle>
+                <CardDescription className="text-text-muted mt-0.5">
+                  Verified algorithmic and human crypto signal providers on
+                  Tadex.
+                </CardDescription>
               </div>
               <Link href="/dashboard/providers">
                 <Button variant="outline" size="sm" className="text-xs gap-1.5">
-                  Browse All Providers
+                  <span>Browse All Providers</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               </Link>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-0">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {providers.slice(0, 3).map((prov) => (
-                <div key={prov.id} className="rounded-lg border border-border bg-muted/10 p-4 space-y-3">
+                <div
+                  key={prov.id}
+                  className="rounded-xl border border-surface-elevated bg-surface-secondary/40 p-4 space-y-3"
+                >
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-foreground text-sm">{prov.name}</span>
+                    <span className="font-semibold text-text-primary text-sm">
+                      {prov.name}
+                    </span>
                     {prov.is_verified && (
-                      <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                      <span className="inline-flex items-center rounded-full bg-brand-primary/10 border border-brand-primary/20 px-2 py-0.5 text-[11px] font-medium text-brand-accent">
                         Verified
                       </span>
                     )}
                   </div>
-                  <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                  <div className="grid grid-cols-2 gap-2 text-xs text-text-muted">
                     <div>
-                      <p>Win Rate</p>
-                      <p className="font-bold text-foreground">
+                      <p className="caption-4 text-text-tertiary">Win Rate</p>
+                      <p className="font-bold text-text-primary font-mono tabular-nums">
                         {prov.win_rate !== undefined && prov.win_rate !== null
                           ? `${(prov.win_rate * 100).toFixed(1)}%`
                           : "N/A"}
                       </p>
                     </div>
                     <div>
-                      <p>Signals Sent</p>
-                      <p className="font-bold text-foreground">{prov.total_signals_sent ?? 0}</p>
+                      <p className="caption-4 text-text-tertiary">Signals Sent</p>
+                      <p className="font-bold text-text-primary font-mono tabular-nums">
+                        {prov.total_signals_sent ?? 0}
+                      </p>
                     </div>
                   </div>
-                  <div className="pt-2 border-t border-border/60">
+                  <div className="pt-2 border-t border-surface-elevated">
                     <Link href={`/dashboard/providers/${prov.id}`}>
-                      <Button variant="outline" size="sm" className="w-full text-xs">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full text-xs"
+                      >
                         View Strategy
                       </Button>
                     </Link>

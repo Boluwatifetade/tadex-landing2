@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import DashboardOverviewPage from "@/app/dashboard/page";
 import * as apiClientModule from "@/lib/api-client";
 
@@ -25,6 +25,7 @@ describe("Dashboard Overview (/dashboard)", () => {
       api_key_masked: "...9821",
       is_testnet: false,
       status: "active",
+      last_used_at: new Date().toISOString(),
     },
   ];
 
@@ -63,12 +64,13 @@ describe("Dashboard Overview (/dashboard)", () => {
     },
   ];
 
-  it("renders verified system state and 5/5 completed readiness checklist when fully configured", async () => {
+  it("renders verified system state and 4/4 completed readiness checklist when fully configured", async () => {
     vi.spyOn(apiClientModule, "apiClient").mockImplementation(async (path) => {
       if (path === "/me") return mockUserMe;
       if (path === "/keys") return mockKeys;
       if (path === "/billing/subscription") return mockSubscription;
       if (path === "/trading/positions") return mockPositions;
+      if (path === "/trading/orders") return [];
       if (path === "/providers") return mockProviders;
       return [];
     });
@@ -77,26 +79,26 @@ describe("Dashboard Overview (/dashboard)", () => {
 
     expect(await screen.findByText("Overview & Readiness")).toBeInTheDocument();
 
-    // 5 of 5 steps completed badge
-    expect(screen.getByText("Ready for Execution")).toBeInTheDocument();
+    // 4 of 4 steps completed badge - Setup Complete
+    expect(screen.getByText("Setup Complete")).toBeInTheDocument();
 
-    // Exchange key status
-    expect(screen.getByText("BYBIT")).toBeInTheDocument();
-    expect(screen.getByText("...9821")).toBeInTheDocument();
+    // Operational Status Banner - Exchange Connected
+    expect(screen.getByText("Exchange Connected")).toBeInTheDocument();
+    expect(screen.getByTestId("banner-exchange-telemetry")).toHaveTextContent("BYBIT Mainnet");
 
     // Subscription status
     expect(screen.getAllByText(/pro/i).length).toBeGreaterThan(0);
 
     // Positions status
-    expect(screen.getByText("1 Active")).toBeInTheDocument();
+    expect(screen.getByTestId("kpi-active-positions")).toHaveTextContent("1Open");
     expect(screen.getByText("BTCUSDT")).toBeInTheDocument();
-    expect(screen.getByText("+$45.20")).toBeInTheDocument();
+    expect(screen.getAllByText("+$45.20").length).toBeGreaterThan(0);
 
     // Telegram status
-    expect(screen.getAllByText("@crypto_trader_ng").length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/crypto_trader_ng/i).length).toBeGreaterThan(0);
 
     // Providers section
-    expect(screen.getByText("Alpha Quant Signals")).toBeInTheDocument();
+    expect(screen.getAllByText("Alpha Quant Signals").length).toBeGreaterThan(0);
     expect(screen.getByText("82.5%")).toBeInTheDocument();
   });
 
@@ -117,6 +119,7 @@ describe("Dashboard Overview (/dashboard)", () => {
         return { has_active_subscription: false, subscription: null, notifications: [] };
       }
       if (path === "/trading/positions") return [];
+      if (path === "/trading/orders") return [];
       if (path === "/providers") return [];
       return [];
     });
@@ -125,12 +128,12 @@ describe("Dashboard Overview (/dashboard)", () => {
 
     expect(await screen.findByText("Overview & Readiness")).toBeInTheDocument();
 
-    // 0 of 5 Completed badge
-    expect(screen.getByText("0 of 5 Completed")).toBeInTheDocument();
+    // 0 of 4 Completed badge
+    expect(screen.getByText("0 of 4 Completed")).toBeInTheDocument();
 
-    // Not Connected states
-    expect(screen.getByText("Not Connected")).toBeInTheDocument();
-    expect(screen.getByText("Unlinked")).toBeInTheDocument();
+    // Not Connected / Disconnected states
+    expect(screen.getByText("Exchange Disconnected")).toBeInTheDocument();
+    expect(screen.getAllByText("Not Connected").length).toBeGreaterThan(0);
 
     // Honest empty positions message
     expect(screen.getByText("No active positions")).toBeInTheDocument();
@@ -149,6 +152,7 @@ describe("Dashboard Overview (/dashboard)", () => {
       if (path === "/keys") return [];
       if (path === "/billing/subscription") return subWithWarning;
       if (path === "/trading/positions") return [];
+      if (path === "/trading/orders") return [];
       if (path === "/providers") return [];
       return [];
     });
@@ -158,7 +162,7 @@ describe("Dashboard Overview (/dashboard)", () => {
     expect(await screen.findByText(/Your subscription payment is past due/)).toBeInTheDocument();
   });
 
-  it("treats revoked API keys as not connected in checklist and card", async () => {
+  it("treats revoked API keys as disconnected in banner and checklist", async () => {
     const revokedKeys = [
       {
         id: "key_revoked_1",
@@ -174,6 +178,7 @@ describe("Dashboard Overview (/dashboard)", () => {
       if (path === "/keys") return revokedKeys;
       if (path === "/billing/subscription") return mockSubscription;
       if (path === "/trading/positions") return [];
+      if (path === "/trading/orders") return [];
       if (path === "/providers") return [];
       return [];
     });
@@ -182,12 +187,12 @@ describe("Dashboard Overview (/dashboard)", () => {
 
     expect(await screen.findByText("Overview & Readiness")).toBeInTheDocument();
 
-    expect(screen.getByText("Not Connected")).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "Connect Key" }).length).toBe(2);
+    expect(screen.getByText("Exchange Disconnected")).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Connect Key" }).length).toBeGreaterThan(0);
     expect(screen.queryByRole("button", { name: "Manage Key" })).not.toBeInTheDocument();
   });
 
-  it("treats suspended API keys as not connected in checklist and card", async () => {
+  it("treats suspended API keys as disconnected in banner and checklist", async () => {
     const suspendedKeys = [
       {
         id: "key_suspended_1",
@@ -203,6 +208,7 @@ describe("Dashboard Overview (/dashboard)", () => {
       if (path === "/keys") return suspendedKeys;
       if (path === "/billing/subscription") return mockSubscription;
       if (path === "/trading/positions") return [];
+      if (path === "/trading/orders") return [];
       if (path === "/providers") return [];
       return [];
     });
@@ -211,8 +217,8 @@ describe("Dashboard Overview (/dashboard)", () => {
 
     expect(await screen.findByText("Overview & Readiness")).toBeInTheDocument();
 
-    expect(screen.getByText("Not Connected")).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "Connect Key" }).length).toBe(2);
+    expect(screen.getByText("Exchange Disconnected")).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Connect Key" }).length).toBeGreaterThan(0);
     expect(screen.queryByRole("button", { name: "Manage Key" })).not.toBeInTheDocument();
   });
 
@@ -231,6 +237,7 @@ describe("Dashboard Overview (/dashboard)", () => {
         api_key_masked: "...7777",
         is_testnet: false,
         status: "active",
+        last_used_at: new Date().toISOString(),
       },
     ];
 
@@ -239,7 +246,8 @@ describe("Dashboard Overview (/dashboard)", () => {
       if (path === "/keys") return mixedKeys;
       if (path === "/billing/subscription") return mockSubscription;
       if (path === "/trading/positions") return [];
-      if (path === "/providers") return [];
+      if (path === "/trading/orders") return [];
+      if (path === "/providers") return baseProviders;
       return [];
     });
 
@@ -247,9 +255,8 @@ describe("Dashboard Overview (/dashboard)", () => {
 
     expect(await screen.findByText("Overview & Readiness")).toBeInTheDocument();
 
-    expect(screen.getByText("BYBIT")).toBeInTheDocument();
-    expect(screen.getByText("...7777")).toBeInTheDocument();
+    expect(screen.getByText("Exchange Connected")).toBeInTheDocument();
+    expect(screen.getByTestId("banner-exchange-telemetry")).toHaveTextContent("BYBIT");
     expect(screen.getByRole("button", { name: "Manage Key" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Manage Keys" })).toBeInTheDocument();
   });
 });

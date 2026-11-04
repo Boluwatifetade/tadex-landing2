@@ -4,6 +4,52 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Phase 3: Dashboard Overview & Portfolio KPI Workspace] - 2026-11-04
+
+### 0. Final acceptance pass — operational signal separation
+- `operationalMode` in `src/app/dashboard/page.tsx` now reflects **exchange communication health only** (active key + `last_used_at` within the preserved 15-minute threshold). A failed positions query no longer demotes recent communication to `Connection Idle`.
+- Positions-feed health is surfaced independently via a new `positionsFeedStatus` prop on `OperationalStatusBanner` (`banner-positions-feed`, states `ok` / `error` / `standby`), replacing the mode-coupled `FEED ACTIVE` / `FEED STANDBY` label.
+- Non-array (malformed) positions/orders payloads are now treated as `error`, never as an empty list.
+- `PortfolioKpiGrid` status props default to `"unavailable"` (not `"empty"`) so an omitted status renders `—`, never zero.
+- `syncTimestamp: null` and the unsynced utility-bar state are unchanged.
+- Added `src/test/Phase3OperationalSignals.test.tsx` (21 tests).
+- **Known limitation (next session):** `apiClient` throws a plain `Error(detail)` without the HTTP status, so the dashboard's maintenance check (`status === 503` + "maintenance" detail) cannot trigger against the live backend. It fails closed (never shows maintenance falsely). Fixing it needs an `apiClient` error-type change, which is out of Phase 3 scope.
+- Project-wide `eslint .` reports 54 pre-existing errors in files not touched by Phase 3 (admin/provider types and older tests). Phase 3 files lint clean.
+
+### 1. Operational Status Banner (`OperationalStatusBanner.tsx`)
+- Built `src/components/dashboard/OperationalStatusBanner.tsx` supporting 4 authoritative operational modes with evidence-aligned terminology:
+  - `optimal`: **"Exchange Connected"** — Active exchange key with verified recent authenticated API communication ($\le 15\text{m}$ via `activeKey.last_used_at`). Independent of positions-feed health. Never overstates state as "Execution Optimal".
+  - `degraded`: **"Connection Idle"** — No authenticated exchange communication recorded within 15 minutes (or `last_used_at` is null).
+  - `disconnected`: **"Exchange Disconnected"** — No active exchange API key connected in `/keys`.
+  - `maintenance`: **"Platform Maintenance"** — Upstream explicit HTTP 503 maintenance signal (detail matching `"maintenance"`). Generic 503s or network timeouts are not misattributed to maintenance.
+- Includes telemetry strip displaying verified Exchange, Provider, and Subscription metadata, with `FEED ACTIVE` / `FEED STANDBY` indicators and contextual CTAs (`Connect Key`, `Trading Workspace`).
+
+### 2. Portfolio KPI Grid (`PortfolioKpiGrid.tsx`)
+- Built `src/components/dashboard/PortfolioKpiGrid.tsx` with explicit `KpiDataState` (`"loading" | "success" | "empty" | "error" | "unavailable"`):
+  - **Active Positions**: Displays open positions count from Bybit; shows `0 Open` only upon a successful positions query returning `[]`; displays `— Unavailable` on error or network failure.
+  - **Net Unrealized PnL**: Floating PnL aggregated across open positions formatted via `NumericValue`. Validated against null, NaN, and non-finite values to render `—` rather than silent misleading totals; displays `$0.00` with neutral coloring only when proven empty or zero.
+  - **Exchange Balance**: Honest `Unavailable` state with explanatory tooltip (*"Feed not exposed in current API contract"*) — strictly zero fabricated numbers.
+  - **Order Fills**: Renamed from "Execution Activity", shows `{count} Fills` with subtitle *"Cumulative filled orders in trade history"* without speculative time window claims.
+
+### 3. Account Setup Checklist (`ExecutionReadinessChecklist.tsx`)
+- Renamed from "Execution Readiness" to **"Account Setup Checklist"** with subtitle *"Completion status of foundational account and exchange configuration requirements."*
+- Dynamic progress pill displaying **"Setup Complete"** when all 4 foundational requirements are satisfied, or `"${completedCount} of 4 Completed"`.
+- Grounded strictly in 4 genuine backend prerequisites:
+  1. `Account Verified`: `user.email_verified === true` (from `GET /api/v1/me`).
+  2. `Exchange API Key`: `keys.some(k => k.status === "active")` (from `GET /api/v1/keys`), labeled as `"Key configured: ${EXCHANGE} (${MASKED_KEY})"`.
+  3. `Telegram Alerts`: `user.telegram_linked === true` (from `GET /api/v1/me`).
+  4. `Platform Subscription`: `subData.has_active_subscription === true` (from `GET /api/v1/billing/subscription`).
+- Excluded unbuilt risk controls or decorative checks.
+
+### 4. Overview Page Integration (`src/app/dashboard/page.tsx`)
+- Integrated `OperationalStatusBanner`, `PortfolioKpiGrid`, and `ExecutionReadinessChecklist`.
+- Harmonized Active Positions table and Signal Providers Spotlight using B4 dark surface tokens (`bg-surface-primary`, `border-surface-elevated`, `NumericValue`).
+- Added robust error handling and explicit table error state (`data-testid="positions-error-state"`) when position queries fail.
+- Updated Vitest timeout in `vitest.config.ts` from 15000ms to 30000ms for stable jsdom execution on Windows.
+- Tests: `src/test/Phase3DashboardOverview.test.tsx` (9/9), `src/test/Phase3OperationalSignals.test.tsx` (21/21), `src/test/DashboardOverview.test.tsx` (6/6). Full suite: 48 files / 236 tests passed. Production build (`next build --turbopack`) clean.
+
+---
+
 ## [Phase 1 & Phase 2: B4 UI Primitives, Option A Application Shell & Split-Screen Auth] - 2026-11-03
 
 ### 1. Architecture Documentation Commit (`a7a876e`)
