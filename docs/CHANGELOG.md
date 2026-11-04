@@ -4,6 +4,51 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Phase 1 & Phase 2: B4 UI Primitives, Option A Application Shell & Split-Screen Auth] - 2026-11-03
+
+### 1. Architecture Documentation Commit (`a7a876e`)
+- Committed the 5 reviewed architecture and design specification documents (`DESIGN_DIRECTION.md`, `PRODUCT_ARCHITECTURE.md`, `APPLICATION_SITEMAP.md`, `SCREEN_SPECIFICATIONS.md`, `IMPLEMENTATION_ROADMAP.md`) in a dedicated documentation-only commit (`a7a876e`).
+
+### 2. Phase 1: B4 Tokens, UI Primitives & Feature Flags (`7b7316c`)
+- Mapped `--background`, `--card`, `--secondary`, `--border`, `--primary`, `--ring`, and `--destructive` raw HSL triplets in `src/app/globals.css` to the approved B4 dark palette so both `hsl(var(--*))` and semantic `bg-surface-*` / `text-text-*` tokens resolve to the unified dark surface hierarchy.
+- Created `src/lib/feature-flags.ts` (`FEATURE_FLAGS`, `FEATURE_GATED_ROUTES`, `isFeatureEnabled`, `getFeatureFlagForRoute`, `isRouteEnabled`) with all unbuilt modules (`riskControl`, `signalBuilder`, `oauthProviders`, `otpVerification`, `manualPositionClose`, `emergencyTradingHalt`, `sessionRevokeAll`) defaulting to `false`.
+- Harmonized `src/components/ui/button.tsx` (`active:scale-[0.98]`, B4 primary/secondary/outline/ghost/destructive/link variants) and `src/components/ui/card.tsx` (`bg-surface-primary`, `border-surface-elevated`, `rounded-2xl`).
+- Built `src/components/ui/StatusBadge.tsx` (6 semantic data freshness states: `fresh`, `syncing`, `stale`, `degraded`, `disconnected`, `error` with `data-status` attribute) and `src/components/ui/NumericValue.tsx` (`font-mono tabular-nums`, `-0` and sub-cent dust `-0.0001` normalization to neutral `$0.00`, `Infinity`/`NaN` fallback to `—`).
+- Added `src/test/Phase1Primitives.test.tsx` verifying all 5 Phase 1 checks.
+
+### 3. Phase 2: Option A Application Shell, Split-Screen Auth & Exchange Status Semantics
+- Created `src/components/dashboard/SyncFreshnessBeacon.tsx` (top-bar exchange sync telemetry beacon with semantic state badges and manual sync button) and `src/components/dashboard/DashboardMobileNav.tsx` (fixed mobile bottom navigation dock with `Overview`, `Trading`, `API Keys`, and `More` drawer trigger).
+- Created `src/lib/exchange-status.ts` authoritatively resolving exchange connection health (`disconnected`, `unverified`, `connected`, `error`) and account data freshness (`fresh`, `stale`, `missing`, `unverified`, `syncing`). Strictly distinguishes telemetry signals: `last_used_at` establishes connection health (proof of exchange API communication), while `syncTimestamp` establishes portfolio data freshness (proof balances/positions are current). If no synchronization timestamp exists, data freshness strictly remains missing/unverified and the beacon displays an amber degraded status (`BYBIT Mainnet (Unsynced)` or `BYBIT Configured (Unverified)`), never `fresh`.
+- Updated `src/components/dashboard/DashboardHeader.tsx` to implement the approved **Option A** architecture:
+  - Fixed Desktop Left Sidebar (`w-64`, `bg-surface-primary`, `border-surface-elevated`) with grouped sections (`TRADING`, `PROVIDER CENTER`, `ACCOUNT`), active teal pill indicator (`bg-brand border-brand-accent/30`), and non-custodial security footer.
+  - Strict role-based admin separation: `SYSTEM ADMINISTRATION` (`Admin Console`, `User Management`, `Execution & Risk`) renders strictly when `userRole === "admin"`.
+  - Feature-gated links (`Risk Control`, `Signal Builder`) hidden by default via `isFeatureEnabled()`.
+  - Sticky Top Utility Bar (`lg:pl-64`) with `SyncFreshnessBeacon`, user identity pills derived from live `/me` (`userEmail`, `Verified`/`Unverified`, `@telegramUsername`, `userStatus`), initials avatar, `Log Out` button, and mobile hamburger drawer.
+- Updated `src/app/dashboard/layout.tsx` to fetch `/keys` alongside `/me`, pass authoritative connection state to `DashboardHeader`, offset `<main>` for the desktop left sidebar (`lg:pl-64 pb-20 lg:pb-8`), and enforce route-level feature-flag protection via `isRouteEnabled(pathname)` (redirecting disabled feature-gated routes to `/dashboard`).
+- Harmonized `src/app/login/page.tsx` and `src/app/register/page.tsx` with the Figma `12:59` / `12:116` 12-column split-screen layout and B4 surface/brand tokens, preserving strictly verified email/password contracts (`POST /auth/login`, `POST /auth/register`) with zero decorative OAuth or OTP buttons, verified "Forgot password?" flow, and accurate Fernet symmetric encryption copy ("ENCRYPTED KEY VAULT").
+- Added `src/test/ExchangeStatusSemantics.test.ts` (7/7 passed), updated `src/test/DashboardHeader.test.tsx` (5/5 passed), and expanded `src/test/Phase2AppShellAndAuth.test.tsx` (9/9 passed) — all **46 test suites (205 tests)** verified passing with zero TypeScript and ESLint errors.
+
+---
+
+## [Dashboard Design System & Agent Skills Foundation] - 2026-11-03
+
+### 1. Project-Level Agent Skills Installation (`.agents/skills/`)
+- Installed **`emil-design-eng`** (`emilkowalski/skills`) for component quality, interaction details, micro-motion polish, and avoiding generic AI styling patterns.
+- Installed **`better-layout`** (`jakubkrehel/skills`) for alignment, spatial rhythm, responsive structure, and layout constraint validation.
+- Installed **`interface-review`** (`jakubkrehel/skills`) for Git baseline differential reviews against committed UI across layout, typography, and accessibility.
+- Installed **`web-design-engineer`** (`ConardLi/garden-skills`) for high-fidelity visual direction, clean elevations, and web dashboard craft.
+- Installed **Perception Principles & Screen Critique Suite** (`Owl-Listener/designer-skills`):
+  - Gestalt principles: `law-of-proximity`, `law-of-similarity`, `law-of-figure-ground`, `law-of-continuity`, `law-of-common-region`.
+  - Screen critique tools: `critique-visual-hierarchy`, `critique-composition`, `critique-typography`, `critique-color`, `critique-affordance`.
+
+### 2. Design System Audit & Baseline Verification
+- Audited `tailwind.config.js` and `src/app/globals.css`: dark surface palette (`surface-*`), content tokens (`content-*`), status tokens (`status-*`), and named text styles (`heading-*`, `title-*`, `body-*`, `caption-*`).
+- Identified gap between skeleton dashboard components (which currently mix legacy generic Tailwind tokens e.g. `bg-card`, `bg-emerald-500`) and the approved design tokens.
+- Produced comprehensive foundation report: `design_system_audit_and_skills_foundation.md`.
+- Ran full test suite: all 43 test suites and 181 unit/integration tests passing.
+
+---
+
 ## [Landing Page Revamp with `ai-design-skills`] - 2026-11-01
 
 ### 1. Skill Installation (`elayadesign/ai-design-skills`)
