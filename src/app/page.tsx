@@ -6,6 +6,7 @@ import Hero from '@/components/Hero';
 import ExchangeTrustStrip from '@/components/ExchangeTrustStrip';
 import TaglineReveal from '@/components/TaglineReveal';
 import WhatTadexDoes from '@/components/WhatTadexDoes';
+import ManualVsTadexComparison from '@/components/ManualVsTadexComparison';
 import HowItWorks from '@/components/HowItWorks';
 import WhoThisIsFor from '@/components/WhoThisIsFor';
 import Pricing from '@/components/Pricing';
@@ -18,6 +19,7 @@ import TadexLogo from '@/components/ui/TadexLogo';
 
 const NAV_ITEMS = [
   { id: 'what-tadex-does', label: 'Benefits' },
+  { id: 'manual-vs-tadex', label: 'Comparison' },
   { id: 'how-it-works', label: 'How it Works' },
   { id: 'who-this-is-for', label: 'Audience' },
   { id: 'pricing', label: 'Pricing' },
@@ -218,6 +220,9 @@ export default function Home() {
 
         {/* Section 3: What Tadex Does */}
         <WhatTadexDoes />
+
+        {/* Section 3b: Problem & Contrast: Manual vs. Tadex Comparison */}
+        <ManualVsTadexComparison />
 
         {/* Section 4: How It Works */}
         <HowItWorks />

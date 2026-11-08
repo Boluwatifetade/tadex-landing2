@@ -32,13 +32,13 @@ export default function WhatTadexDoes() {
     },
     {
       icon: ChartLineUpIcon,
-      title: 'Run Like a Pro Operation',
+      title: 'Run a Disciplined Operation',
       bullets: [
-        'Follow multiple providers across multiple exchanges.',
+        'Execute verified signals directly on your Bybit account.',
         'Set max loss, drawdown limits, and position sizing.',
         'See clear logs of what executed, when, and why.',
       ],
-      badge: 'Multi Exchange',
+      badge: 'Disciplined Execution',
     },
   ];
 

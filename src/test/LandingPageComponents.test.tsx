@@ -80,13 +80,15 @@ describe("Landing Page Revamp (ai-design-skills)", () => {
     expect(screen.getByText("exchange.")).toBeInTheDocument();
   });
 
-  it("renders WhatTadexDoes with 3 benefit cards", () => {
+  it("renders WhatTadexDoes with 3 benefit cards and Bybit-disciplined claims", () => {
     render(<WhatTadexDoes />);
 
     expect(screen.getByText("What You Get With Tadex")).toBeInTheDocument();
     expect(screen.getByText("Never Miss a Trade")).toBeInTheDocument();
     expect(screen.getByText("Remove Human Error")).toBeInTheDocument();
-    expect(screen.getByText("Run Like a Pro Operation")).toBeInTheDocument();
+    expect(screen.getByText("Run a Disciplined Operation")).toBeInTheDocument();
+    expect(screen.getByText("Disciplined Execution")).toBeInTheDocument();
+    expect(screen.queryByText(/Multi Exchange/i)).not.toBeInTheDocument();
   });
 
   it("renders HowItWorks with 4 simple steps and CTA", () => {

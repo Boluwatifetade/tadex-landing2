@@ -4,6 +4,37 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Phase 2: Problem & Contrast — Manual Execution vs. Tadex Automation] - 2026-11-08
+
+### 1. Manual vs. Tadex Comparison Component (`src/components/ManualVsTadexComparison.tsx`)
+- Built an authentic 6-dimension operational contrast section comparing manual Telegram copying with Tadex automated execution:
+  1. **Signal Ingestion & Monitoring**: Contrasts manual 24/7 phone vigilance with cloud-based background signal parsing.
+  2. **Order Entry & Execution Timing**: Contrasts manual app-switching transcription delay with low-latency direct Bybit API dispatch (zero synthetic latency claims).
+  3. **Position Sizing & Risk Calculation**: Contrasts hurried mental math and calculator pressure with pre-configured mathematical sizing (fixed margin or risk-based %).
+  4. **Stop Loss Discipline**: Contrasts emotional hesitation during wicks with automated stop loss placement when signals specify risk targets.
+  5. **Signal Updates & Duplicate Guard**: Contrasts confusing channel edits and repeated alerts with built-in idempotency key protection helping prevent duplicate order dispatches.
+  6. **Account Custody & Operational Control**: Honestly frames manual execution as direct exchange access where the user remains responsible for monitoring signals, calculating sizes, and placing orders, contrasting with Tadex's non-custodial trade-only Bybit integration (withdrawal access disabled, key revocation directly in dashboard).
+- Responsive architecture:
+  - **Desktop (`>= lg`)**: 12-column grid table with structured visual lanes, categorized icons, and distinct badge styling.
+  - **Mobile (`< lg`)**: Stacked dimension cards with isolated manual and automated sub-panels, thumb-friendly tap targets, and zero horizontal table clipping on 390px screens.
+- Operational disclaimer and conversion strip:
+  - Prominent disclaimer confirming Tadex is a software execution tool, does not provide investment advice or signal generation, and does not promise trading profits.
+  - Bottom CTA: *"Start Free. No Credit Card."* pointing directly to `/register`.
+
+### 2. Relevant Component Refinements
+- **`src/components/WhatTadexDoes.tsx`**: Updated Card 3 from *"Run Like a Pro Operation"* / *"Multi Exchange"* to *"Run a Disciplined Operation"* / *"Disciplined Execution"* with Bybit-focused copy, removing unverified multi-exchange claims.
+- **`src/app/page.tsx`**: Mounted `<ManualVsTadexComparison />` below `<WhatTadexDoes />`, and added `{ id: 'manual-vs-tadex', label: 'Comparison' }` to desktop and mobile navigation menus.
+
+### 3. Verification & Testing
+- Added `src/test/ManualVsTadexComparison.test.tsx` (4 tests passing) verifying all 6 dimensions, non-custodial scope, Bybit-only exclusivity, and absence of profit guarantees.
+- Updated `src/test/LandingPageComponents.test.tsx` asserting refined WhatTadexDoes claims (11 tests passing).
+- Full Vitest suite: 50 test files, 243 tests passing with 0 failures and 0 skipped.
+- TypeScript compilation: `npx tsc --noEmit` verified clean with 0 errors.
+- Visual inspection: Verified desktop (1440px) and mobile (390px) rendering in Chrome DevTools MCP with saved evidence artifacts.
+- What's incomplete / next phase: Phase 3 (Interactive Position-Sizing Simulator / Product Demonstration). Phase 2 changes remain uncommitted awaiting explicit user review and approval.
+
+---
+
 ## [Phase 1: Conversion Audit & Foundation Hardening] - 2026-11-04
 
 ### 1. Truthful Hero Messaging & Authentic Web UI Preview (`src/components/Hero.tsx`)
