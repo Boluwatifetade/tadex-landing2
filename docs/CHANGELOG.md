@@ -4,6 +4,39 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Phase 1: Conversion Audit & Foundation Hardening] - 2026-11-04
+
+### 1. Truthful Hero Messaging & Authentic Web UI Preview (`src/components/Hero.tsx`)
+- Aligned H1 headline to verified value proposition: *"Automate Your Trading Signals. Execute Without Manual Delay."*
+- Updated subheadline focusing on connecting Telegram communities to Bybit with strict position sizing and mandatory stop loss enforcement.
+- Updated primary CTA to direct registration: *"Start Free. No Credit Card."* (`/register`) with subtext *"Includes 12 automated trades each month on Free · Fast web onboarding"*.
+- Updated secondary CTA to *"Explore Product Demo"* (`#product-demo`).
+- Removed all fabricated social proof metrics (`99.9% uptime`, `2,000+ users`, `14ms latency`).
+- Replaced flat terminal visual with authentic Tadex Web App execution UI preview featuring:
+  - Prominent badge: `SIMULATED EXECUTION PREVIEW`.
+  - Account identifier: `Account: demo_preview_key` with `Trade-Only Scope`.
+  - Interactive scenario switcher (BTC/USDT, ETH/USDT, SOL/USDT) demonstrating the 3-step engine flow: Ingest Signal -> Pre-Trade Risk Guard -> Bybit Dispatch.
+  - Footnote clearly establishing sample illustrative workflow.
+
+### 2. Exchange Compatibility & Trust Strip (`src/components/ExchangeTrustStrip.tsx`)
+- Created 3-column trust strip mounted immediately below Hero in `src/app/page.tsx`:
+  - **Bybit Integration**: Labeled `AVAILABLE` with precision wording *"Bybit API integration tested for USDT Perpetuals and Futures execution."* (strictly no claims of official Bybit verification or endorsement).
+  - **Binance & OKX**: Labeled `PLANNED` with *"Planned integrations underway for upcoming platform releases."*
+  - **Non-Custodial Scope**: Explicitly details Fernet-based symmetric encryption at rest and trade-only permissions requirement (no withdrawal permissions).
+
+### 3. Header & Navigation Cleanup (`src/app/page.tsx`)
+- Removed obsolete waitlist modal buttons from desktop top navigation and mobile controls bar.
+- Replaced with direct conversion links: "Log in" (`/login`) and "Start Free" (`/register`).
+
+### 4. Verification & Testing
+- Added `src/test/ExchangeTrustStrip.test.tsx` (3 tests passing).
+- Updated `src/test/LandingPageComponents.test.tsx` to assert new Hero copy, authentic simulated UI preview, and absence of fabricated statistics (11 tests passing).
+- Type check: `npx tsc --noEmit` clean with zero errors.
+- What's incomplete / next session: Phase 2 (Problem & Contrast Section / Manual Execution vs Automation comparison). Phase 1 changes are unstaged/uncommitted awaiting explicit user approval.
+
+
+---
+
 ## [Phase 3: Dashboard Overview & Portfolio KPI Workspace] - 2026-11-04
 
 ### 0. Final acceptance pass — operational signal separation

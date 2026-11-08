@@ -14,36 +14,62 @@ import PlanWaitlistModal from "@/components/PlanWaitlistModal";
 import Home from "@/app/page";
 
 describe("Landing Page Revamp (ai-design-skills)", () => {
-  it("renders Hero with gradient headline, subhead, CTAs, trust line, and flat terminal visual", () => {
+  it("renders Hero with truthful headline, CTAs, Bybit scope, and authentic simulated execution UI preview", () => {
     render(<Hero />);
 
     const heading = screen.getByRole("heading", {
       level: 1,
-      name: /Automate Your Trading Signals\. No More Manual Copying\./i,
+      name: /Automate Your Trading Signals\.\s+Execute Without Manual Delay\./i,
     });
     expect(heading).toBeInTheDocument();
     expect(heading.className).toContain("hero-heading-gradient");
     expect(heading.className).toContain("max-w-[680px]");
 
     expect(
-      screen.getByText(/Connect your Telegram groups and exchanges/i)
+      screen.getByText(/Connect your Telegram trading communities to your Bybit account/i)
     ).toBeInTheDocument();
 
-    expect(screen.getByRole("button", { name: /Start Free/i })).toBeInTheDocument();
-    expect(screen.getByText(/No credit card required/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Watch 2‑min Demo/i })).toBeInTheDocument();
-    expect(screen.getByText(/99\.9% uptime/i)).toBeInTheDocument();
-    expect(screen.getByText(/2,000\+ users/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Start Free\. No Credit Card\./i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Includes 12 automated trades each month on Free/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Explore Product Demo/i })
+    ).toBeInTheDocument();
 
-    // Terminal mock assertions (default BTC/USDT live price + interactive tab switching + sample/illustrative label)
-    expect(screen.getByText(/tadex-execution-node v2\.4/i)).toBeInTheDocument();
-    expect(screen.getByText(/FILLED @ \$77,852/i)).toBeInTheDocument();
-    expect(screen.getByText(/Sample illustrative execution/i)).toBeInTheDocument();
+    // Truthful trust line & pill
+    expect(
+      screen.getByText("Bybit API Integration Tested · Non-Custodial")
+    ).toBeInTheDocument();
+    expect(screen.getByText("Bybit API integration tested")).toBeInTheDocument();
+    expect(screen.getByText("Non-custodial (trade-only API)")).toBeInTheDocument();
+    expect(screen.getByText("Zero credit card required")).toBeInTheDocument();
 
+    // Must NOT contain fabricated statistics or latency
+    expect(screen.queryByText(/99\.9% uptime/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/2,000\+ users/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/14ms/i)).not.toBeInTheDocument();
+
+    // Authentic Web UI execution preview assertions
+    expect(screen.getByText("SIMULATED EXECUTION PREVIEW")).toBeInTheDocument();
+    expect(screen.getByText("Tadex Execution Engine")).toBeInTheDocument();
+    expect(screen.getByText("BYBIT MAINNET")).toBeInTheDocument();
+    expect(screen.getByText("Key: demo_preview_key")).toBeInTheDocument();
+    expect(screen.getByText("Trade-Only Scope")).toBeInTheDocument();
+    expect(screen.getByText("SIMULATED FILL @ $75,002.00")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Sample illustrative workflow · Real execution subject to Bybit account balance and market liquidity/i
+      )
+    ).toBeInTheDocument();
+
+    // Tab switching test
     const ethTab = screen.getByRole("tab", { name: "ETH/USDT" });
     fireEvent.click(ethTab);
-    expect(screen.getByText(/FILLED @ \$2,263/i)).toBeInTheDocument();
-    expect(screen.getByText("Binance Futures")).toBeInTheDocument();
+    expect(screen.getByText("SIMULATED FILL @ $2,450.50")).toBeInTheDocument();
+    expect(screen.getByText("Market Buy 0.2140 ETHUSDT")).toBeInTheDocument();
   });
 
   it("renders mandatory B11 TaglineReveal section with word-by-word spans", () => {

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Hero from '@/components/Hero';
+import ExchangeTrustStrip from '@/components/ExchangeTrustStrip';
 import TaglineReveal from '@/components/TaglineReveal';
 import WhatTadexDoes from '@/components/WhatTadexDoes';
 import HowItWorks from '@/components/HowItWorks';
@@ -114,28 +115,14 @@ export default function Home() {
             </Link>
             <Link
               href="/register"
-              className="button-sm text-brand-accent hover:bg-brand-accentSubtle border border-brand-accent/40 px-3 py-2 rounded-lg transition-colors duration-300 ease-weighted active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+              className="bg-brand-accent hover:bg-brand-accentHover text-content-inverted button-sm px-4 py-2 rounded-xl transition-[background-color,transform] duration-300 ease-weighted active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
             >
-              Register
+              Start Free
             </Link>
-            <button
-              type="button"
-              onClick={openWaitlistModal}
-              className="bg-brand-accent hover:bg-brand-accentHover text-content-inverted button-sm px-3 py-2 rounded-lg transition-[background-color,transform] duration-300 ease-weighted active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
-            >
-              Join waitlist
-            </button>
           </div>
 
           {/* Mobile Controls + Animated Toggle Icon (B7) */}
           <div className="md:hidden flex items-center gap-2">
-            <button
-              type="button"
-              onClick={openWaitlistModal}
-              className="bg-brand-accent hover:bg-brand-accentHover text-content-inverted button-xsm px-3 py-2 rounded-lg transition-colors duration-300 ease-weighted active:scale-[0.98]"
-            >
-              Waitlist
-            </button>
             <button
               type="button"
               onClick={() => setMobileMenuOpen((prev) => !prev)}
@@ -222,6 +209,9 @@ export default function Home() {
       <main id="main-content" className="relative">
         {/* Section 1: Hero */}
         <Hero />
+
+        {/* Section 1b: Exchange Compatibility & Trust Strip */}
+        <ExchangeTrustStrip />
 
         {/* Section 2: Mandatory B11 Tagline Reveal */}
         <TaglineReveal />
