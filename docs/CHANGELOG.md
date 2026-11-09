@@ -4,6 +4,20 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Landing Page Simplification & Comparison Rollback] - 2026-11-09
+
+### 1. Landing Page Simplification & Comparison Removal
+- Removed `src/components/ManualVsTadexComparison.tsx` and its unit test `src/test/ManualVsTadexComparison.test.tsx` to keep the public landing page concise and conversion-focused.
+- Removed the `ManualVsTadexComparison` import, section mount, and `Comparison` navigation link from `src/app/page.tsx`.
+- Removed the standalone risk-calculator specification artifact (`INTERACTIVE_RISK_PREVIEW_SPEC.md`); confirmed no risk-calculator application code existed in `src/`.
+
+### 2. Retained Bybit-Focused Benefits Refinement (`src/components/WhatTadexDoes.tsx`)
+- Preserved the Card 3 update introduced in commit `9ec1780` in `src/components/WhatTadexDoes.tsx` (*"Run a Disciplined Operation"* / *"Disciplined Execution"* with *"Execute verified signals directly on your Bybit account"*), ensuring unsupported multi-exchange claims remain eliminated.
+- Preserved corresponding unit test assertions in `src/test/LandingPageComponents.test.tsx` (11/11 tests passing).
+- Full Vitest suite: 49 test files, 239 tests passing with 0 failures. TypeScript (`npx tsc --noEmit`) verified clean with 0 errors.
+
+---
+
 ## [Phase 2: Problem & Contrast — Manual Execution vs. Tadex Automation] - 2026-11-08
 
 ### 1. Manual vs. Tadex Comparison Component (`src/components/ManualVsTadexComparison.tsx`)
