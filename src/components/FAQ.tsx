@@ -24,11 +24,11 @@ export default function FAQ() {
     },
     {
       q: 'Which exchanges work with Tadex?',
-      a: 'We support major exchanges like Bybit, Binance, and OKX. If your exchange is not listed, you can often integrate it via webhooks.',
+      a: 'Tadex is currently live and verified for Bybit (USDT Perpetuals & Futures). Planned integrations for Binance and OKX are underway for upcoming platform releases.',
     },
     {
       q: 'Is my money safe? What about my API keys?',
-      a: 'Your API keys are encrypted and stored securely. We only allow trading actions you configure; withdrawals are not possible via our integration.',
+      a: 'Your capital remains in your personal exchange account. Tadex only accepts trade-only API permissions; keys with withdrawal access are automatically rejected on validation. Credentials are encrypted at rest using Fernet symmetric encryption.',
     },
     {
       q: 'I’m new to trading. Is this suitable for beginners?',

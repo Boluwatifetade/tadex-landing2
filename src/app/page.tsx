@@ -9,6 +9,7 @@ import WhatTadexDoes from '@/components/WhatTadexDoes';
 import HowItWorks from '@/components/HowItWorks';
 import WhoThisIsFor from '@/components/WhoThisIsFor';
 import Pricing from '@/components/Pricing';
+import ProviderBridgeBanner from '@/components/ProviderBridgeBanner';
 import FAQ from '@/components/FAQ';
 import FinalCTA from '@/components/FinalCTA';
 import Footer from '@/components/Footer';
@@ -38,11 +39,6 @@ export default function Home() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-  };
-
-  const openWaitlistModal = () => {
-    setMobileMenuOpen(false);
-    setIsModalOpen(true);
   };
 
   const handlePlanSelect = (planId: string) => {
@@ -227,6 +223,9 @@ export default function Home() {
 
         {/* Section 6: Pricing */}
         <Pricing onPlanSelect={handlePlanSelect} />
+
+        {/* Section 6b: Signal Provider Bridge Banner */}
+        <ProviderBridgeBanner />
 
         {/* Section 7: FAQ */}
         <FAQ />

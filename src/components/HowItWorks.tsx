@@ -28,9 +28,9 @@ export default function HowItWorks() {
       icon: KeyIcon,
       title: 'Connect Your Accounts',
       bullets: [
-        'Add your exchange API keys (Bybit, Binance, OKX, etc.).',
-        'Link your Telegram groups or webhooks.',
-        'Everything is encrypted and secure.',
+        'Add your Bybit trade-only API key (planned support for Binance & OKX upcoming).',
+        'Pair your Telegram account for execution alerts.',
+        'Fernet encrypted credentials at rest (withdrawals rejected).',
       ],
     },
     {
@@ -38,9 +38,9 @@ export default function HowItWorks() {
       icon: SlidersIcon,
       title: 'Set Your Rules',
       bullets: [
-        'Choose which signals to act on.',
-        'Define position size, stop loss, and risk limits.',
-        'Add filters like only trade BTC or only during London session.',
+        'Choose which verified signal channels to follow.',
+        'Define position sizing (fixed margin or risk % per trade).',
+        'Enforce mandatory stop-loss orders and account loss limits.',
       ],
     },
     {

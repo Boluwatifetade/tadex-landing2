@@ -113,7 +113,7 @@ describe("Landing Page Revamp (ai-design-skills)", () => {
     expect(screen.queryByText(/effortless/i)).not.toBeInTheDocument();
   });
 
-  it("renders Pricing in Naira with 3 plans and explainer", () => {
+  it("renders Pricing in Naira with 2 trader plans, direct register CTAs, and truthful security strip", () => {
     const onPlanSelect = vi.fn();
     render(<Pricing onPlanSelect={onPlanSelect} />);
 
@@ -128,16 +128,27 @@ describe("Landing Page Revamp (ai-design-skills)", () => {
     expect(screen.getByText("₦10,000")).toBeInTheDocument();
     expect(screen.getByText("Most Popular")).toBeInTheDocument();
 
-    // Signal Providers
-    expect(screen.getByText("For Signal Providers")).toBeInTheDocument();
-    expect(screen.getByText(/Turn Your Signals Into a Business/i)).toBeInTheDocument();
+    // Must NOT contain Card 3 (moved to ProviderBridgeBanner)
+    expect(screen.queryByText(/Turn Your Signals Into a Business/i)).not.toBeInTheDocument();
+
+    // Must NOT contain fabricated uptime
+    expect(screen.queryByText(/99\.9% uptime/i)).not.toBeInTheDocument();
+
+    // Truthful security line
+    expect(
+      screen.getByText(/Fernet symmetric encryption at rest for API credentials/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Trade-only API permissions required/i)
+    ).toBeInTheDocument();
 
     // Explainer
     expect(screen.getByText("How Tadex Pricing Works")).toBeInTheDocument();
 
-    // CTA interaction
-    const getPremiumBtn = screen.getByRole("button", { name: "Get Premium" });
-    fireEvent.click(getPremiumBtn);
+    // Primary CTA buttons link directly to /register
+    const startFreeButtons = screen.getAllByRole("button", { name: "Start Free. No Credit Card." });
+    expect(startFreeButtons.length).toBe(2);
+    fireEvent.click(startFreeButtons[1]);
     expect(onPlanSelect).toHaveBeenCalledWith("premium");
   });
 
@@ -162,16 +173,28 @@ describe("Landing Page Revamp (ai-design-skills)", () => {
     const q2Btn = screen.getByText("Is it really free to start?");
     fireEvent.click(q2Btn);
     expect(screen.getByText(/up to 12 automated trades per month/i)).toBeInTheDocument();
+
+    // Toggle 3rd question (Bybit live status)
+    const q3Btn = screen.getByText("Which exchanges work with Tadex?");
+    fireEvent.click(q3Btn);
+    expect(screen.getByText(/Tadex is currently live and verified for Bybit/i)).toBeInTheDocument();
   });
 
-  it("renders FinalCTA with headline, CTA, and trust line", () => {
+  it("renders FinalCTA with truthful headline, register CTA, and non-custodial trust line", () => {
     render(<FinalCTA />);
 
     expect(
       screen.getByText("Ready to Stop Copying Trades Manually?")
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Start Free/i })).toBeInTheDocument();
-    expect(screen.getByText("Secure API handling")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Start Free\. No Credit Card\./i })
+    ).toBeInTheDocument();
+    expect(screen.getByText("Non-custodial (trade-only API)")).toBeInTheDocument();
+    expect(screen.getByText("Fernet encrypted credentials")).toBeInTheDocument();
+
+    // Must NOT contain fabricated claims
+    expect(screen.queryByText(/thousands of traders/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/99\.9% uptime/i)).not.toBeInTheDocument();
   });
 
   it("renders Footer with required links, location Lagos, Nigeria, no dead # links, and no developer tagline", () => {
@@ -206,10 +229,11 @@ describe("Landing Page Revamp (ai-design-skills)", () => {
     expect(screen.getByText("₦5,000 / month")).toBeInTheDocument();
   });
 
-  it("renders Home page with skip-to-content link and floating navigation", () => {
+  it("renders Home page with skip-to-content link, floating navigation, and provider bridge banner", () => {
     render(<Home />);
 
     expect(screen.getByText("Skip to content")).toBeInTheDocument();
     expect(screen.getByRole("navigation", { name: /Primary navigation/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 3, name: /Are you a Signal Provider\?/i })).toBeInTheDocument();
   });
 });

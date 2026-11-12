@@ -4,6 +4,32 @@ All notable changes to the Tadex Web Frontend (`tadex-landing2`) will be documen
 
 ---
 
+## [Trader Pricing Cleanup & Signal Provider Bridge Banner] - 2026-11-12
+
+### 1. Trader-Focused 2-Card Pricing (`src/components/Pricing.tsx`)
+- Refactored pricing grid from 3 cards to 2 trader-focused tiers (Free: ₦0/mo with 12 automated trades across free communities; Tadex Premium: ₦5,000/mo launch offer with portfolio-wide risk rules, trailing stops, and execution analytics).
+- Removed Card 3 ("For Signal Providers") from the trader grid to eliminate persona confusion.
+- Removed fabricated "99.9% uptime" claim, replacing it with truthful infrastructure security highlights (Fernet symmetric encryption at rest for API credentials, trade-only API permissions required with automatic withdrawal rejection).
+- Directed plan CTAs directly to `/register` (*"Start Free. No Credit Card."*).
+- Clarified "How Tadex Pricing Works" explainer card confirming zero volume surcharge on paid VIP signals and direct provider payment flow.
+
+### 2. Signal Provider Bridge Banner (`src/components/ProviderBridgeBanner.tsx`)
+- Created elevated bridge banner mounted immediately below Pricing in `src/app/page.tsx`.
+- Features `FOR SIGNAL PROVIDERS & COMMUNITY LEADERS` badge, clear value proposition (*"Monetize your trading group with automated member billing & signal execution"*), transparent 90% revenue retention note (*"Keep 90% of your VIP subscription revenue. Automated member invites and removal."*), and high-contrast CTA (*"Explore Provider Portal"*) linking to `/for-providers`.
+
+### 3. Truthful Landing Page Copy Harmonization (`HowItWorks.tsx`, `FAQ.tsx`, `FinalCTA.tsx`, `page.tsx`)
+- **`HowItWorks.tsx`**: Updated Step 2 to emphasize Bybit trade-only API integration (with planned Binance/OKX notes) and Fernet symmetric encryption; updated Step 3 removing unverified London session filter and focusing on verified position sizing and stop loss enforcement.
+- **`FAQ.tsx`**: Updated Question 3 (Bybit live and verified for USDT Perpetuals & Futures; planned Binance/OKX) and Question 4 (non-custodial trade-only permissions, Fernet encryption at rest, automatic withdrawal rejection).
+- **`FinalCTA.tsx`**: Updated headline and subheadline focusing on Bybit execution with disciplined risk sizing, removed fabricated "thousands of traders" and "99.9% uptime" claims, updated CTA button to `/register` (*"Start Free. No Credit Card."*).
+- **`page.tsx`**: Mounted `<ProviderBridgeBanner />` between Pricing and FAQ.
+
+### 4. Verification & Testing
+- Added unit test `src/test/ProviderBridgeBanner.test.tsx` verifying banner badge, headline, 90% revenue copy, and `/for-providers` link (1/1 passed).
+- Updated `src/test/LandingPageComponents.test.tsx` asserting new 2-card pricing, direct `/register` CTAs, truthful encryption copy, and updated FAQ/FinalCTA text (11/11 tests passing).
+- TypeScript check (`npx tsc --noEmit`): verified clean with 0 errors.
+
+---
+
 ## [Landing Page Simplification & Comparison Rollback] - 2026-11-09
 
 ### 1. Landing Page Simplification & Comparison Removal

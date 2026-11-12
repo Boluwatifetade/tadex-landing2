@@ -6,13 +6,13 @@ import {
   CheckIcon,
   LightningIcon,
   CrownIcon,
-  BroadcastIcon,
   ShieldCheckIcon,
   SparkleIcon,
+  LockIcon,
 } from '@/components/ui/PhosphorIcons';
 
 interface PricingProps {
-  onPlanSelect: (plan: string) => void;
+  onPlanSelect?: (plan: string) => void;
 }
 
 export default function Pricing({ onPlanSelect }: PricingProps) {
@@ -26,13 +26,13 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
               Simple, Transparent Pricing
             </h2>
             <p className="title-1 text-content-secondary">
-              Pay only for what you use. No hidden fees.
+              Pay only for what you use. Zero hidden transaction fees.
             </p>
           </div>
 
-          {/* 3 Pricing Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch mb-12">
-            {/* Card 1: Free */}
+          {/* 2 Trader Pricing Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto mb-12">
+            {/* Card 1: Free Tier */}
             <div className="bg-surface-primary rounded-2xl border border-surface-elevated p-8 flex flex-col justify-between transition-[background-color,transform] duration-500 ease-weighted hover:-translate-y-1">
               <div>
                 <div className="flex items-center justify-between mb-6">
@@ -46,7 +46,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
 
                 <h3 className="heading-5 text-content-primary mb-1">Free</h3>
                 <p className="caption-4 text-content-tertiary mb-6">
-                  Best for: Trying Tadex and small setups
+                  Best for: Trying automated execution and small trading setups
                 </p>
 
                 <div>
@@ -64,55 +64,57 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
                   <ul className="space-y-3 body-6 text-content-secondary">
                     <li className="flex items-start gap-3">
                       <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>Connect your exchange and Telegram</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>Follow free signal communities</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
                       <span>
                         <strong className="font-semibold text-content-primary">
                           12 automated trades
                         </strong>{' '}
-                        per month across all free communities
+                        per month across free communities
                       </span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>Live execution logs</span>
+                      <span>Connect your Bybit trade-only API key</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>Basic risk controls</span>
+                      <span>Real-time execution logs & order history</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
+                      <span>Mandatory stop-loss enforcement on signal intake</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
+                      <span>Single Telegram pairing for execution notifications</span>
                     </li>
                   </ul>
                 </div>
               </div>
 
               <div>
-                <button
-                  type="button"
-                  onClick={() => onPlanSelect('free')}
-                  className="w-full bg-surface-secondary hover:bg-surface-elevated text-content-primary border border-surface-elevated py-3 px-4 button-md rounded-xl transition-[background-color,transform] duration-300 ease-weighted active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
-                >
-                  Start Free
-                </button>
+                <Link href="/register" className="block w-full">
+                  <button
+                    type="button"
+                    onClick={() => onPlanSelect?.('free')}
+                    className="w-full bg-surface-secondary hover:bg-surface-elevated text-content-primary border border-surface-elevated py-3 px-4 button-md rounded-xl transition-[background-color,transform] duration-300 ease-weighted active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+                  >
+                    Start Free. No Credit Card.
+                  </button>
+                </Link>
                 <p className="caption-4 text-content-tertiary text-center mt-2">
                   No credit card required
                 </p>
                 <div className="h-px bg-surface-elevated my-4" />
                 <p className="caption-5 text-content-tertiary text-center">
-                  Paid VIP groups set their own subscription price with the provider. Tadex does not charge extra for access.
+                  Paid VIP groups set their own subscription price with the provider. Tadex does not charge extra fees on signal copy volume.
                 </p>
               </div>
             </div>
 
-            {/* Card 2: Tadex Premium (Most Popular) */}
+            {/* Card 2: Tadex Premium (Launch Offer) */}
             <div className="bg-surface-subtle text-content-primary rounded-2xl border border-brand-accent p-8 relative flex flex-col justify-between transition-[background-color,transform] duration-500 ease-weighted hover:-translate-y-1">
               {/* Most Popular Badge */}
-              <div className="absolute -top-3 left-6 bg-brand-accent text-content-inverted px-3 py-1 rounded-full caption-3 flex items-center gap-1.5">
+              <div className="absolute -top-3 left-6 bg-brand-accent text-content-inverted px-3 py-1 rounded-full caption-3 flex items-center gap-1.5 shadow-xs">
                 <SparkleIcon size={14} />
                 <span>Most Popular</span>
               </div>
@@ -131,7 +133,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
                   Tadex Premium
                 </h3>
                 <p className="caption-4 text-content-secondary mb-6">
-                  Best for: Serious traders following multiple providers or running multi exchange setups
+                  Best for: Active traders following multiple channels with custom risk sizing
                 </p>
 
                 <div>
@@ -165,171 +167,69 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>Follow unlimited providers</span>
+                      <span>Priority execution queue routing</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
                       <span>
-                        Connect multiple exchanges (Bybit, Binance, OKX)
+                        <strong className="font-semibold text-content-primary">
+                          Portfolio risk controls:
+                        </strong>{' '}
+                        Max drawdown caps, daily loss thresholds, and custom per-provider margin allocations
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
                       <span>
                         <strong className="font-semibold text-content-primary">
-                          Advanced risk controls:
+                          Planned launch tools:
                         </strong>{' '}
-                        Portfolio drawdown limits, daily and weekly loss caps, per provider sizing
+                        Auto break-even, trailing stop targets, and partial take-profit splits
                       </span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>
-                        <strong className="font-semibold text-content-primary">
-                          Trade management tools:
-                        </strong>{' '}
-                        Auto break even, trailing stops, partial closes
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>
-                        <strong className="font-semibold text-content-primary">
-                          Advanced analytics:
-                        </strong>{' '}
-                        Per provider PnL, execution quality (slippage, fill rate), correlation insights
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>Audit grade logs for trade reviews and performance tracking</span>
+                      <span>Full audit-grade trade logs and execution slippage reporting</span>
                     </li>
                   </ul>
                 </div>
               </div>
 
               <div>
-                <button
-                  type="button"
-                  onClick={() => onPlanSelect('premium')}
-                  className="w-full bg-brand-accent hover:bg-brand-accentHover text-content-inverted py-3 px-4 button-md rounded-xl transition-[background-color,transform] duration-300 ease-weighted active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
-                >
-                  Get Premium
-                </button>
-                <p className="caption-4 text-brand-accent text-center mt-2">
-                  Launch price: ₦5,000/month
-                </p>
-                <div className="h-px bg-surface-elevated my-4" />
-                <p className="caption-5 text-content-tertiary text-center">
-                  If you join a paid VIP signal group, you pay the provider subscription price directly. Tadex Premium is for advanced automation and risk tools, not signal access.
-                </p>
-              </div>
-            </div>
-
-            {/* Card 3: For Signal Providers */}
-            <div className="bg-surface-primary rounded-2xl border border-surface-elevated p-8 flex flex-col justify-between transition-[background-color,transform] duration-500 ease-weighted hover:-translate-y-1">
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-surface-subtle border border-surface-elevated text-brand-accent flex items-center justify-center">
-                    <BroadcastIcon size={24} />
-                  </div>
-                  <span className="caption-3 text-content-tertiary bg-surface-subtle px-3 py-1 rounded-full border border-surface-elevated">
-                    For Providers
-                  </span>
-                </div>
-
-                <h3 className="heading-5 text-content-primary mb-1">
-                  For Signal Providers
-                </h3>
-                <p className="caption-4 text-content-tertiary mb-6">
-                  Best for: Traders running Telegram signal groups or selling strategies
-                </p>
-
-                <div>
-                  <div className="title-1 text-content-primary">
-                    Turn Your Signals Into a Business
-                  </div>
-                  <p className="caption-4 text-content-tertiary mt-1">
-                    Keep majority of revenue · Tadex ~10% platform fee
-                  </p>
-                </div>
-
-                <div className="h-px bg-surface-elevated my-6" />
-
-                <div className="mb-8">
-                  <p className="caption-3 text-content-primary mb-4">
-                    Provider Features:
-                  </p>
-                  <ul className="space-y-3 body-6 text-content-secondary">
-                    <li className="flex items-start gap-3">
-                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>
-                        Create up to 3 paid plans (e.g., Monthly VIP, Quarterly VIP, Free Community)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>
-                        Set your own price and currency (NGN, USD, GHS, KES, etc.)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>
-                        <strong className="font-semibold text-content-primary">
-                          Tadex handles:
-                        </strong>{' '}
-                        Subscriber billing, access control, automated execution, and payment reconciliation
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>
-                        You keep the majority of revenue; Tadex takes a small platform fee (around 10%)
-                      </span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckIcon size={16} className="text-brand-accent flex-shrink-0 mt-0.5" />
-                      <span>
-                        <strong className="font-semibold text-content-primary">
-                          Dashboards for:
-                        </strong>{' '}
-                        Revenue, subscriber count, retention, churn, and optional follower performance
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div>
-                <Link href="/for-providers" className="block w-full">
+                <Link href="/register" className="block w-full">
                   <button
                     type="button"
-                    onClick={() => onPlanSelect('provider')}
-                    className="w-full bg-surface-secondary hover:bg-surface-elevated text-content-primary border border-surface-elevated py-3 px-4 button-md rounded-xl transition-[background-color,transform] duration-300 ease-weighted active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent"
+                    onClick={() => onPlanSelect?.('premium')}
+                    className="w-full bg-brand-accent hover:bg-brand-accentHover text-content-inverted py-3 px-4 button-md rounded-xl transition-[background-color,transform] duration-300 ease-weighted active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent shadow-xs"
                   >
-                    Become a Provider
+                    Start Free. No Credit Card.
                   </button>
                 </Link>
-                <p className="caption-4 text-content-tertiary text-center mt-2">
-                  Talk to our team
+                <p className="caption-4 text-brand-accent text-center mt-2">
+                  Select your preferred plan inside your dashboard after registration
                 </p>
                 <div className="h-px bg-surface-elevated my-4" />
                 <p className="caption-5 text-content-tertiary text-center">
-                  Exact platform fee and settlement details are shown before you publish your first plan.
+                  If you join a paid VIP signal group, you pay the provider directly. Premium is for advanced automation and risk controls.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Small line under pricing */}
-          <div className="flex items-center gap-2 caption-1 text-content-tertiary mb-12">
-            <ShieldCheckIcon size={18} className="text-brand-accent" />
-            <span>All plans include secure API handling and 99.9% uptime.</span>
+          {/* Truthful Security & Infrastructure Strip */}
+          <div className="flex flex-wrap items-center justify-center gap-6 caption-2 text-content-tertiary mb-12 max-w-4xl mx-auto text-center">
+            <div className="flex items-center gap-2">
+              <LockIcon size={16} className="text-brand-accent" />
+              <span>Fernet symmetric encryption at rest for API credentials</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <ShieldCheckIcon size={16} className="text-brand-accent" />
+              <span>Trade-only API permissions required (withdrawals rejected)</span>
+            </div>
           </div>
 
           {/* Explainer Block: How Tadex Pricing Works */}
-          <div className="bg-surface-primary rounded-2xl p-8 border border-surface-elevated max-w-4xl">
+          <div className="bg-surface-primary rounded-2xl p-8 border border-surface-elevated max-w-4xl mx-auto">
             <h3 className="title-1 text-content-primary mb-4">
               How Tadex Pricing Works
             </h3>
@@ -340,7 +240,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
                   <strong className="font-semibold text-content-primary">
                     Free communities:
                   </strong>{' '}
-                  Free tier includes 12 automated trades/month across all free channels. Upgrade to Tadex Premium for unlimited automation and advanced risk controls.
+                  Free tier includes 12 automated trades/month across all free channels. Upgrade to Tadex Premium for unlimited automation and portfolio-wide risk limits.
                 </p>
               </div>
               <div className="flex items-start gap-3">
@@ -349,7 +249,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
                   <strong className="font-semibold text-content-primary">
                     Paid VIP communities:
                   </strong>{' '}
-                  You pay the provider subscription price directly (set by them). Tadex takes a small platform fee (~10%) from the provider, not from you. Your trades execute automatically with no extra charge from Tadex.
+                  You pay the provider subscription price directly (set by them). Tadex collects a ~10% platform fee from the provider, not from you. Your signal trades execute automatically with zero volume surcharge.
                 </p>
               </div>
               <div className="flex items-start gap-3">
@@ -358,7 +258,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
                   <strong className="font-semibold text-content-primary">
                     Tadex Premium:
                   </strong>{' '}
-                  One monthly fee of ₦5,000 (launch price) for portfolio wide automated risk controls, trailing stops, multiple connected exchanges, and deep execution analytics across all your providers.
+                  One monthly fee of ₦5,000 (launch price) for portfolio-wide automated risk controls, trailing stops, and deep execution analytics across all your providers.
                 </p>
               </div>
             </div>

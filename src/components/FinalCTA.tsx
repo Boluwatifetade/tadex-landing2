@@ -23,22 +23,22 @@ export default function FinalCTA() {
 
               {/* Subheadline */}
               <p className="title-1 text-content-secondary mb-8">
-                Join thousands of traders who already use Tadex to automate their signals and protect their capital.
+                Automate your signal execution directly on your Bybit account with disciplined risk sizing and zero withdrawal permissions.
               </p>
 
               {/* Primary CTA Button */}
               <div className="flex flex-col items-start mb-8">
-                <Link href="#pricing">
+                <Link href="/register">
                   <button
                     type="button"
-                    className="inline-flex items-center justify-center gap-2 bg-brand-accent hover:bg-brand-accentHover text-content-inverted button-lg px-8 py-4 rounded-xl transition-[background-color,transform] duration-300 ease-weighted hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-primary"
+                    className="inline-flex items-center justify-center gap-2 bg-brand-accent hover:bg-brand-accentHover text-content-inverted button-lg px-8 py-4 rounded-xl transition-[background-color,transform] duration-300 ease-weighted hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-primary shadow-xs"
                   >
-                    <span>Start Free</span>
+                    <span>Start Free. No Credit Card.</span>
                     <ArrowRightIcon size={20} />
                   </button>
                 </Link>
                 <span className="caption-4 text-content-tertiary mt-2">
-                  No credit card required
+                  Includes 12 automated trades each month on Free · Fast web onboarding
                 </span>
               </div>
 
@@ -47,16 +47,16 @@ export default function FinalCTA() {
               {/* Trust Line */}
               <div className="flex flex-wrap items-center gap-6 caption-1 text-content-tertiary">
                 <div className="flex items-center gap-2">
-                  <LightningIcon size={16} className="text-brand-accent" />
-                  <span>99.9% uptime</span>
+                  <ShieldCheckIcon size={16} className="text-brand-accent" />
+                  <span>Non-custodial (trade-only API)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <LockIcon size={16} className="text-brand-accent" />
-                  <span>Secure API handling</span>
+                  <span>Fernet encrypted credentials</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <ShieldCheckIcon size={16} className="text-brand-accent" />
-                  <span>Instant setup</span>
+                  <LightningIcon size={16} className="text-brand-accent" />
+                  <span>Bybit execution engine</span>
                 </div>
               </div>
             </div>
